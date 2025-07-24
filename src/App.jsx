@@ -5,6 +5,7 @@ import PasswordReset from './components/pages/PasswordReset'
 import TenantLayout from './components/shared/TenantLayout'
 import Dashboard from './components/pages/tenant/Dashboard'
 import './index.css'
+import Leavepg from './components/pages/tenant/Leavepg'
 
 function App() {
 
@@ -18,6 +19,7 @@ function App() {
       </Route>
       <Route path='/tenant' element={<TenantLayout />}>
         <Route path='dashboard' element={<Dashboard />} />
+        <Route path='leave-pg' element={<Leavepg />} />
       </Route>
       {/* <Route index element={<Navigate to='/tenant/dashboard' replace />} />
       </Route> */}
