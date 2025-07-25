@@ -1,10 +1,15 @@
 import { Outlet } from "react-router";
 import React from "react";
 import logo from "../../assets/images/Logo3-cropped.svg";
-import { Link } from "react-router-dom";
+
+import { Link, useNavigate } from "react-router-dom";
 
 const GuestLayout = () => {
+  const navigate = useNavigate();
+
   console.log("On guest layout page");
+
+
   return (
     <div className="h-screen overflow-y-auto hide-scrollbar bg-[#FAFAFA]">
       {/* Navbar */}
@@ -27,10 +32,18 @@ const GuestLayout = () => {
         </div>
         {/* login & registration button */}
         <div className="flex justify-between">
-          <button className="bg-white mr-4 text-sm text-[#3A0D5C] border-[#3A0D5C] border-2 px-3 py-1.5 rounded-lg font-medium">
+
+          <button
+            onClick={() => navigate("/user/registration")}
+            className="bg-white mr-4 text-sm text-[#3A0D5C] border-[#3A0D5C] border-2 px-3 py-1.5 rounded-lg font-medium"
+          >
             Register
           </button>
-          <button className="bg-[#6E39A3] text-sm text-white px-3 py-1.5 rounded-md font-medium ">
+          <button
+            onClick={() => navigate("/user/login")}
+            className="bg-[#6E39A3] text-sm text-white px-3 py-1.5 rounded-md font-medium "
+          >
+
             Login
           </button>
         </div>
@@ -53,11 +66,13 @@ const GuestLayout = () => {
             </div>
             <div className="flex flex-col items-center">
               <span className="font-semibold">Rooms</span>
-              <span className="text-md">🛏</span>
+
+              <span className="text-md">🛏️</span>
             </div>
             <div className="flex flex-col items-center">
               <span className="font-semibold">Amenities</span>
-              <span className="text-md">🛠</span>
+              <span className="text-md">🛠️</span>
+
             </div>
             <div className="flex flex-col items-center">
               <span className="font-semibold">Contact</span>
@@ -67,10 +82,16 @@ const GuestLayout = () => {
 
           {/* Team Members */}
           <div className="flex justify-center flex-wrap gap-6 mt-10 text-sm md:text-base font-semibold  text-gray-400">
-            <span>Tanvi Gavhane</span>
-            <span>Nivedita Magdum</span>
-            <span>Prajkta Kamble</span>
-            <span>Shruti Naik</span>
+
+            <a href="https://www.linkedin.com/in/tanviGavhane/">
+              Tanvi Gavhane
+            </a>
+            <a href="https://www.linkedin.com/in/nivedita-bsm/">
+              Nivedita Magdum
+            </a>
+            <a href="">Prajkta Kamble</a>
+            <a href="">Shruti Naik</a>
+
           </div>
 
           {/* Copyright */}
@@ -83,4 +104,6 @@ const GuestLayout = () => {
   );
 };
 
+
 export default GuestLayout;
+
