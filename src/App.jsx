@@ -8,12 +8,22 @@ import './index.css'
 import Payment from './components/pages/tenant/Payment'
 import Leavepg from './components/pages/tenant/Leavepg'
 import Notices from './components/pages/tenant/Notices'
+import Amenities from "./components/pages/guest/Amenities";
+import GuestLayout from "./components/shared/GuestLayout";
+import Registration from "./components/pages/guest/Registration";
+import GuestDashboard from "./components/pages/guest/GuestDashboard";
+
 
 function App() {
-
   return (
     <Routes>
       {/* <Route path='/home' element={<LandingPage />} /> */}
+
+      <Route path="/guest" element={<GuestLayout />}>
+        <Route path="dashboard" element={<GuestDashboard />} />
+        <Route path="amenities" element={<Amenities />} />
+        <Route index element={<Navigate to="/guest/dashboard" replace />} />
+
       <Route path='/auth' element={<AuthLayout />}>
         <Route path='login' element={<Login />} />
         <Route path='password-reset' element={<PasswordReset />} />
@@ -28,7 +38,7 @@ function App() {
       {/* <Route index element={<Navigate to='/tenant/dashboard' replace />} />
       </Route> */}
     </Routes>
-  )
+  );
 }
 
-export default App
+export default App;
