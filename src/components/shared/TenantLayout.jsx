@@ -1,16 +1,16 @@
 import { Outlet } from 'react-router-dom';
 import Sidebar from '../pages/tenant/Sidebar';
-import React from 'react'
 
 function TenantLayout() {
     console.log("Inside tenant");
     return (
-        <div className="flex">
+        <div className="flex h-screen">
             <Sidebar />
-            <div className="flex-1 min-h-screen bg-purple-200 flex items-center justify-center">
-                <Outlet />
+            <div className="flex-1 bg-purple-200 overflow-y-auto">
+                <div className="p-4">
+                    <Outlet />
+                </div>
             </div>
-
         </div>
     )
 }

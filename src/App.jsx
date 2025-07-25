@@ -5,6 +5,8 @@ import PasswordReset from './components/pages/PasswordReset'
 import TenantLayout from './components/shared/TenantLayout'
 import Dashboard from './components/pages/tenant/Dashboard'
 import './index.css'
+import Payment from './components/pages/tenant/Payment'
+import Notice from './components/pages/tenant/Notice'
 
 function App() {
 
@@ -18,6 +20,8 @@ function App() {
       </Route>
       <Route path='/tenant' element={<TenantLayout />}>
         <Route path='dashboard' element={<Dashboard />} />
+        <Route path='payment' element={<Payment />} />
+        <Route path='notices' element={<Notice />} />
       </Route>
       {/* <Route index element={<Navigate to='/tenant/dashboard' replace />} />
       </Route> */}

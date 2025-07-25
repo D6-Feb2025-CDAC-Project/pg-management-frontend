@@ -21,7 +21,7 @@ function Sidebar() {
                 </button>
                 <nav className="flex flex-col gap-11">
                     {menuItems.map((item) =>
-                        <NavItem key={item.text} icon={item.icon} text={item.text} isOpen={isOpen} setIsOpen={setIsOpen} url={item.url}/>)}
+                        <NavItem key={item.text} icon={item.icon} text={item.text} isOpen={isOpen} setIsOpen={setIsOpen} url={item.url} />)}
                 </nav>
             </motion.div>
             {!isOpen && <Tooltip id="sidebar-tooltip" />}
