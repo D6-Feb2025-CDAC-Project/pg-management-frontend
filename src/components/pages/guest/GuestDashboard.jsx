@@ -7,7 +7,7 @@ function GuestDashboard() {
     // dashboard page
     <>
       {/*1st container*/}
-      <div className="grid grid-cols-1 md:grid-cols-2 my-8 bg-[#EBD8FF] ">
+      <div className="grid grid-cols-1 md:grid-cols-2 my-8 bg-purpleLight">
         {/* left content */}
         <div className="px-5 flex flex-col justify-center relative">
           {/* title */}
@@ -72,7 +72,7 @@ function GuestDashboard() {
 
       {/* 3rd container */}
 
-      <div className="grid grid-cols-1 md:grid-cols-2 my-15 bg-[#EBD8FF] w-[96%] mx-auto rounded-tr-2xl rounded-tl-2xl">
+      <div className="grid grid-cols-1 md:grid-cols-2 my-15 bg-purpleLight w-[96%] mx-auto rounded-tr-2xl rounded-tl-2xl">
         {/* left image */}
         <div>
           <img

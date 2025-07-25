@@ -10,12 +10,12 @@ const GuestLayout = () => {
   console.log("On guest layout page");
 
   return (
-    <div className="h-screen overflow-y-auto hide-scrollbar background-color">
+    <div className="h-screen overflow-y-auto hide-scrollbar bg-bgGray">
       {/* Navbar */}
       <nav className="flex bg-white items-center justify-between px-4 py-2 shadow">
         {/* left logo container */}
         <div className="flex">
-          <img src={logo} alt="LOGO" className="w-25" />
+          <img src={logo} alt="LOGO" className="w-24" />
         </div>
         {/* pages links */}
         <div className="flex space-x-8 font-semibold text-black">

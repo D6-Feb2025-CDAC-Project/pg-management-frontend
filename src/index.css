@@ -1,4 +1,6 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 /* Custom scrollbar-hiding styles */
 .hide-scrollbar::-webkit-scrollbar {
@@ -20,7 +22,5 @@
     @apply mt-4 text-sm bg-white text-[#3A0D5C] border-2 px-3 py-1.5 rounded-lg font-medium
   }
 
-  /* background color */
-  .background-color{
-    @apply bg-[#FAFAFA]
-  }
+  
+  

@@ -43,10 +43,10 @@ const amenities = [
 
 const Amenities = () => {
   return (
-    <div className="background-color px-6 md:px-16 mt-8">
+    <div className="bg-bgGray px-6 md:px-16 mt-8">
       {amenities.map((section, idx) => (
         <div key={idx} className="mb-10">
-          <h2 className="text-2xl font-semibold text-[#6E39A3] mb-4">
+          <h2 className="text-2xl font-semibold text-purpleDark mb-4">
             {section.title}
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
