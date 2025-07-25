@@ -6,7 +6,8 @@ import TenantLayout from './components/shared/TenantLayout'
 import Dashboard from './components/pages/tenant/Dashboard'
 import './index.css'
 import Payment from './components/pages/tenant/Payment'
-import Notice from './components/pages/tenant/Notice'
+import Leavepg from './components/pages/tenant/Leavepg'
+import Notices from './components/pages/tenant/Notices'
 
 function App() {
 
@@ -21,7 +22,8 @@ function App() {
       <Route path='/tenant' element={<TenantLayout />}>
         <Route path='dashboard' element={<Dashboard />} />
         <Route path='payment' element={<Payment />} />
-        <Route path='notices' element={<Notice />} />
+        <Route path='leave-pg' element={<Leavepg />} />
+        <Route path='notices' element={<Notices />} />
       </Route>
       {/* <Route index element={<Navigate to='/tenant/dashboard' replace />} />
       </Route> */}
