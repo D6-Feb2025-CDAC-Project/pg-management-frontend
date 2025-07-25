@@ -10,5 +10,5 @@ export const menuItems = [
   { icon: <BanknoteArrowUp />, text: "Payments", url: "/tenant/payment" },
   { icon: <Megaphone />, text: "Notices", url: "/tenant/notices" },
   { icon: <DoorOpen />, text: "Leave PG", url: "/tenant/leave-pg" },
-  { icon: <LogOut />, text: "Logout", url: "/auth/login" },
+  { icon: <LogOut />, text: "Logout", url: "/user/login" },
 ];

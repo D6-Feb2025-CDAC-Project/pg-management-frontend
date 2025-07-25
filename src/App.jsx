@@ -1,7 +1,7 @@
 import { Route, Routes, Navigate } from "react-router-dom";
 import AuthLayout from "./components/shared/AuthLayout";
-import Login from "./components/pages/Login";
-import PasswordReset from "./components/pages/PasswordReset";
+import Login from "./components/pages/tenant-authentication/Login";
+import PasswordReset from "./components/pages/tenant-authentication/PasswordReset";
 import Rooms from "./components/pages/guest/Rooms";
 import SingleRooms from "./components/pages/guest/SingleRooms";
 import DoubleRooms from "./components/pages/guest/DoubleRooms";
@@ -32,10 +32,10 @@ function App() {
         <Route index element={<Navigate to="/guest/dashboard" replace />} />
       </Route>
       // Tenant auth routes
-      <Route path="/auth" element={<AuthLayout />}>
+      <Route path="/user" element={<AuthLayout />}>
         <Route path="login" element={<Login />} />
         <Route path="password-reset" element={<PasswordReset />} />
-        <Route index element={<Navigate to="/auth/login" replace />} />
+        <Route index element={<Navigate to="/user/login" replace />} />
       </Route>
       // tenant routes
       <Route path="/tenant" element={<TenantLayout />}>
@@ -43,6 +43,20 @@ function App() {
         <Route path="payment" element={<Payment />} />
         <Route path="leave-pg" element={<Leavepg />} />
         <Route path="notices" element={<Notices />} />
+      </Route>
+      // admin auth Routes
+      <Route path="/superUser" element={<AuthLayout />}>
+        {/* <Route path="login" element={<Login />} />
+        <Route index element={<Navigate to="/admin/login" replace />} /> */}
+      </Route>
+      // admin routes
+      <Route path="/admin" element={<TenantLayout />}>
+        {/* <Route path="dashboard" element={<Dashboard />} />
+        <Route path="properties" element={<Properties />} />
+        <Route path="tenants" element={<Tenants />} />
+        <Route path="complaints" element={<Complaints />} />
+        <Route path="leave-requests" element={<LeaveRequests />} />
+        <Route path="notices" element={<Notices />} /> */}
       </Route>
     </Routes>
   );
