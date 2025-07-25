@@ -5,6 +5,7 @@ import PasswordReset from './components/pages/PasswordReset'
 import TenantLayout from './components/shared/TenantLayout'
 import Dashboard from './components/pages/tenant/Dashboard'
 import './index.css'
+import Payment from './components/pages/tenant/Payment'
 import Leavepg from './components/pages/tenant/Leavepg'
 import Notices from './components/pages/tenant/Notices'
 
@@ -20,6 +21,7 @@ function App() {
       </Route>
       <Route path='/tenant' element={<TenantLayout />}>
         <Route path='dashboard' element={<Dashboard />} />
+        <Route path='payment' element={<Payment />} />
         <Route path='leave-pg' element={<Leavepg />} />
         <Route path='notices' element={<Notices />} />
       </Route>
