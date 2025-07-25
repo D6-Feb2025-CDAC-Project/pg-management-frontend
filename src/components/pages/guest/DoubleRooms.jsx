@@ -8,7 +8,8 @@ const doubleRooms = [
     capacity: 2,
     amenities: ["Wi-Fi", "Shared Bathroom", "2 Beds", "Wardrobe"],
     available: true,
-    image: "https://risingstarhostel.com/wp-content/uploads/2024/03/A05I5717-scaled.jpg",
+    image:
+      "https://risingstarhostel.com/wp-content/uploads/2024/03/A05I5717-scaled.jpg",
   },
   {
     id: 2,
@@ -17,7 +18,8 @@ const doubleRooms = [
     capacity: 2,
     amenities: ["Wi-Fi", "Balcony", "2 Chairs", "24x7 Water"],
     available: true,
-    image: "https://img1.wsimg.com/isteam/ip/3e37772c-11b9-4f93-ac8b-ce984c048c0c/Deluxe%20Twin_11zon.jpg/:/cr=t:0%25,l:20.72%25,w:66.68%25,h:100%25/rs=w:388,h:388,cg:true",
+    image:
+      "https://img1.wsimg.com/isteam/ip/3e37772c-11b9-4f93-ac8b-ce984c048c0c/Deluxe%20Twin_11zon.jpg/:/cr=t:0%25,l:20.72%25,w:66.68%25,h:100%25/rs=w:388,h:388,cg:true",
   },
   {
     id: 3,
@@ -26,17 +28,17 @@ const doubleRooms = [
     capacity: 2,
     amenities: ["Wi-Fi", "Geyser", "Fridge", "Laundry"],
     available: true,
-    image: "https://metrocityliving.com/wp-content/uploads/2024/06/metrocity-girls-hostel-in-kothrud-madhavbaug-double-bed-sharing-e1719839173434.jpg",
+    image:
+      "https://metrocityliving.com/wp-content/uploads/2024/06/metrocity-girls-hostel-in-kothrud-madhavbaug-double-bed-sharing-e1719839173434.jpg",
   },
 ];
-
 
 function DoubleRooms() {
   const availableRooms = doubleRooms.filter((room) => room.available);
 
   return (
     <div className="min-h-screen p-6 bg-gray-100">
-      <h1 className="text-3xl font-bold mb-6 text-purple-800">
+      <h1 className="text-3xl font-bold mb-6 text-black">
         Available Double Rooms
       </h1>
 
@@ -47,7 +49,7 @@ function DoubleRooms() {
               key={room.id}
               className="bg-white shadow-md p-6 rounded-xl border border-gray-200"
             >
-                 <img
+              <img
                 src={room.image}
                 alt={`Room ${room.number}`}
                 className="mb-4 w-full h-48 object-cover rounded"
@@ -62,23 +64,22 @@ function DoubleRooms() {
                 <strong>Capacity:</strong> {room.capacity} person
               </p>
               <p className="mb-2">
-                <strong>Amenities:</strong>{" "}
-                {room.amenities.join(", ")}
+                <strong>Amenities:</strong> {room.amenities.join(", ")}
               </p>
               <p className="text-green-600 font-medium mb-2">Available</p>
-              <button className="mt-2 px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700">
+              <button className="mt-2 primary-button hover:bg-purple-700">
                 Proceed to Book
               </button>
             </div>
           ))}
         </div>
       ) : (
-        <p className="text-gray-700">No Double Rooms Available at the moment.</p>
+        <p className="text-gray-700">
+          No Double Rooms Available at the moment.
+        </p>
       )}
     </div>
   );
 }
 
 export default DoubleRooms;
-
-

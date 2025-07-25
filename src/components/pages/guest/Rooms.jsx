@@ -3,11 +3,7 @@ import SingleRooms from "./SingleRooms";
 import DoubleRooms from "./DoubleRooms";
 import TripleRooms from "./TripleRooms";
 
-import { useNavigate } from 'react-router-dom';
-
-
-
-
+import { useNavigate } from "react-router-dom";
 
 const rooms = [
   {
@@ -40,74 +36,65 @@ const rooms = [
 ];
 
 function Rooms() {
-    const navigate = useNavigate();
-    const handleBookNow = (type) => {
-  if (type === "Single Room") navigate("/guest/rooms/single");
- else if (type === "Double Sharing") navigate("/guest/rooms/double");
+  const navigate = useNavigate();
+  const handleBookNow = (type) => {
+    if (type === "Single Room") navigate("/guest/rooms/single");
+    else if (type === "Double Sharing") navigate("/guest/rooms/double");
     else if (type === "Triple Sharing") navigate("/guest/rooms/triple");
-// console.log("hello");
-};
+    // console.log("hello");
+  };
   return (
-    
-    <div className="min-h-screen bg-white font-sans">
-      {/* Navbar */}
-      <div className="w-screen min-h-screen bg-gray-100 px-8 py-6">
-      
-      {/* Page Heading */}
-      <div className="bg-[#EBD8FF] py-10 text-center">
-        <h2 className="text-3xl font-bold text-gray-800">Available Rooms</h2>
-        <p className="text-gray-600 mt-2">Choose the room that fits you best</p>
-      </div>
+    <>
+      <div className="bg-white shadow-2xl mt-8 w-[96%] mx-auto">
+        {/* Page Heading */}
+        <div className=" py-10 text-center">
+          <h2 className="text-3xl font-bold text-gray-800">Available Rooms</h2>
+          <p className="text-gray-600 mt-2">
+            Choose the room that fits you best
+          </p>
+        </div>
 
-      {/* Room Cards */}
-      <div className="p-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-        {rooms.map((room) => (
-          <div
-            key={room.id}
-            className="border rounded-lg shadow hover:shadow-md transition duration-300"
-          >
-            <img
-              src={room.image}
-              alt={room.type}
-              className="w-full h-48 object-cover rounded-t-lg"
-            />
-            <div className="p-4">
-              <h3 className="text-xl font-semibold text-gray-800 mb-2">
-                {room.type}
-              </h3>
-              <p className="text-gray-600 mb-1">Rent: ₹{room.rent}/month</p>
-              <p className="text-gray-600 mb-1">Capacity: {room.capacity} person(s)</p>
-              <p
-                className={`font-medium ${
-                  room.available ? "text-green-600" : "text-red-500"
-                }`}
-              >
-                {room.available ? "Available" : "Not Available"}
-              </p>
-             
-             
+        {/* Room Cards */}
+        <div className="p-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+          {rooms.map((room) => (
+            <div
+              key={room.id}
+              className="border rounded-lg shadow hover:shadow-md transition duration-300"
+            >
+              <img
+                src={room.image}
+                alt={room.type}
+                className="w-full h-48 object-cover rounded-t-lg"
+              />
+              <div className="p-4">
+                <h3 className="text-xl font-semibold text-gray-800 mb-2">
+                  {room.type}
+                </h3>
+                <p className="text-gray-600 mb-1">Rent: ₹{room.rent}/month</p>
+                <p className="text-gray-600 mb-1">
+                  Capacity: {room.capacity} person(s)
+                </p>
+                <p
+                  className={`font-medium ${
+                    room.available ? "text-green-600" : "text-red-500"
+                  }`}
+                >
+                  {room.available ? "Available" : "Not Available"}
+                </p>
 
-
-             <button
+                <button
                   onClick={() => handleBookNow(room.type)}
-                  className="mt-4 bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700 disabled:opacity-50"
+                  className="secondary-button"
                   disabled={!room.available}
                 >
-                 Explore
+                  Explore
                 </button>
-
+              </div>
             </div>
-            
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
-
-
-
-
-
-      
-    </div></div>
+    </>
   );
 }
 

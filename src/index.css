@@ -9,3 +9,18 @@
     -ms-overflow-style: none;  /* IE and Edge */
     scrollbar-width: none;     /* Firefox */
   }
+
+  /* for buttons like submit , login, save, book */
+  .primary-button {
+    @apply bg-[#6E39A3] text-sm text-white px-3 py-1.5 rounded-md font-medium;
+  }
+
+  /* for buttons like filters, secondary purpose buttons */
+  .secondary-button {
+    @apply mt-4 text-sm bg-white text-[#3A0D5C] border-2 px-3 py-1.5 rounded-lg font-medium
+  }
+
+  /* background color */
+  .background-color{
+    @apply bg-[#FAFAFA]
+  }

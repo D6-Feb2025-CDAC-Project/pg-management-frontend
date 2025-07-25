@@ -8,7 +8,8 @@ const tripleRooms = [
     capacity: 3,
     amenities: ["Wi-Fi", "Attached Bathroom", "3 Beds", "Storage Lockers"],
     available: true,
-    image: "https://www.shutterstock.com/image-photo/triple-room-modern-hotel-260nw-649329964.jpg",
+    image:
+      "https://www.shutterstock.com/image-photo/triple-room-modern-hotel-260nw-649329964.jpg",
   },
   {
     id: 2,
@@ -17,7 +18,8 @@ const tripleRooms = [
     capacity: 3,
     amenities: ["Wi-Fi", "Balcony", "Shared Wardrobe", "24x7 Water"],
     available: true,
-    image: "https://a0.muscache.com/im/pictures/7e3680d2-e66a-4a6c-9438-0375235d1bcc.jpg?im_w=720",
+    image:
+      "https://a0.muscache.com/im/pictures/7e3680d2-e66a-4a6c-9438-0375235d1bcc.jpg?im_w=720",
   },
   {
     id: 3,
@@ -26,7 +28,8 @@ const tripleRooms = [
     capacity: 3,
     amenities: ["Wi-Fi", "Geyser", "Laundry Service", "Table & Chair"],
     available: false,
-    image: "https://www.silkahotels.com/images/silka-tsuen-wan/stay/triple-room/triple_room-S360-desktop.webp",
+    image:
+      "https://www.silkahotels.com/images/silka-tsuen-wan/stay/triple-room/triple_room-S360-desktop.webp",
   },
   {
     id: 4,
@@ -35,7 +38,8 @@ const tripleRooms = [
     capacity: 3,
     amenities: ["Wi-Fi", "Mini Fridge", "Attached Bathroom", "Smart TV"],
     available: true,
-    image: "https://risingstarhostel.com/wp-content/uploads/2025/05/Copy-of-PRB_1274-scaled.jpg",
+    image:
+      "https://risingstarhostel.com/wp-content/uploads/2025/05/Copy-of-PRB_1274-scaled.jpg",
   },
   {
     id: 5,
@@ -44,7 +48,8 @@ const tripleRooms = [
     capacity: 3,
     amenities: ["Wi-Fi", "Cupboard", "3 Beds", "24x7 Security"],
     available: true,
-    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQO5mhoym0US4lPP23sNjxn86mEGdlU7cFj4Q&s",
+    image:
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQO5mhoym0US4lPP23sNjxn86mEGdlU7cFj4Q&s",
   },
   {
     id: 6,
@@ -53,7 +58,8 @@ const tripleRooms = [
     capacity: 3,
     amenities: ["Wi-Fi", "Laundry", "Geyser", "Fan & Lights"],
     available: true,
-    image: "https://5.imimg.com/data5/GI/SC/GLADMIN-50954254/ams-pg-triple-sharing-room-500x500.jpg",
+    image:
+      "https://5.imimg.com/data5/GI/SC/GLADMIN-50954254/ams-pg-triple-sharing-room-500x500.jpg",
   },
 ];
 
@@ -62,7 +68,7 @@ function TripleRooms() {
 
   return (
     <div className="min-h-screen p-6 bg-gray-100">
-      <h1 className="text-3xl font-bold mb-6 text-purple-800">
+      <h1 className="text-3xl font-bold mb-6 text-black">
         Available Triple Sharing Rooms
       </h1>
 
@@ -91,7 +97,7 @@ function TripleRooms() {
                 <strong>Amenities:</strong> {room.amenities.join(", ")}
               </p>
               <p className="text-green-600 font-medium mb-2">Available</p>
-              <button className="mt-2 px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700">
+              <button className="mt-2 primary-button hover:bg-purple-700">
                 Proceed to Book
               </button>
             </div>

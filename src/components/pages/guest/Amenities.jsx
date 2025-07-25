@@ -43,7 +43,7 @@ const amenities = [
 
 const Amenities = () => {
   return (
-    <div className="bg-[#F9F6FF] py-12 px-6 md:px-16">
+    <div className="background-color px-6 md:px-16 mt-8">
       {amenities.map((section, idx) => (
         <div key={idx} className="mb-10">
           <h2 className="text-2xl font-semibold text-[#6E39A3] mb-4">

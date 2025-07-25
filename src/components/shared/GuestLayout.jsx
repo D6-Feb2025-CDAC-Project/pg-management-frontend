@@ -10,7 +10,7 @@ const GuestLayout = () => {
   console.log("On guest layout page");
 
   return (
-    <div className="h-screen overflow-y-auto hide-scrollbar bg-[#FAFAFA]">
+    <div className="h-screen overflow-y-auto hide-scrollbar background-color">
       {/* Navbar */}
       <nav className="flex bg-white items-center justify-between px-4 py-2 shadow">
         {/* left logo container */}
@@ -29,21 +29,13 @@ const GuestLayout = () => {
             Amenities
           </Link>
         </div>
-        {/* login & registration button */}
-        <div className="flex justify-between">
-          <button
-            onClick={() => navigate("/user/registration")}
-            className="bg-white mr-4 text-sm text-[#3A0D5C] border-[#3A0D5C] border-2 px-3 py-1.5 rounded-lg font-medium"
-          >
-            Register
-          </button>
-          <button
-            onClick={() => navigate("/auth/login")}
-            className="bg-[#6E39A3] text-sm text-white px-3 py-1.5 rounded-md font-medium "
-          >
-            Login
-          </button>
-        </div>
+        {/* login button */}
+        <button
+          onClick={() => navigate("/auth/login")}
+          className="primary-button"
+        >
+          Login
+        </button>
       </nav>
       <Outlet />
       {/* footer */}
