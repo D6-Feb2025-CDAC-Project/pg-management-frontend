@@ -1,11 +1,11 @@
 import React from 'react'
 
-function Notice() {
+function Notices() {
     return (
         <div>
-            This is notices page
+            This is notices page.
         </div>
     )
 }
 
-export default Notice
+export default Notices

@@ -1,26 +1,39 @@
 import { Route, Routes, Navigate } from "react-router-dom";
-import AuthLayout from "./components/shared/AuthLayout";
+
 import Login from "./components/pages/tenant-authentication/Login";
 import PasswordReset from "./components/pages/tenant-authentication/PasswordReset";
-import Rooms from "./components/pages/guest/Rooms";
+
+import GuestLayout from "./components/shared/GuestLayout";
+import TenantLayout from "./components/shared/TenantLayout";
+import AuthLayout from "./components/shared/AuthLayout";
+import AdminLayout from "./components/shared/AdminLayout";
+
+import GuestDashboard from "./components/pages/guest/GuestDashboard";
 import SingleRooms from "./components/pages/guest/SingleRooms";
 import DoubleRooms from "./components/pages/guest/DoubleRooms";
 import TripleRooms from "./components/pages/guest/TripleRooms";
-import GuestLayout from "./components/shared/GuestLayout";
-import TenantLayout from "./components/shared/TenantLayout";
-import Dashboard from "./components/pages/tenant/Dashboard";
-import "./index.css";
-import Payment from "./components/pages/tenant/Payment";
-import Leavepg from "./components/pages/tenant/Leavepg";
-import Notices from "./components/pages/tenant/Notices";
 import Amenities from "./components/pages/guest/Amenities";
-import Registration from "./components/pages/guest/Registration";
-import GuestDashboard from "./components/pages/guest/GuestDashboard";
+import Rooms from "./components/pages/guest/Rooms";
+
+import TenantDashboard from "./components/pages/tenant/Dashboard";
+import Payment from "./components/pages/tenant/Payment";
+import LeaveRequest from "./components/pages/tenant/Leavepg";
+import TenantNotices from "./components/pages/tenant/Notices";
+import TenantComplaints from "./components/pages/tenant/Complaints";
+
+import AdminDashboard from "./components/pages/admin/Dashboard";
+import AdminRooms from "./components/pages/admin/Rooms";
+import Tenants from "./components/pages/admin/Tenants";
+import AdminComplaints from "./components/pages/admin/Complaints";
+import LeaveRequests from "./components/pages/admin/LeaveRequests";
+import AdminNotices from "./components/pages/admin/Notices";
+
+import "./index.css";
 
 function App() {
   return (
     <Routes>
-      {/* <Route path='/home' element={<LandingPage />} /> */}
+
       // Guest routes
       <Route path="/guest" element={<GuestLayout />}>
         <Route path="dashboard" element={<GuestDashboard />} />
@@ -31,33 +44,46 @@ function App() {
         <Route path="/guest/rooms/triple" element={<TripleRooms />} />
         <Route index element={<Navigate to="/guest/dashboard" replace />} />
       </Route>
+
+
       // Tenant auth routes
       <Route path="/user" element={<AuthLayout />}>
         <Route path="login" element={<Login />} />
         <Route path="password-reset" element={<PasswordReset />} />
         <Route index element={<Navigate to="/user/login" replace />} />
       </Route>
+
+
       // tenant routes
       <Route path="/tenant" element={<TenantLayout />}>
-        <Route path="dashboard" element={<Dashboard />} />
+        <Route path="dashboard" element={<TenantDashboard />} />
         <Route path="payment" element={<Payment />} />
-        <Route path="leave-pg" element={<Leavepg />} />
-        <Route path="notices" element={<Notices />} />
+        <Route path="leave-pg" element={<LeaveRequest />} />
+        <Route path="complaints" element={<TenantComplaints />} />
+        <Route path="notices" element={<TenantNotices />} />
+        <Route index element={<Navigate to="/tenant/dashboard" replace />} />
       </Route>
+
+
       // admin auth Routes
       <Route path="/superUser" element={<AuthLayout />}>
         {/* <Route path="login" element={<Login />} />
         <Route index element={<Navigate to="/admin/login" replace />} /> */}
       </Route>
+
+
       // admin routes
-      <Route path="/admin" element={<TenantLayout />}>
-        {/* <Route path="dashboard" element={<Dashboard />} />
-        <Route path="properties" element={<Properties />} />
+      <Route path="/admin" element={<AdminLayout />}>
+        <Route path="dashboard" element={<AdminDashboard />} />
+        <Route path="rooms" element={<AdminRooms />} />
         <Route path="tenants" element={<Tenants />} />
-        <Route path="complaints" element={<Complaints />} />
+        <Route path="complaints" element={<AdminComplaints />} />
         <Route path="leave-requests" element={<LeaveRequests />} />
-        <Route path="notices" element={<Notices />} /> */}
+        <Route path="notices" element={<AdminNotices />} />
+        <Route index element={<Navigate to="/admin/dashboard" replace />} />
       </Route>
+
+      <Route index element={<Navigate to="/guest/dashboard" replace />} />
     </Routes>
   );
 }
