@@ -56,7 +56,7 @@ const Login = () => {
   return (
     <>
       <div className="bg-white p-8 rounded-2xl shadow-lg w-full max-w-sm">
-        <h2 className="text-2xl font-semibold text-fuchsia-700 text-center">
+        <h2 className="text-2xl font-semibold text-purpleDarkScaleScale-700 text-center">
           Welcome Back
         </h2>
         <p className="text-gray-500 text-center mb-6">Log in to continue</p>
@@ -71,7 +71,7 @@ const Login = () => {
               placeholder="you@example.com"
               value={email}
               onChange={({ target }) => setEmail(target.value)}
-              className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-fuchsia-400 outline-none text-base"
+              className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-purpleDarkScaleScale-400 outline-none text-base"
             />
           </div>
 
@@ -84,7 +84,7 @@ const Login = () => {
                 type={showPassword ? "text" : "password"}
                 value={password}
                 onChange={({ target }) => setPassword(target.value)}
-                className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-fuchsia-400 outline-none pr-12"
+                className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-purpleDarkScale-400 outline-none pr-12"
               />
               <button
                 type="button"
@@ -105,7 +105,7 @@ const Login = () => {
               href="/user/password-reset"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-fuchsia-600 hover:underline"
+              className="text-purpleDarkScale-600 hover:underline"
             >
               Forgot password?
             </a>
@@ -113,14 +113,14 @@ const Login = () => {
 
           <button
             type="submit"
-            className="w-full bg-fuchsia-600 text-white font-semibold py-3 rounded-xl hover:bg-fuchsia-700 transition"
+            className="w-full bg-purpleDarkScale-600 text-white font-semibold py-3 rounded-xl hover:bg-purpleDarkScale-700 transition"
           >
             Login
           </button>
         </form>
 
         {/* <p className="mt-4 text-gray-600 text-center">
-                    Don't have an account? <a href="/user/register" className="text-fuchsia-600 hover:underline">Sign up</a>
+                    Don't have an account? <a href="/user/register" className="text-purpleDarkScale-600 hover:underline">Sign up</a>
                 </p> */}
 
         {/* <Notification errorMessage={errorMessage} successMessage={null} onErrClose={() => setErrorMessage(null)} onSuccClose={null} /> */}

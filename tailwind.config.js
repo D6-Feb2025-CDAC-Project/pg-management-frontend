@@ -5,7 +5,17 @@ export default {
     extend: {
       colors: {
         // Custom Purple Color Palette
-        purpleDark: "#6E39A3",
+        purpleDarkScale: {
+          100: '#EADCF6', // lightest tint
+          200: '#CDB1E7',
+          300: '#AF86D9',
+          400: '#9362C9', // close to base
+          500: '#6E39A3', // your original
+          600: '#5A2D84',
+          700: '#462166',
+          800: '#331548', // darkest shade
+        },
+        purpleDark: '#6E39A3',
         purpleLight: "#E7D0F5",
         bgGray: "#FAFAFA",
       },
