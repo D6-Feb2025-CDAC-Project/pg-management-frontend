@@ -65,7 +65,7 @@ const Leavepg = () => {
   };
 
   return (
-    <div className="min-h-screen w-full bg-gray-100 py-10 px-6">
+    <div className="min-h-screen w-full bg-purpleDarkScale-100  py-10 px-6">
       <div className="max-w-7xl mx-auto space-y-10">
 
         {/* Title */}

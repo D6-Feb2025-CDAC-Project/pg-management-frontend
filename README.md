@@ -1,12 +1,107 @@
-# React + Vite
+# PG Management System – Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A web-based management system for PG (Paying Guest) accommodations, designed to streamline tasks such as handling complaints, notices, feedback, attendance, and user management.
 
-Currently, two official plugins are available:
+> This is the **frontend** of the full-stack application. It connects to a Spring Boot + MySQL backend.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## Expanding the ESLint configuration
+## 🛠️ Tech Stack
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- ⚛️ React.js
+- 💨 Tailwind CSS
+- 🌐 React Router
+- 🔐 JWT Authentication (planned)
+- ⚙️ Axios for API calls
+
+---
+
+## 📁 Folder Structure (Planned & In progress)
+
+```
+src/
+├── assets/            # Static files like logos and images
+├── components/        # Reusable UI components
+├── pages/             # Page-level components (Login, Dashboard, etc.)
+├── routes/            # App routing definitions
+├── services/          # API logic and endpoints
+└── App.jsx            # Root component
+```
+
+---
+
+## 🚀 Getting Started
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/D6-Feb2025-CDAC-Project/pg-management-frontend.git
+cd pg-management-frontend
+```
+
+### 2. Install dependencies
+
+```bash
+npm install
+```
+
+### 3. Start the development server
+
+```bash
+npm run dev
+```
+
+Open `http://localhost:5173` to view the app in your browser.
+
+---
+
+## ✨ Features (Planned & In Progress)
+
+- 🔐 Login & Role-based Access (Student / Admin / Warden)
+- 🛏 Room & Bed Allocation Tracking
+- 📬 Complaint Submission and Resolution
+- 📢 Notice Board Management
+- 🧾 Feedback System
+- 📊 Attendance Tracking
+- 📁 User Profiles and Role Management
+
+---
+
+## 🧑‍💻 Contributing
+
+This project is developed by a group of 4 students as part of the CDAC academic curriculum.
+
+**Branching Strategy:**
+
+- `main` – Stable production-ready builds
+- `dev` – Active development
+- `feature/your-feature-name` – New feature branches
+
+👉 Before starting work:
+
+1. Pull latest changes from `dev`
+2. Create your own `feature/` branch
+3. Open a Pull Request to `dev` when done
+
+---
+
+## ⚙️ Backend
+
+The backend is built using **Spring Boot** and **MySQL**.
+
+> 🔧 Backend repository link will be added here once available.
+
+---
+
+## 🌐 Deployment
+
+> 📦 Deployment details will be updated once finalized.
+
+---
+
+## 👥 Team
+
+- Nivedita Magadum
+- Prajkta Kamble
+- Shruti Naik
+- Tanvi Gavhane

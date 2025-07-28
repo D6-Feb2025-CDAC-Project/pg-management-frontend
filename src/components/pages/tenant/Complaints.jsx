@@ -1,26 +1,37 @@
 import React, { useState } from 'react';
+import ComplaintDetails from '../admin/sub-components/ComplaintDetails';
+
+const dummyComplaints = [
+  {
+    id: 1,
+    title: 'Leaking tap in bathroom',
+    message: 'There is a constant leak in the bathroom tap causing water wastage.',
+    date: '2025-07-20',
+    status: 'Pending',
+    priority: 'Medium',
+    actionTaken: '',
+    resolvedDate: null,
+    resolvedBy: null
+  },
+  {
+    id: 2,
+    title: 'Wi-Fi not working on 2nd floor',
+    message: 'The Wi-Fi signal is very weak on the second floor.',
+    date: '2025-07-22',
+    status: 'Resolved',
+    priority: 'High',
+    actionTaken: 'Replaced Wi-Fi router and installed signal booster on 2nd floor',
+    resolvedDate: '2025-07-25'
+  },
+]
 
 const Complaints = () => {
-  const [complaints, setComplaints] = useState([
-    {
-      id: 1,
-      title: 'Leaking tap in bathroom',
-      message: 'There is a constant leak in the bathroom tap causing water wastage.',
-      date: '2025-07-20',
-      status: 'Pending',
-    },
-    {
-      id: 2,
-      title: 'Wi-Fi not working on 2nd floor',
-      message: 'The Wi-Fi signal is very weak on the second floor.',
-      date: '2025-07-22',
-      status: 'Resolved',
-    },
-  ]);
+  const [complaints, setComplaints] = useState(dummyComplaints);
 
   const [newComplaint, setNewComplaint] = useState({
     title: '',
     message: '',
+    priority: 'Medium',
   });
 
   const handleChange = (e) => {
@@ -35,22 +46,25 @@ const Complaints = () => {
       id: complaints.length + 1,
       title: newComplaint.title,
       message: newComplaint.message,
+      priority: newComplaint.priority,
       date: new Date().toISOString().split('T')[0],
       status: 'Pending',
+      actionTaken: '',
+      resolvedDate: null,
     };
 
     setComplaints([newEntry, ...complaints]);
-    setNewComplaint({ title: '', message: '' });
+    setNewComplaint({ title: '', message: '', priority: 'Medium' });
   };
 
   return (
-    <div className="bg-purpleDarkScale-100 p-6 min-h-screen">
-      <h1 className="text-3xl font-bold text-purpleDark mb-6 text-center">
+    <div className="bg-purpleDarkScale-100  p-6 min-h-screen">
+      <h1 h1 className="text-3xl font-bold text-purpleDark mb-6 text-center" >
         Raise a Complaint
-      </h1>
+      </h1 >
 
       {/* Complaint Form */}
-      <div className="bg-white p-6 rounded-xl shadow space-y-4 border border-purpleDarkScale-300 mb-10 max-w-3xl mx-auto">
+      <div div className="bg-white p-6 rounded-xl shadow space-y-4 border border-purpleDarkScale-300 mb-10 max-w-3xl mx-auto" >
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="block text-purpleDark text-sm font-medium mb-1">
@@ -65,6 +79,21 @@ const Complaints = () => {
               className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-purpleDarkScale-400"
               required
             />
+          </div>
+          <div>
+            <label className="block text-purpleDark text-sm font-medium mb-1">
+              Priority Level
+            </label>
+            <select
+              name="priority"
+              value={newComplaint.priority}
+              onChange={handleChange}
+              className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-purpleDarkScale-400"
+            >
+              <option value="Low">Low</option>
+              <option value="Medium">Medium</option>
+              <option value="High">High</option>
+            </select>
           </div>
           <div>
             <label className="block text-purpleDark text-sm font-medium mb-1">
@@ -87,41 +116,32 @@ const Complaints = () => {
             Submit Complaint
           </button>
         </form>
-      </div>
+      </div >
 
       {/* Complaint History */}
-      <div className="max-w-3xl mx-auto space-y-4">
+      <div div className="max-w-3xl mx-auto space-y-4" >
         <h2 className="text-xl font-semibold text-purpleDark mb-2">
           Your Previous Complaints
         </h2>
 
-        {complaints.length === 0 ? (
-          <p className="text-gray-600 italic">No complaints raised yet.</p>
-        ) : (
-          complaints.map((comp) => (
-            <div
-              key={comp.id}
-              className="bg-white border border-purpleDarkScale-300 rounded-lg shadow p-4"
-            >
-              <div className="flex justify-between items-center mb-1">
-                <h3 className="text-lg font-bold text-gray-900">{comp.title}</h3>
-                <span
-                  className={`px-3 py-1 text-xs font-semibold rounded-full ${
-                    comp.status === 'Resolved'
-                      ? 'bg-green-500 text-white'
-                      : 'bg-yellow-400 text-black'
-                  }`}
-                >
-                  {comp.status}
-                </span>
+
+        {
+          complaints.length === 0 ? (
+            <p className="text-gray-600 italic">No complaints raised yet.</p>
+          ) : (
+            complaints.map((comp) => (
+              <div key={comp.id}
+                className="bg-white border rounded-lg shadow p-4">
+                <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4">
+                  <ComplaintDetails complaint={comp} />
+                </div>
               </div>
-              <p className="text-sm text-gray-700 mb-1">{comp.message}</p>
-              <p className="text-xs text-gray-500">Date: {comp.date}</p>
-            </div>
-          ))
-        )}
-      </div>
-    </div>
+            ))
+
+          )
+        }
+      </div >
+    </div >
   );
 };
 
