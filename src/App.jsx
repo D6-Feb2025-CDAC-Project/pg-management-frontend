@@ -25,10 +25,11 @@ import AdminDashboard from "./components/pages/admin/Dashboard";
 import AdminRooms from "./components/pages/admin/Rooms";
 import Tenants from "./components/pages/admin/Tenants";
 import AdminComplaints from "./components/pages/admin/Complaints";
-import LeaveRequests from "./components/pages/admin/LeaveRequests";
+import LeaveNotices from "./components/pages/admin/LeaveNotices";
 import AdminNotices from "./components/pages/admin/Notices";
 
 import "./index.css";
+
 
 function App() {
   return (
@@ -78,7 +79,7 @@ function App() {
         <Route path="rooms" element={<AdminRooms />} />
         <Route path="tenants" element={<Tenants />} />
         <Route path="complaints" element={<AdminComplaints />} />
-        <Route path="leave-requests" element={<LeaveRequests />} />
+        <Route path="leave-notices" element={<LeaveNotices />} />
         <Route path="notices" element={<AdminNotices />} />
         <Route index element={<Navigate to="/admin/dashboard" replace />} />
       </Route>

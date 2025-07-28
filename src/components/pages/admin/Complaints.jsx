@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import StatsCard from './sub-components/StatsCard';
-import FilterControls from './sub-components/FilterControls';
-import ComplaintCard from './sub-components/ComplaintCard';
+import StatsCard from '../sub-components/StatsCard';
+import FilterControls from './sub-components/complaints/FilterControls';
+import ComplaintCard from './sub-components/complaints/ComplaintCard';
 
 const dummyComplaints = [
     {

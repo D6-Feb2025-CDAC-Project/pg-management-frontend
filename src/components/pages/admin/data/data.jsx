@@ -14,6 +14,6 @@ export const menuItems = [
     { icon: <Users />, text: "Tenants", url: "/admin/tenants" },
     { icon: <Megaphone />, text: "Notices", url: "/admin/notices" },
     { icon: <OctagonAlert />, text: "Complaints", url: "/admin/complaints" },
-    { icon: <DoorOpen />, text: "Leave Requests", url: "/admin/leave-requests" },
-    { icon: <LogOut />, text: "Logout", url: "/admin/logout" }
+    { icon: <DoorOpen />, text: "Leave Notices", url: "/admin/leave-notices" },
+    { icon: <LogOut />, text: "Logout", url: "/user/login" }
 ]

@@ -1,5 +1,5 @@
-import PriorityBadge from "./PriorityBadge";
-import StatusBadge from "./StatusBadge";
+import PriorityBadge from "../../../sub-components/PriorityBadge";
+import StatusBadge from "../../../sub-components/StatusBadge";
 
 // Complaint Details Component
 const ComplaintDetails = ({ complaint }) => (
