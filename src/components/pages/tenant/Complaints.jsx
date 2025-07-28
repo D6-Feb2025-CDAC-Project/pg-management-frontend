@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import ComplaintDetails from '../admin/sub-components/ComplaintDetails';
+import ComplaintDetails from '../admin/sub-components/complaints/ComplaintDetails';
 
 const dummyComplaints = [
   {
@@ -59,12 +59,12 @@ const Complaints = () => {
 
   return (
     <div className="bg-purpleDarkScale-100  p-6 min-h-screen">
-      <h1 h1 className="text-3xl font-bold text-purpleDark mb-6 text-center" >
+      <h1 className="text-3xl font-bold text-purpleDark mb-6 text-center" >
         Raise a Complaint
       </h1 >
 
       {/* Complaint Form */}
-      <div div className="bg-white p-6 rounded-xl shadow space-y-4 border border-purpleDarkScale-300 mb-10 max-w-3xl mx-auto" >
+      <div className="bg-white p-6 rounded-xl shadow space-y-4 border border-purpleDarkScale-300 mb-10 max-w-3xl mx-auto" >
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="block text-purpleDark text-sm font-medium mb-1">
@@ -119,7 +119,7 @@ const Complaints = () => {
       </div >
 
       {/* Complaint History */}
-      <div div className="max-w-3xl mx-auto space-y-4" >
+      <div className="max-w-3xl mx-auto space-y-4" >
         <h2 className="text-xl font-semibold text-purpleDark mb-2">
           Your Previous Complaints
         </h2>

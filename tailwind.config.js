@@ -17,6 +17,7 @@ export default {
         },
         purpleDark: '#6E39A3',
         purpleLight: "#E7D0F5",
+        purpleLighter: "#F0E3FA",
         bgGray: "#FAFAFA",
       },
     },

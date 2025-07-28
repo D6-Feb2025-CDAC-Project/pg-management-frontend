@@ -8,6 +8,16 @@ const StatusBadge = ({ status }) => {
                 return 'bg-purpleDark text-white';
             case 'Pending':
                 return 'bg-yellow-400 text-black';
+            case 'Completed':
+                return 'bg-green-500 text-white';
+            case 'Approved':
+                return 'bg-purpleDark text-white';
+            case 'Under Review':
+                return 'bg-blue-500 text-white';
+            case 'Pending Review':
+                return 'bg-yellow-400 text-black';
+            case 'Rejected':
+                return 'bg-red-500 text-white';
             default:
                 return 'bg-gray-400 text-white';
         }
