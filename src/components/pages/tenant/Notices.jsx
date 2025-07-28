@@ -62,17 +62,17 @@ const Notice = () => {
   const borderColor = {
     urgent: 'border-red-500',
     important: 'border-yellow-400',
-    general: 'border-gray-400',
+    general: 'border-purpleDark',
   };
 
   const badgeColor = {
     urgent: 'bg-red-600',
     important: 'bg-yellow-400 text-black',
-    general: 'bg-gray-600',
+    general: 'bg-purpleDark',
   };
 
   return (
-    <div className="min-h-screen w-full bg-purpleLight py-6 px-4">
+    <div className="min-h-screen w-full bg-purpleDarkScale-100  py-6 px-4">
       <div className="space-y-8 max-w-4xl mx-auto">
         {/* Title */}
         <h1 className="text-3xl font-bold text-purpleDark text-center">
@@ -93,11 +93,10 @@ const Notice = () => {
               <button
                 key={type}
                 onClick={() => setFilter(type)}
-                className={`px-4 py-1.5 rounded text-sm border font-medium transition ${
-                  filter === type
-                    ? 'bg-purpleDark text-white border-purpleDark'
-                    : 'bg-white text-gray-800 border-gray-300 hover:bg-purpleLight'
-                }`}
+                className={`px-4 py-1.5 rounded text-sm border font-medium transition ${filter === type
+                  ? 'bg-purpleDark text-white border-purpleDark'
+                  : 'bg-white text-gray-800 border-gray-300 hover:bg-purpleLight'
+                  }`}
               >
                 {type.charAt(0).toUpperCase() + type.slice(1)}
               </button>
@@ -115,9 +114,8 @@ const Notice = () => {
             filtered.map((notice) => (
               <div
                 key={notice.id}
-                className={`w-full bg-white border-l-4 px-6 py-5 rounded-md shadow-sm transition ${
-                  borderColor[notice.type]
-                } ${notice.unread ? 'ring-2 ring-green-400' : ''}`}
+                className={`w-full bg-white border-l-4 px-6 py-5 rounded-md shadow-sm transition ${borderColor[notice.type]
+                  } ${notice.unread ? 'ring-2 ring-green-400' : ''}`}
               >
                 <div className="flex justify-between items-start mb-2 flex-wrap gap-2">
                   <h3 className="text-lg font-semibold text-gray-900">

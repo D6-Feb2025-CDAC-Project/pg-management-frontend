@@ -7,7 +7,7 @@ function TenantLayout() {
     return (
         <div className="flex h-screen">
             <Sidebar menuItems={menuItems} />
-            <div className="flex-1 bg-purpleDark-200 overflow-y-auto">
+            <div className="flex-1 bg-purple-200 overflow-y-auto">
                 <div className="p-4">
                     <Outlet />
                 </div>
