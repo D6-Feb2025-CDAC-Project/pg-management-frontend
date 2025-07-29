@@ -23,6 +23,8 @@ import TenantComplaints from "./components/pages/tenant/Complaints";
 
 import AdminDashboard from "./components/pages/admin/Dashboard";
 import AdminRooms from "./components/pages/admin/Rooms";
+import AddProperty from "./components/pages/admin/AddProperty";
+import EditProperty from "./components/pages/admin/EditProperty";
 import Tenants from "./components/pages/admin/Tenants";
 import AdminComplaints from "./components/pages/admin/Complaints";
 import LeaveNotices from "./components/pages/admin/LeaveNotices";
@@ -68,6 +70,8 @@ function App() {
       <Route path="/admin" element={<AdminLayout />}>
         <Route path="dashboard" element={<AdminDashboard />} />
         <Route path="rooms" element={<AdminRooms />} />
+         <Route path="add-property" element={<AddProperty />} />
+         <Route path="edit-property/:roomNo" element={<EditProperty />} />
         <Route path="tenants" element={<Tenants />} />
         <Route path="complaints" element={<AdminComplaints />} />
         <Route path="leave-notices" element={<LeaveNotices />} />
