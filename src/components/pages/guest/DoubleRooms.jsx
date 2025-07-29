@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 const doubleRooms = [
   {
@@ -45,32 +46,31 @@ function DoubleRooms() {
       {availableRooms.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {availableRooms.map((room) => (
-            <div
-              key={room.id}
-              className="bg-white shadow-md p-6 rounded-xl border border-gray-200"
-            >
-              <img
-                src={room.image}
-                alt={`Room ${room.number}`}
-                className="mb-4 w-full h-48 object-cover rounded"
-              />
-              <h3 className="text-xl font-semibold text-gray-800 mb-2">
-                Room No: {room.number}
-              </h3>
-              <p className="mb-1">
-                <strong>Rent:</strong> ₹{room.rent}/month
-              </p>
-              <p className="mb-1">
-                <strong>Capacity:</strong> {room.capacity} person
-              </p>
-              <p className="mb-2">
-                <strong>Amenities:</strong> {room.amenities.join(", ")}
-              </p>
-              <p className="text-green-600 font-medium mb-2">Available</p>
-              <button className="mt-2 primary-button hover:bg-purple-700">
-                Proceed to Book
-              </button>
-            </div>
+            <Link to="/guest/room-details" state={{ room }} key={room.id}>
+              <div
+                key={room.id}
+                className="bg-white shadow-md p-6 rounded-xl border border-gray-200"
+              >
+                <img
+                  src={room.image}
+                  alt={`Room ${room.number}`}
+                  className="mb-4 w-full h-48 object-cover rounded"
+                />
+                <h3 className="text-xl font-semibold text-gray-800 mb-2">
+                  Room No: {room.number}
+                </h3>
+                <p className="mb-1">
+                  <strong>Rent:</strong> ₹{room.rent}/month
+                </p>
+                <p className="mb-1">
+                  <strong>Capacity:</strong> {room.capacity} person
+                </p>
+                <p className="mb-2">
+                  <strong>Amenities:</strong> {room.amenities.join(", ")}
+                </p>
+                <p className="text-green-600 font-medium mb-2">Available</p>
+              </div>
+            </Link>
           ))}
         </div>
       ) : (
