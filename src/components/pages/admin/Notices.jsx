@@ -57,7 +57,9 @@ const AdminNotices = () => {
 
   return (
     <div className="min-h-screen p-6 bg-purple-200">
-      <h1 className="text-3xl font-bold text-purple-800 mb-6">Admin Notice Board</h1>
+      <h1 className="text-3xl font-bold text-purple-800 mb-6 text-center">
+        Admin Notice Board
+      </h1>
 
       {/* Form */}
       <div className="bg-white p-6 rounded-lg shadow-lg mb-8">
