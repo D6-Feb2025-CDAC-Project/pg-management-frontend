@@ -29,12 +29,11 @@ import LeaveNotices from "./components/pages/admin/LeaveNotices";
 import AdminNotices from "./components/pages/admin/Notices";
 
 import "./index.css";
-
+import PendingBookings from "./components/pages/sub-components/PendingBookings";
 
 function App() {
   return (
     <Routes>
-
       // Guest routes
       <Route path="/guest" element={<GuestLayout />}>
         <Route path="dashboard" element={<GuestDashboard />} />
@@ -45,16 +44,12 @@ function App() {
         <Route path="/guest/rooms/triple" element={<TripleRooms />} />
         <Route index element={<Navigate to="/guest/dashboard" replace />} />
       </Route>
-
-
       // Tenant auth routes
       <Route path="/user" element={<AuthLayout />}>
         <Route path="login" element={<Login />} />
         <Route path="password-reset" element={<PasswordReset />} />
         <Route index element={<Navigate to="/user/login" replace />} />
       </Route>
-
-
       // tenant routes
       <Route path="/tenant" element={<TenantLayout />}>
         <Route path="dashboard" element={<TenantDashboard />} />
@@ -64,15 +59,11 @@ function App() {
         <Route path="notices" element={<TenantNotices />} />
         <Route index element={<Navigate to="/tenant/dashboard" replace />} />
       </Route>
-
-
       // admin auth Routes
       <Route path="/superUser" element={<AuthLayout />}>
         {/* <Route path="login" element={<Login />} />
         <Route index element={<Navigate to="/admin/login" replace />} /> */}
       </Route>
-
-
       // admin routes
       <Route path="/admin" element={<AdminLayout />}>
         <Route path="dashboard" element={<AdminDashboard />} />
@@ -81,9 +72,9 @@ function App() {
         <Route path="complaints" element={<AdminComplaints />} />
         <Route path="leave-notices" element={<LeaveNotices />} />
         <Route path="notices" element={<AdminNotices />} />
+        <Route path="pending-bookings" element={<PendingBookings />} />
         <Route index element={<Navigate to="/admin/dashboard" replace />} />
       </Route>
-
       <Route index element={<Navigate to="/guest/dashboard" replace />} />
     </Routes>
   );
