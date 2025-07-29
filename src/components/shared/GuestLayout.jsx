@@ -31,7 +31,7 @@ const GuestLayout = () => {
         </div>
         {/* login button */}
         <button
-          onClick={() => navigate("/auth/login")}
+          onClick={() => navigate("/user/login")}
           className="primary-button"
         >
           Login
