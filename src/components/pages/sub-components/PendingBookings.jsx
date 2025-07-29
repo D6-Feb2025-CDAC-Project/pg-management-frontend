@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { FaEye, FaDownload } from "react-icons/fa"; // 👈 Import icons
+import { FaEye, FaDownload } from "react-icons/fa";
 
 const PendingBookings = ({ onBack }) => {
   const [bookings, setBookings] = useState([
@@ -87,7 +87,7 @@ const PendingBookings = ({ onBack }) => {
                         Approve
                       </button>
                       <button
-                        className="reject-button"
+                        className="reject-button ml-2"
                         onClick={() => updateStatus(booking.id, "Rejected")}
                       >
                         Reject

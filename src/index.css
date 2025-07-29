@@ -19,7 +19,15 @@
 
   /* for buttons like filters, secondary purpose buttons */
   .secondary-button {
-    @apply mt-4 text-sm bg-white text-[#3A0D5C] border-2 px-3 py-1.5 rounded-lg font-medium
+    @apply  text-sm bg-white border-[#3A0D5C] text-[#3A0D5C] border-2 px-3 py-1.5 rounded-lg font-medium
+  }
+
+  .approve-button {
+    @apply bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg
+  }
+
+  .reject-button {
+@apply bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg
   }
 
   
