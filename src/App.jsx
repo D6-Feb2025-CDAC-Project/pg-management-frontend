@@ -32,6 +32,7 @@ import AdminNotices from "./components/pages/admin/Notices";
 
 import "./index.css";
 import PendingBookings from "./components/pages/sub-components/PendingBookings";
+import RoomDetails from "./components/pages/guest/RoomDetails";
 
 function App() {
   return (
@@ -40,12 +41,14 @@ function App() {
       <Route path="/guest" element={<GuestLayout />}>
         <Route path="dashboard" element={<GuestDashboard />} />
         <Route path="amenities" element={<Amenities />} />
-        <Route path="/guest/rooms" element={<Rooms />} />
+        <Route path="rooms" element={<Rooms />} />
         <Route path="/guest/rooms/single" element={<SingleRooms />} />
         <Route path="/guest/rooms/double" element={<DoubleRooms />} />
         <Route path="/guest/rooms/triple" element={<TripleRooms />} />
         <Route index element={<Navigate to="/guest/dashboard" replace />} />
       </Route>
+      // room details route only with footer
+      <Route path="/guest/room-details" element={<RoomDetails />} />
       // Tenant auth routes
       <Route path="/user" element={<AuthLayout />}>
         <Route path="login" element={<Login />} />
@@ -79,7 +82,6 @@ function App() {
         <Route path="pending-bookings" element={<PendingBookings />} />
         <Route index element={<Navigate to="/admin/dashboard" replace />} />
       </Route>
-      <Route index element={<Navigate to="/guest/dashboard" replace />} />
     </Routes>
   );
 }
