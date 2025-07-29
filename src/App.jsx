@@ -16,6 +16,10 @@ import Notices from "./components/pages/tenant/Notices";
 import Amenities from "./components/pages/guest/Amenities";
 import Registration from "./components/pages/guest/Registration";
 import GuestDashboard from "./components/pages/guest/GuestDashboard";
+import Properties from "./components/pages/admin/Properties"
+import Addproperty from "./components/pages/admin/Addproperty";
+import EditProperty from "./components/pages/admin/EditProperty";
+import Tenants from "./components/pages/admin/Tenants";
 
 function App() {
   return (
@@ -51,6 +55,11 @@ function App() {
       </Route>
       // admin routes
       <Route path="/admin" element={<TenantLayout />}>
+
+      <Route path="properties" element={<Properties />} />
+      <Route path="add-property" element={<Addproperty />} />
+      <Route path="edit-property/:roomNo" element={<EditProperty />} />
+ <Route path="tenants" element={<Tenants />} />
         {/* <Route path="dashboard" element={<Dashboard />} />
         <Route path="properties" element={<Properties />} />
         <Route path="tenants" element={<Tenants />} />
