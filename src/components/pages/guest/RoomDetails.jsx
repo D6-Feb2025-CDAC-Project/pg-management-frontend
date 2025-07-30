@@ -1,15 +1,21 @@
 import React from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Footer from "../sub-components/Footer";
 
 const RoomDetails = () => {
   const location = useLocation();
-  // get room data
+  const navigate = useNavigate();
+
+  // get room data from single rooms , double rooms and triple rooms page
   const { room } = location.state || {};
 
   if (!room) {
     return <p className="text-center mt-10">No room details found.</p>;
   }
+
+  const handleBookNow = () => {
+    navigate("/guest/room-details/registration", { state: { room } });
+  };
 
   return (
     <div className="h-screen overflow-y-auto hide-scrollbar bg-bgGray">
@@ -45,7 +51,9 @@ const RoomDetails = () => {
 
             {/* fixed Buttons inside container */}
             <div className="absolute bottom-4 left-0 w-full flex  gap-3 px-4">
-              <button className="primary-button">Book Now</button>
+              <button className="primary-button" onClick={handleBookNow}>
+                Book Now
+              </button>
               <button className="secondary-button">Raise Enquiry</button>
             </div>
           </div>
