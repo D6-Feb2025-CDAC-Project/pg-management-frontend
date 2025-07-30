@@ -14,6 +14,8 @@ import DoubleRooms from "./components/pages/guest/DoubleRooms";
 import TripleRooms from "./components/pages/guest/TripleRooms";
 import Amenities from "./components/pages/guest/Amenities";
 import Rooms from "./components/pages/guest/Rooms";
+import RoomDetails from "./components/pages/guest/RoomDetails";
+import Registration from "./components/pages/guest/Registration";
 
 import TenantDashboard from "./components/pages/tenant/Dashboard";
 import Payment from "./components/pages/tenant/Payment";
@@ -29,10 +31,9 @@ import Tenants from "./components/pages/admin/Tenants";
 import AdminComplaints from "./components/pages/admin/Complaints";
 import LeaveNotices from "./components/pages/admin/LeaveNotices";
 import AdminNotices from "./components/pages/admin/Notices";
+import PendingBookings from "./components/pages/sub-components/PendingBookings";
 
 import "./index.css";
-import PendingBookings from "./components/pages/sub-components/PendingBookings";
-import RoomDetails from "./components/pages/guest/RoomDetails";
 
 function App() {
   return (
@@ -73,15 +74,17 @@ function App() {
       <Route path="/admin" element={<AdminLayout />}>
         <Route path="dashboard" element={<AdminDashboard />} />
         <Route path="rooms" element={<AdminRooms />} />
-         <Route path="add-property" element={<AddProperty />} />
-         <Route path="edit-property/:roomNo" element={<EditProperty />} />
+        <Route path="add-property" element={<AddProperty />} />
+        <Route path="edit-property/:roomNo" element={<EditProperty />} />
         <Route path="tenants" element={<Tenants />} />
         <Route path="complaints" element={<AdminComplaints />} />
         <Route path="leave-notices" element={<LeaveNotices />} />
         <Route path="notices" element={<AdminNotices />} />
-        <Route path="pending-bookings" element={<PendingBookings />} />
+        {/* <Route path="pending-bookings" element={<PendingBookings />} /> */}
         <Route index element={<Navigate to="/admin/dashboard" replace />} />
       </Route>
+      // guest Registration
+      <Route path="/guest/registration" element={<Registration />} />
     </Routes>
   );
 }

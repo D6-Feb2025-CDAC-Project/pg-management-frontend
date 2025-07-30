@@ -38,28 +38,30 @@ const Dashboard = () => {
   ];
 
   const grids = [
-    {
-      title: "Pending Bookings",
-      value: "4",
-      nextPage: "/admin/pending-bookings",
-    },
+    // {
+    //   title: "Pending Bookings",
+    //   value: "4",
+    //   nextPage: "/admin/pending-bookings",
+    // },
     { title: "Total Tenants", value: "45", nextPage: "/admin/tenants" },
     { title: "Available Rooms", value: "8", nextPage: "/admin/rooms" },
     { title: "Active Complaints", value: "2", nextPage: "/admin/complaints" },
   ];
 
   return (
-    <div className="p-6 bg-bgGray min-h-screen">
-      <h1 className="text-3xl font-bold mb-6">Admin Dashboard</h1>
+    <div className="p-6 min-h-screen">
+      <h1 className="text-3xl font-bold text-purple-800 mb-6">
+        Admin Dashboard
+      </h1>
       {/* 4 main grids */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-6">
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-6 mb-6">
         {grids.map((grid, index) => (
           <Link key={index} to={grid.nextPage}>
             <div className="bg-white shadow-lg rounded-2xl p-6 hover:scale-90 transition">
-              <h2 className="text-xl font-semibold">{grid.title}</h2>
-              <p className="text-2xl mt-3 font-bold text-purple-700">
-                {grid.value}
-              </p>
+              <h2 className="text-xl font-semibold text-purple-700 mb-4">
+                {grid.title}
+              </h2>
+              <p className="text-xl font-semibold">{grid.value}</p>
             </div>
           </Link>
         ))}
@@ -68,7 +70,9 @@ const Dashboard = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
         {/* monthly income chart */}
         <div className="bg-white shadow-lg rounded-2xl p-6">
-          <h2 className="text-xl font-semibold mb-6">Earnings Trend</h2>
+          <h2 className="text-xl font-semibold text-purple-700 mb-6">
+            Earnings Trend
+          </h2>
           <ResponsiveContainer width="100%" height={250}>
             <LineChart data={earningsData}>
               <CartesianGrid strokeDasharray="3 3" />
@@ -82,7 +86,9 @@ const Dashboard = () => {
 
         {/* occupancy chart */}
         <div className="bg-white shadow-lg rounded-2xl p-6">
-          <h2 className="text-xl font-semibold mb-4">Occupancy Rate</h2>
+          <h2 className="text-xl font-semibold text-purple-700 mb-4">
+            Occupancy Rate
+          </h2>
           <ResponsiveContainer width="100%" height={250}>
             <PieChart>
               <Pie
@@ -105,10 +111,12 @@ const Dashboard = () => {
       </div>
       {/* recent activity */}
       <div className="bg-white shadow-lg rounded-2xl p-6 mb-6">
-        <h2 className="text-xl font-semibold mb-4">Recent Activities</h2>
+        <h2 className="text-xl font-semibold text-purple-700 mb-4">
+          Recent Activities
+        </h2>
         <table className="w-full border">
           <thead>
-            <tr className="bg-gray-200">
+            <tr className="bg-purpleLight">
               <th className="p-2 border">Action</th>
               <th className="p-2 border">Date</th>
             </tr>
@@ -125,7 +133,9 @@ const Dashboard = () => {
       </div>
       {/* quick actions */}
       <div className="bg-white p-6 shadow-lg rounded-2xl">
-        <h2 className="text-xl font-semibold mb-4">Quick Actions</h2>
+        <h2 className="text-xl font-semibold text-purple-700 mb-4">
+          Quick Actions
+        </h2>
         <div className="flex flex-wrap gap-3">
           {["Add Room", "View Complaints", "Manage Tenants"].map(
             (action, index) => (

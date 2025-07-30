@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import RoomCard from "../sub-components/RoomCard";
 
 const doubleRooms = [
   {
@@ -39,38 +40,14 @@ function DoubleRooms() {
 
   return (
     <div className="min-h-screen p-6 bg-gray-100">
-      <h1 className="text-3xl font-bold mb-6 text-black">
-        Available Double Rooms
+      <h1 className="text-2xl font-bold mb-6 text-black">
+        Available Double Sharing Rooms
       </h1>
 
       {availableRooms.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {availableRooms.map((room) => (
-            <Link to="/guest/room-details" state={{ room }} key={room.id}>
-              <div
-                key={room.id}
-                className="bg-white shadow-md p-6 rounded-xl border border-gray-200"
-              >
-                <img
-                  src={room.image}
-                  alt={`Room ${room.number}`}
-                  className="mb-4 w-full h-48 object-cover rounded"
-                />
-                <h3 className="text-xl font-semibold text-gray-800 mb-2">
-                  Room No: {room.number}
-                </h3>
-                <p className="mb-1">
-                  <strong>Rent:</strong> ₹{room.rent}/month
-                </p>
-                <p className="mb-1">
-                  <strong>Capacity:</strong> {room.capacity} person
-                </p>
-                <p className="mb-2">
-                  <strong>Amenities:</strong> {room.amenities.join(", ")}
-                </p>
-                <p className="text-green-600 font-medium mb-2">Available</p>
-              </div>
-            </Link>
+            <RoomCard key={room.id} room={room} />
           ))}
         </div>
       ) : (
