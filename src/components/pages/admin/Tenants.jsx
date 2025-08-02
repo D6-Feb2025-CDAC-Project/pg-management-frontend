@@ -1,141 +1,92 @@
+  import React, { useState } from "react";
 
-import React, { useState } from "react";
+  const dummyTenants = [
+    { name: "John Doe", room: "205 (Double)", tenure: "4 months", rentStatus: "Paid", complaints: "3 (1 Active)" },
+    { name: "Jane Smith", room: "101 (Single)", tenure: "7 months", rentStatus: "Due", complaints: "1 (0 Active)" },
+    { name: "Robert Johnson", room: "308 (Triple)", tenure: "2 months", rentStatus: "Overdue", complaints: "5 (2 Active)" },
+    { name: "Sarah Williams", room: "210 (Double)", tenure: "1 month", rentStatus: "Paid", complaints: "0 (0 Active)" },
+    { name: "Michael Brown", room: "105 (Single)", tenure: "8 months", rentStatus: "Paid", complaints: "7 (0 Active)" },
+  ];
 
-const dummyTenants = [
-  {
-    name: "John Doe",
-    room: "205 (Double)",
-    tenure: "4 months",
-    rentStatus: "Paid",
-    complaints: "3 (1 Active)",
-  },
-  {
-    name: "Jane Smith",
-    room: "101 (Single)",
-    tenure: "7 months",
-    rentStatus: "Due",
-    complaints: "1 (0 Active)",
-  },
-  {
-    name: "Robert Johnson",
-    room: "308 (Triple)",
-    tenure: "2 months",
-    rentStatus: "Overdue",
-    complaints: "5 (2 Active)",
-  },
-  {
-    name: "Sarah Williams",
-    room: "210 (Double)",
-    tenure: "1 month",
-    rentStatus: "Paid",
-    complaints: "0 (0 Active)",
-  },
-  {
-    name: "Michael Brown",
-    room: "105 (Single)",
-    tenure: "8 months",
-    rentStatus: "Paid",
-    complaints: "7 (0 Active)",
-  },
-];
+  export default function Tenants() {
+    const [searchQuery, setSearchQuery] = useState("");
+    const [actionIndex, setActionIndex] = useState(null);
 
-export default function Tenants() {
-  const [actionIndex, setActionIndex] = useState(null);
-
-  const getRentStatusColor = (status) => {
+    const getRentStatusColor = (status) => {
     switch (status) {
-      case "Paid":
-        return "bg-green-500";
-      case "Due":
-        return "bg-yellow-400";
-      case "Overdue":
-        return "bg-red-500";
-      default:
-        return "bg-gray-300";
+      case "Paid": return "bg-green-100 text-green-700";
+      case "Due": return "bg-yellow-100 text-yellow-700";
+      case "Overdue": return "bg-red-100 text-red-700";
+      default: return "bg-gray-100 text-gray-700";
     }
   };
 
-  return (
-    <div className="p-6">
-      <h1 className="text-2xl font-semibold  mb-6">
-      Tenants 
-      </h1>
 
-      <div className="flex justify-between items-center mb-4">
-        <input
-          type="text"
-          placeholder="Search by name, room number, or mobile..."
-          className="border p-2 rounded w-1/3"
-        />
 
-        <div className="flex gap-2 items-center">
-          <button className="border px-3 py-2 rounded">Filter ▼</button>
-          <button className="bg-blue-500 text-white px-3 py-2 rounded">
-            Export Data
-          </button>
-        </div>
-      </div>
+    const filteredTenants = dummyTenants.filter((tenant) => {
+      const query = searchQuery.toLowerCase();
+      return (
+        tenant.name.toLowerCase().includes(query) ||
+        tenant.room.toLowerCase().includes(query)
+      );
+    });
 
-      <table className="w-full table-auto border shadow">
-        <thead className="bg-gray-100">
-          <tr>
-            <th className="border px-4 py-2 text-left">Name</th>
-            <th className="border px-4 py-2 text-left">Room</th>
-            <th className="border px-4 py-2 text-left">Tenure</th>
-            <th className="border px-4 py-2 text-left">Rent Status</th>
-            <th className="border px-4 py-2 text-left">Complaints</th>
-            <th className="border px-4 py-2 text-left">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {dummyTenants.map((tenant, index) => (
-            <tr key={index} className="hover:bg-gray-50">
-              <td className="border px-4 py-2">{tenant.name}</td>
-              <td className="border px-4 py-2">{tenant.room}</td>
-              <td className="border px-4 py-2">{tenant.tenure}</td>
-              <td className="border px-4 py-2">
-                <span
-                  className={`text-white text-sm px-2 py-1 rounded ${getRentStatusColor(
-                    tenant.rentStatus
-                  )}`}
-                >
-                  {tenant.rentStatus}
-                </span>
-              </td>
-              <td className="border px-4 py-2">{tenant.complaints}</td>
-              <td className="border px-4 py-2 relative">
-                <button className="bg-blue-500 text-white px-3 py-1 rounded text-sm mr-2">
-                  View
-                </button>
-                <button
-                  className="bg-red-500 text-white px-3 py-1 rounded text-sm"
-                  onClick={() =>
-                    setActionIndex(actionIndex === index ? null : index)
-                  }
-                >
-                  Action
-                </button>
+      return (
+        <div className="p-6">
+        <h1 className="text-3xl font-bold text-purpleDark mb-6">Tenants</h1>
+        
 
-                {actionIndex === index && (
-                  <div className="absolute right-0 mt-2 w-40 bg-white shadow-md border rounded z-10">
-                    <button className="block w-full text-left px-4 py-2 hover:bg-gray-100">
-                      Send Reminder
-                    </button>
-                    <button className="block w-full text-left px-4 py-2 hover:bg-gray-100">
-                      Call Tenant
-                    </button>
-                    <button className="block w-full text-left px-4 py-2 text-red-500 hover:bg-gray-100">
-                      Deactivate
-                    </button>
-                  </div>
-                )}
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-6">
+            <input
+              type="text"
+              placeholder="Search by name or room..."
+              className="border p-2 rounded w-full sm:w-1/3"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+          </div>
 
+        {filteredTenants.length === 0 ? (
+          <div className="text-center text-gray-500">No matching tenants found.</div>
+        ) : (
+          <div className="space-y-4">
+            {filteredTenants.map((tenant, index) => (
+              <div
+    key={index}
+    className="bg-white border border-purple-200 rounded-lg shadow p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4"
+  >
+                {/* Fixed-width columns */}
+            <div className="flex flex-col w-[60%]">
+              <div>
+                <p className="text-lg font-semibold text-purple-800">{tenant.name}</p>
+      <p className="text-sm text-purple-600">{tenant.room}</p>
+              </div>
+              <div className="mt-1">
+              <p className="text-sm text-purple-700">Tenure: <span className="font-medium">{tenant.tenure}</span></p>
+      <p className="text-sm text-purple-700">Complaints: <span className="font-medium">{tenant.complaints}</span></p>
+              </div>
+            </div>
+
+
+                <div className="flex items-center gap-2 w-fit ml-auto">
+    <span className={`text-sm px-2 py-1 rounded font-semibold ${getRentStatusColor(tenant.rentStatus)}`}>
+    {tenant.rentStatus}
+  </span>
+
+    <button
       
-    </div>
-  );
-}
+      className="bg-purpleDark text-white px-3 py-1 rounded text-sm"
+    >
+      Action
+    </button>
+  </div>
+
+
+                
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    );
+  }
