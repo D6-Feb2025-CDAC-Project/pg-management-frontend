@@ -49,20 +49,12 @@ const properties = [
   },
 ];
 
-const getStatusColour = (free, capacity) => {
-  if (free === capacity) return "bg-green-500"; 
-  if (free === 0) return "bg-red-500"; 
-  return "bg-yellow-400"; 
-};
-
 export default function PropertiesListPage() {
   const navigate = useNavigate();
   const [search, setSearch] = useState("");
   const [floorFilter, setFloorFilter] = useState("All");
   const [sortAsc, setSortAsc] = useState(true);
-  const [showSettings, setShowSettings] = useState(false);
 
-  
   const filtered = properties
     .filter((p) =>
       p.roomNo.includes(search) ||
@@ -72,24 +64,17 @@ export default function PropertiesListPage() {
     .sort((a, b) => (sortAsc ? a.rent - b.rent : b.rent - a.rent));
 
   return (
-    <div className="min-h-screen bg-gray-100 p-6 font-sans">
-     
-      <div className="flex justify-between items-center bg-gray-200 px-6 py-4 rounded relative">
-       
-      </div>
-
-     
+    <div className="min-h-screen bg-purple-200 p-6 font-sans">
       <div className="flex justify-between items-center mt-6 mb-4">
         <h2 className="text-2xl font-semibold">Rooms</h2>
         <button
           onClick={() => navigate("/admin/add-property")}
-          className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded"
+          className="bg-purpleDark text-white px-4 py-2 rounded"
         >
           + Add New Room
         </button>
       </div>
 
-    
       <div className="flex gap-2 mb-4 flex-wrap">
         <input
           type="text"
@@ -118,11 +103,10 @@ export default function PropertiesListPage() {
         </button>
       </div>
 
-      {/* Table */}
       <div className="overflow-x-auto bg-white border rounded-lg">
         <table className="w-full text-left text-sm">
           <thead>
-            <tr className="bg-gray-100">
+            <tr className="bg-[#EBD9FB]">
               <th className="p-2 border">Room No.</th>
               <th className="p-2 border">Type</th>
               <th className="p-2 border">Floor</th>
@@ -134,28 +118,26 @@ export default function PropertiesListPage() {
           </thead>
           <tbody>
             {filtered.map((room) => {
-              const freeBeds = room.capacity - room.occupied;
               return (
                 <tr key={room.roomNo}>
                   <td className="p-2 border">{room.roomNo}</td>
                   <td className="p-2 border">{room.type}</td>
                   <td className="p-2 border">{room.floor}</td>
                   <td className="p-2 border">₹{room.rent.toLocaleString()}</td>
-                  
-<td className="p-2 border space-x-1">
-  <button
-    className="bg-green-500 text-white text-xs px-2 py-1 rounded"
-    title="Vacant Beds"
-  >
-    Vacant: {room.capacity - room.occupied}
-  </button>
-  <button
-    className="bg-red-500 text-white text-xs px-2 py-1 rounded"
-    title="Occupied Beds"
-  >
-    Occupied: {room.occupied}
-  </button>
-</td>
+                  <td className="p-2 border space-x-1">
+                    <button
+                      className="bg-green-200 text-green-900 text-xs px-2 py-1 rounded"
+                      title="Vacant Beds"
+                    >
+                      Vacant: {room.capacity - room.occupied}
+                    </button>
+                    <button
+                      className="bg-red-200 text-red-900 text-xs px-2 py-1 rounded"
+                      title="Occupied Beds"
+                    >
+                      Occupied: {room.occupied}
+                    </button>
+                  </td>
                   <td className="p-2 border">{room.facilities}</td>
                   <td className="p-2 border space-x-2">
                     <button
@@ -175,16 +157,6 @@ export default function PropertiesListPage() {
             })}
           </tbody>
         </table>
-      </div>
-
-      
-      <div className="flex justify-end mt-4 space-x-2">
-        {[1, 2, 3].map((p) => (
-          <button key={p} className="px-3 py-1 border rounded">
-            {p}
-          </button>
-        ))}
-        <button className="px-3 py-1 border rounded">Next →</button>
       </div>
     </div>
   );
