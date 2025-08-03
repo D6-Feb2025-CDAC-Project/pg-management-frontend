@@ -1,5 +1,4 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
 import RoomCard from "../sub-components/RoomCard";
 
 function SingleRooms() {
@@ -66,6 +65,7 @@ function SingleRooms() {
     },
   ];
 
+  // data will come from server using axios
   const availableRooms = singleRooms.filter((room) => room.available);
 
   return (

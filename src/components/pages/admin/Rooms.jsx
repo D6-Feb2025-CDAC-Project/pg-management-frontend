@@ -56,9 +56,10 @@ export default function PropertiesListPage() {
   const [sortAsc, setSortAsc] = useState(true);
 
   const filtered = properties
-    .filter((p) =>
-      p.roomNo.includes(search) ||
-      p.type.toLowerCase().includes(search.toLowerCase())
+    .filter(
+      (p) =>
+        p.roomNo.includes(search) ||
+        p.type.toLowerCase().includes(search.toLowerCase())
     )
     .filter((p) => floorFilter === "All" || p.floor === floorFilter)
     .sort((a, b) => (sortAsc ? a.rent - b.rent : b.rent - a.rent));
@@ -106,7 +107,7 @@ export default function PropertiesListPage() {
       <div className="overflow-x-auto bg-white border rounded-lg">
         <table className="w-full text-left text-sm">
           <thead>
-            <tr className="bg-[#EBD9FB]">
+            <tr className="bg-purpleDarkScale-200">
               <th className="p-2 border">Room No.</th>
               <th className="p-2 border">Type</th>
               <th className="p-2 border">Floor</th>

@@ -12,6 +12,10 @@ const Registration = () => {
     phone: "",
     otp: "",
     enteredOtp: "",
+    password: "",
+    confirmPassword: "",
+    gender: "",
+    moveInDate: "",
     agreed: false,
   });
 
@@ -42,6 +46,7 @@ const Registration = () => {
     // if (!guest.agreed) return alert("Please agree to the terms!");
 
     alert("Registration Successful!");
+    console.log(guest);
   };
 
   return (
@@ -135,18 +140,33 @@ const Registration = () => {
               type="password"
               placeholder="Password"
               className="border p-2 rounded flex-grow mr-5"
+              value={guest.password}
+              onChange={(e) => setGuest({ ...guest, password: e.target.value })}
+              required
             />
             {/* confirm password */}
             <input
               type="password"
               placeholder="Confirm Password"
               className="border p-2 rounded flex-grow"
+              value={guest.confirmPassword}
+              onChange={(e) =>
+                setGuest({ ...guest, confirmPassword: e.target.value })
+              }
+              required
             />
           </div>
           {/* gender dropdown */}
           <div className="grid gap-4 mb-6">
             <div className="flex flex-col">
-              <select className="p-3 border rounded text-gray-400">
+              <select
+                value={guest.gender}
+                onChange={(e) => setGuest({ ...guest, gender: e.target.value })}
+                className={`p-3 border rounded ${
+                  guest.gender ? "text-black" : "text-gray-400"
+                }`}
+                required
+              >
                 <option value="">Select Gender</option>
                 <option>Male</option>
                 <option>Female</option>
@@ -157,17 +177,18 @@ const Registration = () => {
           {/* move in date */}
           <div className="flex flex-col mb-6">
             <label className="mb-1 font-medium">Expected Move-in Date</label>
-            <input type="date" className="p-3 border rounded text-gray-400" />
+            <input
+              type="date"
+              className={`p-3 border rounded ${
+                guest.moveInDate ? "text-black" : "text-gray-400"
+              }`}
+              value={guest.moveInDate}
+              onChange={(e) =>
+                setGuest({ ...guest, moveInDate: e.target.value })
+              }
+              required
+            />
           </div>
-          {/* Notes */}
-          {/* <div className="mb-6">
-            <label className="block font-medium mb-2">Additional Notes</label>
-            <textarea
-              placeholder="Any specific needs or queries..."
-              className="p-3 border rounded w-full"
-              rows="3"
-            ></textarea>
-          </div> */}
 
           {/* Terms & Conditions */}
           <div className="flex items-center gap-2 mb-4">
@@ -175,6 +196,7 @@ const Registration = () => {
               type="checkbox"
               checked={guest.agreed}
               onChange={(e) => setGuest({ ...guest, agreed: e.target.checked })}
+              required
             />
             <span>
               I agree to the{" "}
@@ -198,7 +220,7 @@ const Registration = () => {
         </form>
       </div>
 
-      {/* ✅ Show Terms Popup */}
+      {/* show Terms Popup */}
       {showTerms && <TermsAndConditions onClose={() => setShowTerms(false)} />}
     </div>
   );
