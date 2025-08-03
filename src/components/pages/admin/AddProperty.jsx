@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import facilitiesList from "../../../assets/constants/facilitiesList";
 
 const AddProperty = () => {
   const navigate = useNavigate();
@@ -59,7 +60,7 @@ const AddProperty = () => {
         {/* Row 1 */}
         <div className="grid grid-cols-2 gap-6 mb-4">
           <div>
-            <label className="block mb-1 font-semibold">Room Number*</label>
+            <label className="block mb-1 font-semibold">Room Number</label>
             <input
               type="text"
               name="roomNumber"
@@ -70,7 +71,9 @@ const AddProperty = () => {
             />
           </div>
           <div>
-            <label className="block mb-1 font-semibold">Room Size (sq.ft)</label>
+            <label className="block mb-1 font-semibold">
+              Room Size (sq.ft)
+            </label>
             <input
               type="text"
               name="roomSize"
@@ -82,9 +85,9 @@ const AddProperty = () => {
         </div>
 
         {/* Row 2 */}
-        <div className="grid grid-cols-2 gap-6 mb-4">
+        <div className="grid grid-cols-1 gap-6 mb-4">
           <div>
-            <label className="block mb-1 font-semibold">Room Type*</label>
+            <label className="block mb-1 font-semibold">Room Type</label>
             <select
               name="roomType"
               value={formData.roomType}
@@ -98,23 +101,12 @@ const AddProperty = () => {
               <option value="Triple">Triple</option>
             </select>
           </div>
-          <div>
-            <label className="block mb-1 font-semibold">Max Occupancy*</label>
-            <input
-              type="number"
-              name="maxOccupancy"
-              value={formData.maxOccupancy}
-              onChange={handleChange}
-              className="w-full border px-3 py-2 rounded"
-              required
-            />
-          </div>
         </div>
 
         {/* Row 3 */}
         <div className="grid grid-cols-2 gap-6 mb-4">
           <div>
-            <label className="block mb-1 font-semibold">Floor*</label>
+            <label className="block mb-1 font-semibold">Floor</label>
             <select
               name="floor"
               value={formData.floor}
@@ -129,7 +121,7 @@ const AddProperty = () => {
             </select>
           </div>
           <div>
-            <label className="block mb-1 font-semibold">Monthly Rent (₹)*</label>
+            <label className="block mb-1 font-semibold">Monthly Rent (₹)</label>
             <input
               type="number"
               name="rent"
@@ -143,54 +135,40 @@ const AddProperty = () => {
 
         {/* Facilities */}
         <div className="mb-4">
-          <label className="block mb-1 font-semibold">Facilities</label>
-          <div className="grid grid-cols-2 gap-4">
-            <label>
-              <input
-                type="checkbox"
-                name="ac"
-                checked={formData.facilities.ac}
-                onChange={handleChange}
-                className="mr-2"
-              />
-              AC
-            </label>
-            <label>
-              <input
-                type="checkbox"
-                name="attachedBathroom"
-                checked={formData.facilities.attachedBathroom}
-                onChange={handleChange}
-                className="mr-2"
-              />
-              Attached Bathroom
-            </label>
-            <label>
-              <input
-                type="checkbox"
-                name="studyTable"
-                checked={formData.facilities.studyTable}
-                onChange={handleChange}
-                className="mr-2"
-              />
-              Study Table
-            </label>
-            <label>
-              <input
-                type="checkbox"
-                name="hotWater"
-                checked={formData.facilities.hotWater}
-                onChange={handleChange}
-                className="mr-2"
-              />
-              Hot Water
-            </label>
-          </div>
+          <label className="block mb-4 font-semibold">Facilities</label>
+
+          {Object.entries(facilitiesList).map(([category, items]) => (
+            <div key={category} className="mb-7">
+              <h4 className="font-semibold capitalize">{category}</h4>
+              <div className="grid grid-cols-2 gap-4 pl-4">
+                {items.map((facility) => (
+                  <label key={facility}>
+                    <input
+                      type="checkbox"
+                      name={facility}
+                      checked={formData.facilities[facility] || false}
+                      onChange={(e) =>
+                        setFormData((prev) => ({
+                          ...prev,
+                          facilities: {
+                            ...prev.facilities,
+                            [facility]: e.target.checked,
+                          },
+                        }))
+                      }
+                      className="mr-2"
+                    />
+                    {facility}
+                  </label>
+                ))}
+              </div>
+            </div>
+          ))}
         </div>
 
         {/* Status */}
         <div className="mb-4">
-          <label className="block mb-1 font-semibold">Status*</label>
+          <label className="block mb-1 font-semibold">Status</label>
           <select
             name="status"
             value={formData.status}
@@ -207,13 +185,17 @@ const AddProperty = () => {
 
         {/* Photos */}
         <div className="mb-6">
-          <label className="block mb-1 font-semibold">Room Photos (URL)</label>
+          <label className="block mb-1 font-semibold">Room Photo</label>
           <input
-            type="text"
+            type="file"
+            accept="image/*"
             name="photos"
-            value={formData.photos}
-            onChange={handleChange}
-            placeholder="Enter image URL"
+            onChange={(e) =>
+              setFormData((prev) => ({
+                ...prev,
+                photos: e.target.files[0], // store file object
+              }))
+            }
             className="w-full border px-3 py-2 rounded"
           />
         </div>
@@ -223,14 +205,11 @@ const AddProperty = () => {
           <button
             type="button"
             onClick={() => navigate("/admin/properties")}
-            className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+            className="reject-button"
           >
             Cancel
           </button>
-          <button
-            type="submit"
-            className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
-          >
+          <button type="submit" className="approve-button">
             Save
           </button>
         </div>

@@ -44,17 +44,18 @@ const Dashboard = () => {
     //   nextPage: "/admin/pending-bookings",
     // },
     { title: "Total Tenants", value: "45", nextPage: "/admin/tenants" },
+    { title: "Booked Rooms", value: "12", nextPage: "/admin/rooms" },
     { title: "Available Rooms", value: "8", nextPage: "/admin/rooms" },
     { title: "Active Complaints", value: "2", nextPage: "/admin/complaints" },
   ];
 
   return (
     <div className="p-6 min-h-screen">
-      <h1 className="text-3xl font-bold text-purple-800 mb-6">
+      <h1 className="text-3xl font-bold text-purpleDark mb-6 text-center">
         Admin Dashboard
       </h1>
       {/* 4 main grids */}
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-6 mb-6">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-6">
         {grids.map((grid, index) => (
           <Link key={index} to={grid.nextPage}>
             <div className="bg-white shadow-lg rounded-2xl p-6 hover:scale-90 transition">

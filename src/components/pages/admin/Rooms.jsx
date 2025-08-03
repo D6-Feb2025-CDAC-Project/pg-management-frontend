@@ -65,9 +65,12 @@ export default function PropertiesListPage() {
     .sort((a, b) => (sortAsc ? a.rent - b.rent : b.rent - a.rent));
 
   return (
-    <div className="min-h-screen bg-purple-200 p-6 font-sans">
-      <div className="flex justify-between items-center mt-6 mb-4">
-        <h2 className="text-2xl font-semibold">Rooms</h2>
+    <div className="bg-purpleDarkScale-100 p-6 min-h-screen">
+      <h2 className="text-3xl font-bold text-purpleDark mb-6 text-center">
+        Rooms
+      </h2>
+
+      <div className="flex justify-end mb-5">
         <button
           onClick={() => navigate("/admin/add-property")}
           className="bg-purpleDark text-white px-4 py-2 rounded"
@@ -97,7 +100,7 @@ export default function PropertiesListPage() {
         </select>
 
         <button
-          className="px-4 py-2 border rounded"
+          className="px-4 py-2 border rounded bg-white"
           onClick={() => setSortAsc((prev) => !prev)}
         >
           Sort by Rent {sortAsc ? "↑" : "↓"}
