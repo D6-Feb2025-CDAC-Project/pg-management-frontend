@@ -39,7 +39,7 @@ const ComplaintDetails = ({ complaint }) => (
         </div>
 
         <p className="text-sm text-gray-700 mb-3 bg-purpleDarkScale-50 p-3 rounded border border-purpleDarkScale-200">
-            <span className="font-medium text-purpleDark">Issue:</span> {complaint.message}
+            <span className="font-medium text-purpleDark">Issue:</span> {complaint.issue}
         </p>
 
         {complaint.actionTaken && (

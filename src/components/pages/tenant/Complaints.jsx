@@ -5,7 +5,7 @@ const dummyComplaints = [
   {
     id: 1,
     title: 'Leaking tap in bathroom',
-    message: 'There is a constant leak in the bathroom tap causing water wastage.',
+    issue: 'There is a constant leak in the bathroom tap causing water wastage.',
     date: '2025-07-20',
     status: 'Pending',
     priority: 'Medium',
@@ -16,21 +16,21 @@ const dummyComplaints = [
   {
     id: 2,
     title: 'Wi-Fi not working on 2nd floor',
-    message: 'The Wi-Fi signal is very weak on the second floor.',
+    issue: 'The Wi-Fi signal is very weak on the second floor.',
     date: '2025-07-22',
     status: 'Resolved',
     priority: 'High',
     actionTaken: 'Replaced Wi-Fi router and installed signal booster on 2nd floor',
     resolvedDate: '2025-07-25'
   },
-]
+];
 
 const Complaints = () => {
   const [complaints, setComplaints] = useState(dummyComplaints);
 
   const [newComplaint, setNewComplaint] = useState({
     title: '',
-    message: '',
+    issue: '',
     priority: 'Medium',
   });
 
@@ -40,12 +40,12 @@ const Complaints = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!newComplaint.title || !newComplaint.message) return;
+    if (!newComplaint.title || !newComplaint.issue) return;
 
     const newEntry = {
       id: complaints.length + 1,
       title: newComplaint.title,
-      message: newComplaint.message,
+      issue: newComplaint.issue,
       priority: newComplaint.priority,
       date: new Date().toISOString().split('T')[0],
       status: 'Pending',
@@ -54,17 +54,17 @@ const Complaints = () => {
     };
 
     setComplaints([newEntry, ...complaints]);
-    setNewComplaint({ title: '', message: '', priority: 'Medium' });
+    setNewComplaint({ title: '', issue: '', priority: 'Medium' });
   };
 
   return (
-    <div className="bg-purpleDarkScale-100  p-6 min-h-screen">
-      <h1 className="text-3xl font-bold text-purpleDark mb-6 text-center" >
+    <div className="bg-purpleDarkScale-100 p-6 min-h-screen">
+      <h1 className="text-3xl font-bold text-purpleDark mb-6 text-center">
         Raise a Complaint
-      </h1 >
+      </h1>
 
       {/* Complaint Form */}
-      <div className="bg-white p-6 rounded-xl shadow space-y-4 border border-purpleDarkScale-300 mb-10 max-w-3xl mx-auto" >
+      <div className="bg-white p-6 rounded-xl shadow space-y-4 border border-purpleDarkScale-300 mb-10 max-w-3xl mx-auto">
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="block text-purpleDark text-sm font-medium mb-1">
@@ -97,11 +97,11 @@ const Complaints = () => {
           </div>
           <div>
             <label className="block text-purpleDark text-sm font-medium mb-1">
-              Message
+              Issue
             </label>
             <textarea
-              name="message"
-              value={newComplaint.message}
+              name="issue"
+              value={newComplaint.issue}
               onChange={handleChange}
               rows="4"
               placeholder="Describe your issue..."
@@ -116,34 +116,30 @@ const Complaints = () => {
             Submit Complaint
           </button>
         </form>
-      </div >
+      </div>
 
       {/* Complaint History */}
-      <div className="max-w-3xl mx-auto space-y-4" >
+      <div className="max-w-3xl mx-auto space-y-4">
         <h2 className="text-xl font-semibold text-purpleDark mb-2">
           Your Previous Complaints
         </h2>
-
 
         {
           complaints.length === 0 ? (
             <p className="text-gray-600 italic">No complaints raised yet.</p>
           ) : (
             complaints.map((comp) => (
-              <div key={comp.id}
-                className="bg-white border rounded-lg shadow p-4">
+              <div key={comp.id} className="bg-white border rounded-lg shadow p-4">
                 <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4">
                   <ComplaintDetails complaint={comp} />
                 </div>
               </div>
             ))
-
           )
         }
-      </div >
-    </div >
+      </div>
+    </div>
   );
 };
 
 export default Complaints;
-
