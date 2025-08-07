@@ -1,9 +1,7 @@
 import { useState, useEffect } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import { EyeIcon, EyeOffIcon } from "lucide-react";
-// import Notification from "../utility/Notification"
-// import userService from '../../services/users'
-// import blogService from '../../services/bookmarks'
+import { login } from "../../../services/TenantService";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -16,43 +14,59 @@ const Login = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const loggedInUserJSON = window.localStorage.getItem("loggedInUser");
-    if (loggedInUserJSON) {
-      const loggedInUser = JSON.parse(loggedInUserJSON);
-      setUser(loggedInUser);
-      blogService.setToken(loggedInUser.token);
-    }
+    // const loggedInUserJSON = window.localStorage.getItem("loggedInUser");
+    // if (loggedInUserJSON) {
+    //   const loggedInUser = JSON.parse(loggedInUserJSON);
+    //   setUser(loggedInUser);
+    //   blogService.setToken(loggedInUser.token);
+    // }
     setLoading(false);
   }, []);
 
   const handleLogin = async (event) => {
-    // event.preventDefault();
-    // try {
-    //   const loggedInUser = await userService.login({ email, password });
+    event.preventDefault();
 
-    //   setUser(loggedInUser);
-    //   blogService.setToken(loggedInUser.token);
-    //   const loggedInUserJSON = JSON.stringify(loggedInUser);
-    //   window.localStorage.setItem("loggedInUser", loggedInUserJSON);
+    if (email === "") {
+      alert("Please enter email or username");
+    } else if (password === "") {
+      alert("Please enter password");
+    } else {
+      try {
+        const loggedInUser = await login(email, password);
 
-    //   setEmail("");
-    //   setPassword("");
+        setUser(loggedInUser);
+        window.localStorage.setItem(
+          "loggedInUser",
+          JSON.stringify(loggedInUser)
+        );
 
-    navigate("/tenant/dashboard");
-    // } catch (exception) {
-    //   setErrorMessage("login failed! please provide valid credentials");
-    //   setTimeout(() => setErrorMessage(null), 5000);
-    // }
+        setEmail("");
+        setPassword("");
+        alert("logged in successful");
+        navigate("/tenant/dashboard");
+      } catch (error) {
+        console.error("Login failed:", error);
+
+        if (error.response && error.response.status === 401) {
+          alert("Invalid username/email or password.");
+        } else {
+          alert("Something went wrong. Please try again later.");
+        }
+
+        setErrorMessage("Login failed!");
+        setTimeout(() => setErrorMessage(null), 5000);
+      }
+    }
   };
 
-  if (loading) {
-    return <div>Loading...</div>; // Display a loading message while checking user
-  }
+  // if (loading) {
+  //   return <div>Loading...</div>; // Display a loading message while checking user
+  // }
 
-  if (user) {
-    return <Navigate replace to="/" />; // Redirect if user is logged in
-  }
-  console.log("On login page");
+  // if (user) {
+  //   return <Navigate replace to="/" />; // Redirect if user is logged in
+  // }
+  // console.log("On login page");
   return (
     <>
       <div className="bg-white p-8 rounded-2xl shadow-lg w-full max-w-sm">
@@ -64,11 +78,9 @@ const Login = () => {
         <form onSubmit={handleLogin}>
           <div className="mb-4">
             <label className="block text-gray-600 font-medium mb-2">
-              Email
+              Email / Username
             </label>
             <input
-              type="email"
-              placeholder="you@example.com"
               value={email}
               onChange={({ target }) => setEmail(target.value)}
               className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-purpleDarkScaleScale-400 outline-none text-base"
