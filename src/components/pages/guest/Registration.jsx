@@ -1,9 +1,11 @@
 import React, { useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import TermsAndConditions from "../sub-components/TermsAndConditions";
+import { addTenant } from "../../../services/TenantService";
 
 const Registration = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const { room } = location.state || {};
 
   const [guest, setGuest] = useState({
@@ -39,14 +41,29 @@ const Registration = () => {
     }
   };
 
-  const handleSubmit = (e) => {
-    // e.preventDefault();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
     // if (!otpVerified) return alert("Please verify OTP first!");
     // if (!guest.agreed) return alert("Please agree to the terms!");
 
-    alert("Registration Successful!");
-    console.log(guest);
+    const payload = {
+      username: guest.name,
+      email: guest.email,
+      password: guest.password,
+      gender: guest.gender,
+      contactNumber: guest.phone,
+      moveInDate: guest.moveInDate,
+      roomId: 3, // since you don't have dynamic room ID yet
+    };
+
+    try {
+      await addTenant(payload);
+      alert("Registration Successful!");
+      navigate("/user/login");
+    } catch (err) {
+      alert(err + "Something went wrong during registration.");
+    }
   };
 
   return (
@@ -97,15 +114,15 @@ const Registration = () => {
               onChange={(e) => setGuest({ ...guest, email: e.target.value })}
               required
             />
-            <button
+            {/* <button
               type="button"
               className="secondary-button"
               onClick={sendOtp}
             >
               Send OTP
-            </button>
+            </button> */}
           </div>
-          {otpSent && (
+          {/* {otpSent && (
             <div className="flex gap-3 mb-3">
               <input
                 type="text"
@@ -124,7 +141,7 @@ const Registration = () => {
                 Verify OTP
               </button>
             </div>
-          )}
+          )} */}
           {/* phone number */}
           <input
             type="tel"
