@@ -75,7 +75,7 @@ function App() {
         <Route path="dashboard" element={<AdminDashboard />} />
         <Route path="rooms" element={<AdminRooms />} />
         <Route path="add-property" element={<AddProperty />} />
-        <Route path="edit-property/:roomNo" element={<EditProperty />} />
+        <Route path="edit-property/:id" element={<EditProperty />} />
         <Route path="tenants" element={<Tenants />} />
         <Route path="complaints" element={<AdminComplaints />} />
         <Route path="leave-notices" element={<LeaveNotices />} />
