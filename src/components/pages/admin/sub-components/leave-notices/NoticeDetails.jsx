@@ -1,7 +1,6 @@
 import InfoDisplay from "../../../sub-components/InfoDisplay";
 import StatusBadge from "../../../sub-components/StatusBadge";
 
-// Notice Details Component (similar to ComplaintDetails)
 const NoticeDetails = ({ notice }) => (
     <div className="flex-1">
         <div className="flex flex-wrap items-center gap-2 mb-2">
@@ -39,17 +38,34 @@ const NoticeDetails = ({ notice }) => (
             </p>
         )}
 
-        {notice.depositSettlement && (
-            <div className="bg-green-50 p-3 rounded border border-green-200 mb-3">
-                <h4 className="font-medium text-green-800 mb-2">Deposit Settlement</h4>
+        {/* Settlement Status Display */}
+        {notice.status === 'Approved' || notice.status === 'Payment Processing' || notice.status === 'Completed' ? (
+            <div className="bg-blue-50 p-3 rounded border border-blue-200 mb-3">
+                <h4 className="font-medium text-blue-800 mb-2">Settlement Information</h4>
                 <div className="text-sm space-y-1">
-                    <div><span className="font-medium">Deduction:</span> ₹{notice.depositSettlement.deductionAmount}</div>
-                    <div><span className="font-medium">Reason:</span> {notice.depositSettlement.deductionReason || 'No deductions'}</div>
-                    <div><span className="font-medium">Final Refund:</span> ₹{notice.depositSettlement.finalAmount}</div>
-                    <div><span className="font-medium">Processed:</span> {notice.depositSettlement.processedDate}</div>
+                    <div>
+                        <span className="font-medium">Status:</span>
+                        {notice.settlementGenerated ? (
+                            <span className="text-green-600 ml-1">Created</span>
+                        ) : (
+                            <span className="text-yellow-600 ml-1">Creating...</span>
+                        )}
+                    </div>
+                    {notice.depositSettlement ? (
+                        <>
+                            <div><span className="font-medium">Deduction:</span> ₹{notice.depositSettlement.deductionAmount}</div>
+                            <div><span className="font-medium">Reason:</span> {notice.depositSettlement.deductionReason || 'No deductions'}</div>
+                            <div><span className="font-medium">Final Refund:</span> ₹{notice.depositSettlement.finalAmount}</div>
+                            {notice.depositSettlement.processedDate && (
+                                <div><span className="font-medium">Processed:</span> {notice.depositSettlement.processedDate}</div>
+                            )}
+                        </>
+                    ) : notice.settlementGenerated ? (
+                        <div className="text-gray-600">Settlement created, awaiting processing</div>
+                    ) : null}
                 </div>
             </div>
-        )}
+        ) : null}
     </div>
 );
 
