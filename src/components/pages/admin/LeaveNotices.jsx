@@ -1,75 +1,22 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import StatsCard from '../sub-components/StatsCard';
 import InfoCard from '../sub-components/InfoCard';
 import FilterControls from './sub-components/complaints/FilterControls';
 import DepositModal from './sub-components/leave-notices/DepositModal';
 import NoticeCard from './sub-components/leave-notices/NoticeCard';
-
-// Sample data
-const dummyLeaveNotices = [
-    {
-        id: 1,
-        referenceId: 'LN001',
-        tenantName: 'John Smith',
-        tenantId: 'T001',
-        roomNumber: 'Room 205',
-        submissionDate: '2025-07-20',
-        moveOutDate: '2025-08-20',
-        reason: 'job_relocation',
-        reasonText: 'Job Relocation',
-        details: 'Got a new job in Mumbai, need to relocate immediately.',
-        contactNumber: '+91 98765 43210',
-        emailAddress: 'john.smith@email.com',
-        status: 'Pending Review',
-        securityDeposit: 15000,
-        reviewNotes: '',
-        depositSettlement: null
-    },
-    {
-        id: 2,
-        referenceId: 'LN002',
-        tenantName: 'Sarah Johnson',
-        tenantId: 'T002',
-        roomNumber: 'Room 301',
-        submissionDate: '2025-07-18',
-        moveOutDate: '2025-08-15',
-        reason: 'higher_studies',
-        reasonText: 'Higher Studies',
-        details: 'Admitted to university abroad for Masters degree.',
-        contactNumber: '+91 87654 32109',
-        emailAddress: 'sarah.j@email.com',
-        status: 'Approved',
-        securityDeposit: 15000,
-        reviewNotes: 'Approved. Good tenant with no issues.',
-        depositSettlement: {
-            deductionAmount: 500,
-            deductionReason: 'Minor wall damage repair',
-            finalAmount: 14500,
-            processedDate: '2025-07-25'
-        }
-    },
-    {
-        id: 3,
-        referenceId: 'LN003',
-        tenantName: 'Mike Davis',
-        tenantId: 'T003',
-        roomNumber: 'Room 102',
-        submissionDate: '2025-07-22',
-        moveOutDate: '2025-08-10',
-        reason: 'financial_constraints',
-        reasonText: 'Financial Constraints',
-        details: 'Due to job loss, unable to continue staying.',
-        contactNumber: '+91 76543 21098',
-        emailAddress: 'mike.davis@email.com',
-        status: 'Under Review',
-        securityDeposit: 15000,
-        reviewNotes: 'Checking payment history and room condition.',
-        depositSettlement: null
-    }
-];
+import { useLeaveNoticesHandlers } from '../../../services/LeaveNoticeAPI';
 
 const LeaveNotices = () => {
-    const [notices, setNotices] = useState(dummyLeaveNotices);
+    const {
+        notices,
+        loading,
+        error,
+        loadNotices,
+        handleStatusChange,
+        handleNotesSubmit,
+        handleDepositSettlement
+    } = useLeaveNoticesHandlers();
+
     const [filterStatus, setFilterStatus] = useState('All');
     const [sortBy, setSortBy] = useState('date');
     const [selectedNotice, setSelectedNotice] = useState(null);
@@ -77,26 +24,33 @@ const LeaveNotices = () => {
     const [showDepositModal, setShowDepositModal] = useState(false);
     const [depositNotice, setDepositNotice] = useState(null);
 
-    const handleStatusChange = (noticeId, newStatus, notes = '') => {
-        setNotices(notices.map(notice =>
-            notice.id === noticeId
-                ? { ...notice, status: newStatus, reviewNotes: notes }
-                : notice
-        ));
-        setSelectedNotice(null);
-        setReviewNotes('');
+    // Load data on component mount
+    useEffect(() => {
+        loadNotices();
+    }, []);
+
+    // Handle status changes with API integration
+    const onStatusChange = async (noticeId, newStatus, notes = '') => {
+        try {
+            await handleStatusChange(noticeId, newStatus, notes);
+            setSelectedNotice(null);
+            setReviewNotes('');
+        } catch (err) {
+            console.error('Error updating status:', err);
+        }
     };
 
-    const handleNotesSubmit = (noticeId) => {
+    // Handle notes submission with API integration
+    const onNotesSubmit = async (noticeId) => {
         if (!reviewNotes.trim()) return;
 
-        setNotices(notices.map(notice =>
-            notice.id === noticeId
-                ? { ...notice, reviewNotes: reviewNotes, status: 'Under Review' }
-                : notice
-        ));
-        setReviewNotes('');
-        setSelectedNotice(null);
+        try {
+            await handleNotesSubmit(noticeId, reviewNotes);
+            setReviewNotes('');
+            setSelectedNotice(null);
+        } catch (err) {
+            console.error('Error updating notes:', err);
+        }
     };
 
     const handleNotesCancel = () => {
@@ -109,19 +63,15 @@ const LeaveNotices = () => {
         setShowDepositModal(true);
     };
 
-    const handleDepositSettlement = (noticeId, settlementData) => {
-        setNotices(notices.map(notice =>
-            notice.id === noticeId
-                ? {
-                    ...notice,
-                    status: 'Completed',
-                    depositSettlement: {
-                        ...settlementData,
-                        processedDate: new Date().toISOString().split('T')[0]
-                    }
-                }
-                : notice
-        ));
+    // Handle deposit settlement with API integration
+    const onDepositSettlement = async (noticeId, settlementData) => {
+        try {
+            await handleDepositSettlement(noticeId, settlementData);
+            setShowDepositModal(false);
+            setDepositNotice(null);
+        } catch (err) {
+            console.error('Error processing settlement:', err);
+        }
     };
 
     const getFilteredNotices = () => {
@@ -139,6 +89,8 @@ const LeaveNotices = () => {
                     return new Date(a.moveOutDate) - new Date(b.moveOutDate);
                 case 'status':
                     return a.status.localeCompare(b.status);
+                case 'tenant':
+                    return a.tenantName.localeCompare(b.tenantName);
                 default:
                     return 0;
             }
@@ -154,6 +106,7 @@ const LeaveNotices = () => {
         pending: notices.filter(n => n.status === 'Pending Review').length,
         underReview: notices.filter(n => n.status === 'Under Review').length,
         approved: notices.filter(n => n.status === 'Approved').length,
+        paymentProcessing: notices.filter(n => n.status === 'Payment Processing').length,
         completed: notices.filter(n => n.status === 'Completed').length
     };
 
@@ -163,8 +116,29 @@ const LeaveNotices = () => {
                 Admin - Leave Notices Management
             </h1>
 
+            {/* Error Display */}
+            {error && (
+                <div className="bg-red-50 border border-red-300 text-red-700 px-4 py-3 rounded mb-4 max-w-6xl mx-auto">
+                    <span className="font-medium">Error:</span> {error}
+                    <button
+                        onClick={loadNotices}
+                        className="ml-2 underline hover:no-underline"
+                    >
+                        Retry
+                    </button>
+                </div>
+            )}
+
+            {/* Loading Indicator */}
+            {loading && (
+                <div className="text-center py-8">
+                    <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-purpleDark"></div>
+                    <p className="mt-2 text-purpleDark">Loading leave notices...</p>
+                </div>
+            )}
+
             {/* Stats Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6 max-w-6xl mx-auto">
+            <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6 max-w-6xl mx-auto">
                 <StatsCard
                     title="Total Notices"
                     value={stats.total}
@@ -186,57 +160,69 @@ const LeaveNotices = () => {
                 <StatsCard
                     title="Approved"
                     value={stats.approved}
+                    color="border-green-500"
+                    bgColor="text-green-600"
+                />
+                <StatsCard
+                    title="Completed"
+                    value={stats.completed}
                     color="border-purpleDark"
                     bgColor="text-purpleDark"
                 />
-                {/* <StatsCard
-                    title="Completed"
-                    value={stats.completed}
-                    color="border-green-500"
-                    bgColor="text-green-600"
-                /> */}
             </div>
 
             {/* Filters and Controls */}
-            <FilterControls
-                filterStatus={filterStatus}
-                setFilterStatus={setFilterStatus}
-                sortBy={sortBy}
-                setSortBy={setSortBy}
-            />
+            {!loading && (
+                <FilterControls
+                    filterStatus={filterStatus}
+                    setFilterStatus={setFilterStatus}
+                    sortBy={sortBy}
+                    setSortBy={setSortBy}
+                />
+            )}
 
             {/* Leave Notices List */}
-            <div className="max-w-6xl mx-auto space-y-4">
-                {filteredNotices.length === 0 ? (
-                    <InfoCard>
-                        <div className="p-8 text-center">
-                            <p className="text-purpleDarkScale-600 italic">No leave notices found matching the selected filters.</p>
-                        </div>
-                    </InfoCard>
-                ) : (
-                    filteredNotices.map((notice) => (
-                        <NoticeCard
-                            key={notice.id}
-                            notice={notice}
-                            selectedNotice={selectedNotice}
-                            reviewNotes={reviewNotes}
-                            setReviewNotes={setReviewNotes}
-                            onStatusChange={handleStatusChange}
-                            onAddNotes={setSelectedNotice}
-                            onNotesSubmit={handleNotesSubmit}
-                            onNotesCancel={handleNotesCancel}
-                            onSettleDeposit={handleSettleDeposit}
-                        />
-                    ))
-                )}
-            </div>
+            {!loading && (
+                <div className="max-w-6xl mx-auto space-y-4">
+                    {filteredNotices.length === 0 ? (
+                        <InfoCard>
+                            <div className="p-8 text-center">
+                                <p className="text-purpleDarkScale-600 italic">
+                                    {notices.length === 0
+                                        ? "No leave notices found."
+                                        : "No leave notices found matching the selected filters."
+                                    }
+                                </p>
+                            </div>
+                        </InfoCard>
+                    ) : (
+                        filteredNotices.map((notice) => (
+                            <NoticeCard
+                                key={notice.id}
+                                notice={notice}
+                                selectedNotice={selectedNotice}
+                                reviewNotes={reviewNotes}
+                                setReviewNotes={setReviewNotes}
+                                onStatusChange={onStatusChange}
+                                onAddNotes={setSelectedNotice}
+                                onNotesSubmit={onNotesSubmit}
+                                onNotesCancel={handleNotesCancel}
+                                onSettleDeposit={handleSettleDeposit}
+                            />
+                        ))
+                    )}
+                </div>
+            )}
 
             {/* Deposit Settlement Modal */}
             <DepositModal
                 isOpen={showDepositModal}
-                onClose={() => setShowDepositModal(false)}
+                onClose={() => {
+                    setShowDepositModal(false);
+                    setDepositNotice(null);
+                }}
                 notice={depositNotice}
-                onSubmit={handleDepositSettlement}
+                onSubmit={onDepositSettlement}
             />
         </div>
     );
