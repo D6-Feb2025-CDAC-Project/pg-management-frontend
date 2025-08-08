@@ -76,16 +76,20 @@ const handleHideRoom = async (roomId) => {
           className="w-full sm:w-auto flex-grow border px-3 py-2 rounded"
         />
 
+        
+
+
         <select
-          value={floorFilter}
-          onChange={(e) => setFloorFilter(e.target.value)}
-          className="px-4 py-2 border rounded"
-        >
-          <option value="All">All Floors</option>
-          <option value="first">1st Floor</option>
-          <option value="second">2nd Floor</option>
-          <option value="third">3rd Floor</option>
+        value={floorFilter}
+        onChange={(e) => setFloorFilter(e.target.value)}
+        className="px-4 py-2 border rounded">
+        <option value="All">All Floors</option>
+        <option value="Ground">Ground Floor</option>
+        <option value="First">First Floor</option>
+        <option value="Second">Second Floor</option>
+        <option value="Third">Third Floor</option>
         </select>
+
 
         <button
           className="px-4 py-2 border rounded bg-white"

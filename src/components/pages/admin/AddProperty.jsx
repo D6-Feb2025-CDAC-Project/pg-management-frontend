@@ -2,17 +2,23 @@ import React, { useState } from "react";
 import axios from "axios";
 
 const AddProperty = () => {
-  const [formData, setFormData] = useState({
-  roomNo: "",            
-  roomType: "",
-  tenantType: "",         
-  floor: "",
-  rentAmount: "",         
-  maxOccupancy: "",
-  currentOccupancy: "",  
-  facilities: [],
-  });
+  
+  const [facilitiesList, setFacilitiesList] = useState([
+    { name: "AC", category: "Cooling", isChecked: false },
+    { name: "Attached Bathroom", category: "Bathroom", isChecked: false },
+    { name: "Study Table", category: "Furniture", isChecked: false },
+    { name: "Hot Water", category: "Utility", isChecked: false }
+  ]);
 
+  const [formData, setFormData] = useState({
+    roomNo: "",
+    roomType: "",
+    tenantType: "",
+    floor: "",
+    rentAmount: "",
+    maxOccupancy: "",
+    currentOccupancy: "",
+  });
 
   const [selectedFile, setSelectedFile] = useState(null);
   const [photos, setPhotos] = useState([]);
@@ -22,14 +28,13 @@ const AddProperty = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleFacilityChange = (e) => {
-    const { value, checked } = e.target;
-    setFormData((prev) => {
-      const updatedFacilities = checked
-        ? [...prev.facilities, value]
-        : prev.facilities.filter((item) => item !== value);
-      return { ...prev, facilities: updatedFacilities };
-    });
+  
+  const handleFacilityChange = (index) => {
+    setFacilitiesList((prev) =>
+      prev.map((f, i) =>
+        i === index ? { ...f, isChecked: !f.isChecked } : f
+      )
+    );
   };
 
   const handleImageUpload = (e) => {
@@ -37,62 +42,94 @@ const AddProperty = () => {
     setPhotos((prev) => [...prev, ...files]);
   };
 
-  
-const handleSubmit = async (e) => {
-  e.preventDefault();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-  try {
-    const formDataToSend = new FormData();
+    try {
+      const formDataToSend = new FormData();
 
-    // Add the room JSON
-    formDataToSend.append(
-      "room",
-      new Blob(
-        [
-          JSON.stringify({
-            ...formData,
-            rentAmount: Number(formData.rentAmount),
-            maxOccupancy: Number(formData.maxOccupancy),
-            currentOccupancy: Number(formData.currentOccupancy),
-            facilities: formData.facilities.map((name) => ({
-              name: name,
-              category: "", 
-            })),
-          }),
-        ],
-        { type: "application/json" }
-      )
-    );
+      
+      const selectedFacilities = facilitiesList
+        .filter((f) => f.isChecked)
+        .map((f) => ({
+          name: f.name,
+          category: f.category
+        }));
 
-    // Append a single image (make sure selectedFile is a File object)
-    if (selectedFile) {
-      formDataToSend.append("image", selectedFile);
+      console.log("Selected facilities:", selectedFacilities); // Debug log
+
+      // Add the room JSON
+      formDataToSend.append(
+        "room",
+        new Blob(
+          [
+            JSON.stringify({
+              ...formData,
+              rentAmount: Number(formData.rentAmount),
+              maxOccupancy: Number(formData.maxOccupancy),
+              currentOccupancy: Number(formData.currentOccupancy),
+              facilities: selectedFacilities
+            }),
+          ],
+          { type: "application/json" }
+        )
+      );
+
+      // Append a single image
+      if (selectedFile) {
+        formDataToSend.append("image", selectedFile);
+      }
+
+      
+      const response = await axios.post(
+        "http://localhost:8080/rooms",
+        formDataToSend,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      console.log("Room added:", response.data);
+      alert("Room added successfully!");
+      
+      
+      setFormData({
+        roomNo: "",
+        roomType: "",
+        tenantType: "",
+        floor: "",
+        rentAmount: "",
+        maxOccupancy: "",
+        currentOccupancy: "",
+      });
+      setFacilitiesList(prev => prev.map(f => ({ ...f, isChecked: false })));
+      setSelectedFile(null);
+      setPhotos([]);
+      
+    } catch (err) {
+      console.error("Full error:", err);
+      console.error("Error response:", err.response?.data);
+      console.error("Error status:", err.response?.status);
+      
+      if (err.response?.data) {
+        alert(`Error: ${err.response.data.message || err.response.data}`);
+      } else {
+        alert("Error adding room. Check console for details.");
+      }
     }
+  };
 
-   
-    const response = await axios.post("http://localhost:8080/rooms", formDataToSend, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    });
-
-    console.log("Room added:", response.data);
-    alert("Room added successfully!");
-  } catch (err) {
-    console.error("Error adding room:", err);
-    alert("Error adding room.");
-  }
-};
-
-   return (
+  return (
     <div className="p-6 bg-purple-100 min-h-screen">
-      <h2 className="text-2xl font-semibold mb-4">Add New Property</h2>
+      <h2 className="text-2xl font-semibold mb-4">Add New Room</h2>
 
       <form
         onSubmit={handleSubmit}
         className="bg-white p-6 rounded-lg shadow-md"
       >
-        <h3 className="text-lg font-semibold mb-4">Property Details</h3>
+        <h3 className="text-lg font-semibold mb-4">Room Details</h3>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Room Number */}
@@ -108,9 +145,6 @@ const handleSubmit = async (e) => {
             />
           </div>
 
-         
-          
-
           {/* Room Type */}
           <div>
             <label className="block font-medium mb-1">Room Type*</label>
@@ -125,7 +159,6 @@ const handleSubmit = async (e) => {
               <option value="SINGLE_SHARING">Single</option>
               <option value="DOUBLE_SHARING">Double</option>
               <option value="THREE_SHARING">Triple</option>
-              
             </select>
           </div>
 
@@ -159,21 +192,22 @@ const handleSubmit = async (e) => {
             </select>
           </div>
 
-
-           {/* Tenant Type */}
-          <select
-          name="tenantType"
-          value={formData.tenantType}
-            onChange={handleChange}
-            className="w-full border border-gray-300 rounded px-3 py-2"
-            required
->
-          <option value="">Select Tenant Type</option>
-          <option value="FEMALE_ONLY">Female Only</option>
-          <option value="MALE_ONLY">Male Only</option>
-          <option value="UNISEX">Unisex</option>
-        </select>
-
+          {/* Tenant Type */}
+          <div>
+            <label className="block font-medium mb-1">Tenant Type*</label>
+            <select
+              name="tenantType"
+              value={formData.tenantType}
+              onChange={handleChange}
+              className="w-full border border-gray-300 rounded px-3 py-2"
+              required
+            >
+              <option value="">Select Tenant Type</option>
+              <option value="FEMALE_ONLY">Female Only</option>
+              <option value="MALE_ONLY">Male Only</option>
+              <option value="UNISEX">Unisex</option>
+            </select>
+          </div>
 
           {/* Monthly Rent */}
           <div>
@@ -190,40 +224,34 @@ const handleSubmit = async (e) => {
             />
           </div>
 
-          {/* Status */}
+          {/* Current Occupancy */}
           <div>
-            <label className="block font-medium mb-1">Status*</label>
-            <select
-              name="status"
-              value={formData.status}
+            <label className="block font-medium mb-1">Current Occupancy</label>
+            <input
+              type="number"
+              name="currentOccupancy"
+              value={formData.currentOccupancy}
               onChange={handleChange}
               className="w-full border border-gray-300 rounded px-3 py-2"
-              required
-            >
-              <option value="">Select Status</option>
-              <option value="Available">Available</option>
-              <option value="Occupied">Occupied</option>
-            </select>
+              min="0"
+            />
           </div>
 
           {/* Facilities */}
-          <div>
+          <div className="md:col-span-2">
             <label className="block font-medium mb-1">Facilities</label>
             <div className="flex flex-wrap gap-4">
-              {["AC", "Attached Bathroom", "Study Table", "Hot Water"].map(
-                (facility) => (
-                  <label key={facility} className="flex items-center gap-1">
-                    <input
-                      type="checkbox"
-                      value={facility}
-                      checked={formData.facilities.includes(facility)}
-                      onChange={handleFacilityChange}
-                      className="h-4 w-4"
-                    />
-                    {facility}
-                  </label>
-                )
-              )}
+              {facilitiesList.map((facility, index) => (
+                <label key={index} className="flex items-center gap-1">
+                  <input
+                    type="checkbox"
+                    checked={facility.isChecked}
+                    onChange={() => handleFacilityChange(index)}
+                    className="h-4 w-4"
+                  />
+                  {facility.name}
+                </label>
+              ))}
             </div>
           </div>
         </div>
@@ -231,6 +259,21 @@ const handleSubmit = async (e) => {
         {/* Room Photos */}
         <div className="mt-6">
           <label className="block font-medium mb-2">Room Photos</label>
+          
+          <div className="mb-4">
+            <label className="block text-sm font-medium mb-1">Upload Room Image</label>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(e) => setSelectedFile(e.target.files[0])}
+              className="w-full border border-gray-300 rounded px-3 py-2"
+            />
+            {selectedFile && (
+              <p className="text-sm text-green-600 mt-1">
+                Selected: {selectedFile.name}
+              </p>
+            )}
+          </div>
 
           <input
             type="file"
@@ -241,28 +284,19 @@ const handleSubmit = async (e) => {
             className="hidden"
           />
 
-        
-
-            <div>
-             <label>Upload Room Image</label>
-             <input
-             type="file"
-             accept="image/*"
-             onChange={(e) => setSelectedFile(e.target.files[0])}/>
-             </div>
-
-
           {/* Previews */}
-          <div className="flex flex-wrap gap-3">
-            {photos.map((photo, index) => (
-              <img
-                key={index}
-                src={URL.createObjectURL(photo)}
-                alt={`Photo ${index + 1}`}
-                className="w-24 h-24 object-cover rounded"
-              />
-            ))}
-          </div>
+          {photos.length > 0 && (
+            <div className="flex flex-wrap gap-3 mt-4">
+              {photos.map((photo, index) => (
+                <img
+                  key={index}
+                  src={URL.createObjectURL(photo)}
+                  alt={`Photo ${index + 1}`}
+                  className="w-24 h-24 object-cover rounded"
+                />
+              ))}
+            </div>
+          )}
         </div>
 
         {/* Action Buttons */}
@@ -270,6 +304,21 @@ const handleSubmit = async (e) => {
           <button
             type="button"
             className="bg-red-500 text-white px-6 py-2 rounded hover:bg-red-600"
+            onClick={() => {
+              // Reset form
+              setFormData({
+                roomNo: "",
+                roomType: "",
+                tenantType: "",
+                floor: "",
+                rentAmount: "",
+                maxOccupancy: "",
+                currentOccupancy: "",
+              });
+              setFacilitiesList(prev => prev.map(f => ({ ...f, isChecked: false })));
+              setSelectedFile(null);
+              setPhotos([]);
+            }}
           >
             Cancel
           </button>
@@ -286,5 +335,3 @@ const handleSubmit = async (e) => {
 };
 
 export default AddProperty;
-
-
