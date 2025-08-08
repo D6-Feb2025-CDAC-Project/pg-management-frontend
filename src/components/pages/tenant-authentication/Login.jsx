@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import { EyeIcon, EyeOffIcon } from "lucide-react";
-import { login } from "../../../services/TenantService";
+import { login } from "./../../../services/UserService";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);

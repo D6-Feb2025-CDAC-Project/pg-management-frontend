@@ -34,13 +34,3 @@ export const addTenant = async (tenantData) => {
     throw error;
   }
 };
-
-// Login with username or email
-export const login = async (identifier, password) => {
-  const response = await axios.post(`${BASE_URL}/login`, {
-    identifier,
-    password,
-  });
-
-  return response.data;
-};
