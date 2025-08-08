@@ -17,11 +17,13 @@ const Notices = () => {
   const [editFrom, setEditFrom] = useState('PG Admin');
   const [editType, setEditType] = useState('general');
 
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080';
+
   const fetchNotices = async () => {
     try {
       setLoading(true);
       const fetchedNotices = await adminNoticeService.getFormattedNotices();
-      setNotices(fetchedNotices);
+      setNotices(fetchedNotices)
     } catch (err) {
       console.error('Failed to fetch notices:', err);
       setError('Failed to fetch notices. Please try again.');
@@ -44,8 +46,10 @@ const Notices = () => {
     };
 
     try {
+
       setLoading(true);
       await adminNoticeService.addNewNotice(newNotice);
+
       setTitle('');
       setMessage('');
       setFrom('PG Admin');
@@ -223,9 +227,8 @@ const Notices = () => {
         notices.map((notice) => (
           <div
             key={notice.id}
-            className={`bg-white border border-gray-300 rounded-md p-4 mb-4 shadow-sm ${
-              notice.unread ? 'ring-2 ring-green-400' : ''
-            }`}
+            className={`bg-white border border-gray-300 rounded-md p-4 mb-4 shadow-sm ${notice.unread ? 'ring-2 ring-green-400' : ''
+              }`}
           >
             {editingNotice === notice.id ? (
               <div className="space-y-4">

@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_BASE_URL = "http://localhost:8080"; // Update if your backend URL is different
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080';
 
 // GET: Fetch all visible rooms
 export const getAllVisibleRooms = async () => {
