@@ -49,8 +49,10 @@ const Registration = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!otpVerified) return alert("Please verify Email first!");
-    if (!guest.agreed) return alert("Please agree to the terms!");
+    if (!otpVerified) return toast.warn("Please verify Email first!");
+    if (!guest.agreed) return toast.warn("Please agree to the terms!");
+    if (guest.password != guest.confirmPassword)
+      return toast.warn("Password & Confirm password doesn't matches");
 
     const payload = {
       username: guest.name,

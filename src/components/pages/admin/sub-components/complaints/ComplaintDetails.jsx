@@ -17,9 +17,7 @@ const ComplaintDetails = ({ complaint }) => (
                         <p className="text-sm text-gray-600">
                             <span className="font-medium text-purpleDark">Tenant:</span> {complaint.tenantName} ({complaint.tenantId})
                         </p>
-                        <p className="text-sm text-gray-600">
-                            <span className="font-medium text-purpleDark">Apartment:</span> {complaint.apartment}
-                        </p>
+                        
                     </>
                 )}
                 <p className="text-sm text-gray-600">
