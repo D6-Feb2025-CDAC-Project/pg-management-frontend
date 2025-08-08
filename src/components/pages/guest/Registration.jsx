@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import TermsAndConditions from "../sub-components/TermsAndConditions";
 import { addTenant } from "../../../services/TenantService";
+import { generateOtp, verifyGeneratedOtp } from "../../../services/OtpService";
+import { toast } from "react-toastify";
 
 const Registration = () => {
   const location = useLocation();
@@ -12,7 +14,6 @@ const Registration = () => {
     name: "",
     email: "",
     phone: "",
-    otp: "",
     enteredOtp: "",
     password: "",
     confirmPassword: "",
@@ -25,27 +26,31 @@ const Registration = () => {
   const [otpVerified, setOtpVerified] = useState(false);
   const [showTerms, setShowTerms] = useState(false);
 
-  const sendOtp = () => {
-    const generatedOtp = Math.floor(1000 + Math.random() * 9000).toString();
-    alert(`OTP Sent: ${generatedOtp}`);
-    setGuest({ ...guest, otp: generatedOtp });
-    setOtpSent(true);
+  const sendOtp = async () => {
+    if (guest.email != "") {
+      const result = await generateOtp(guest.email);
+      toast.success(result.message);
+      setOtpSent(true);
+    } else {
+      toast.warn("Please enter email");
+    }
   };
 
-  const verifyOtp = () => {
-    if (guest.enteredOtp === guest.otp) {
-      alert("OTP Verified");
+  const verifyOtp = async () => {
+    const result = await verifyGeneratedOtp(guest.email, guest.enteredOtp);
+    if (result.success) {
+      toast.success(result.message);
       setOtpVerified(true);
     } else {
-      alert("Invalid OTP");
+      toast.error(result.message);
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // if (!otpVerified) return alert("Please verify OTP first!");
-    // if (!guest.agreed) return alert("Please agree to the terms!");
+    if (!otpVerified) return alert("Please verify Email first!");
+    if (!guest.agreed) return alert("Please agree to the terms!");
 
     const payload = {
       username: guest.name,
@@ -54,7 +59,7 @@ const Registration = () => {
       gender: guest.gender,
       contactNumber: guest.phone,
       moveInDate: guest.moveInDate,
-      roomId: 3, // since you don't have dynamic room ID yet
+      roomId: room.id,
     };
 
     try {
@@ -72,7 +77,6 @@ const Registration = () => {
         <h2 className="text-2xl font-bold text-purpleDark mb-6 text-center">
           Room Registration
         </h2>
-
         {/* room details */}
         {room && (
           <div className="mb-6 border p-4 rounded bg-gray-50">
@@ -81,17 +85,25 @@ const Registration = () => {
               <strong>Room No:</strong> {room.number}
             </p>
             <p className="mb-1">
-              <strong>Rent:</strong> ₹{room.rent}/month
+              <strong>Rent:</strong> ₹{room.rent}/month + extra charges (For
+              Maintenance : ₹{room.maintenance}/month & Electricity : ₹
+              {room.electricity}/month)
             </p>
             <p className="mb-1">
-              <strong>Capacity:</strong> {room.capacity} persons
+              <strong>Deposit:</strong> ₹{room.deposit}
+            </p>
+            <p className="mb-1">
+              <strong>Current Occupancy:</strong> {room.currentOccupancy}{" "}
+              persons
+            </p>
+            <p className="mb-1">
+              <strong>Available for:</strong> {room.tenantType}
             </p>
             <p className="mb-1">
               <strong>Amenities:</strong> {room.amenities.join(", ")}
             </p>
           </div>
         )}
-
         {/* guest info */}
         <form onSubmit={handleSubmit}>
           <h3 className="font-bold text-lg mb-2">Guest Information</h3>
@@ -114,15 +126,15 @@ const Registration = () => {
               onChange={(e) => setGuest({ ...guest, email: e.target.value })}
               required
             />
-            {/* <button
+            <button
               type="button"
               className="secondary-button"
               onClick={sendOtp}
             >
               Send OTP
-            </button> */}
+            </button>
           </div>
-          {/* {otpSent && (
+          {otpSent && (
             <div className="flex gap-3 mb-3">
               <input
                 type="text"
@@ -141,7 +153,7 @@ const Registration = () => {
                 Verify OTP
               </button>
             </div>
-          )} */}
+          )}
           {/* phone number */}
           <input
             type="tel"

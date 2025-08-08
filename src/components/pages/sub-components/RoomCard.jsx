@@ -7,8 +7,10 @@ const RoomCard = ({ room }) => {
   const handleBookNow = (room) => {
     navigate("/guest/registration", { state: { room } });
   };
+
+  const capacity = 1;
   return (
-    <div className="bg-white shadow-md rounded-xl border border-gray-200 flex flex-col h-[420px]">
+    <div className="bg-white shadow-md rounded-xl border border-gray-200 flex flex-col h-[500px]">
       <img
         src={room.image}
         alt={`Room ${room.number}`}
@@ -20,10 +22,18 @@ const RoomCard = ({ room }) => {
           Room No: {room.number}
         </h3>
         <p className="mb-1">
-          <strong>Rent:</strong> ₹{room.rent}/month
+          <strong>Rent:</strong> ₹{room.rent}/month, extra charges (₹
+          {room.electricity} & ₹{room.maintenance})
         </p>
         <p className="mb-1">
-          <strong>Capacity:</strong> {room.capacity} person
+          <strong>Deposit:</strong> ₹{room.deposit}
+        </p>
+        <p className="mb-1">
+          <strong>Vacancy :</strong> {room.capacity - room.currentOccupancy}{" "}
+          person
+        </p>
+        <p className="mb-1">
+          <strong>Available for :</strong> {room.tenantType}
         </p>
         <p className="mb-2">
           <strong>Amenities:</strong> {room.amenities.join(", ")}
