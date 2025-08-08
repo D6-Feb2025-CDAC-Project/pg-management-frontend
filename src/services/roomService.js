@@ -22,12 +22,21 @@ export const getRoomById = async (roomId) => {
 
 // PUT: Update room details by ID
 export const updateRoom = async (roomId, updatedData) => {
-  const response = await axios.put(`${API_BASE_URL}/rooms/${roomId}`, updatedData);
+  const response = await axios.put(
+    `${API_BASE_URL}/rooms/${roomId}`,
+    updatedData
+  );
   return response.data;
 };
 
 // PUT: Hide room (logical delete)
 export const hideRoom = async (roomId) => {
   const response = await axios.put(`${API_BASE_URL}/rooms/${roomId}/hide`);
+  return response.data;
+};
+
+// get rooms with their facilities
+export const getRoomsWithFacilties = async () => {
+  const response = await axios.get(`${API_BASE_URL}/rooms/facilities`);
   return response.data;
 };

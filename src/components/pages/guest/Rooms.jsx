@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 const rooms = [
   {
     id: 1,
-    type: "Single Room",
+    type: "Single Sharing",
     capacity: 1,
     image:
       "https://media.istockphoto.com/id/653447274/photo/empty-single-bedroom.jpg?s=612x612&w=0&k=20&c=zb_l0uNIc0TfWhYf9_582SGan1vw-ivbkUfTmWZHnGk=",
@@ -32,7 +32,7 @@ const rooms = [
 function Rooms() {
   const navigate = useNavigate();
   const handleBookNow = (type) => {
-    if (type === "Single Room") navigate("/guest/rooms/single");
+    if (type === "Single Sharing") navigate("/guest/rooms/single");
     else if (type === "Double Sharing") navigate("/guest/rooms/double");
     else if (type === "Triple Sharing") navigate("/guest/rooms/triple");
     // console.log("hello");

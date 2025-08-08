@@ -1,72 +1,26 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
 import RoomCard from "../sub-components/RoomCard";
-
-const tripleRooms = [
-  {
-    id: 1,
-    number: "T201",
-    rent: 5500,
-    capacity: 3,
-    amenities: ["Wi-Fi", "Attached Bathroom", "3 Beds", "Storage Lockers"],
-    available: true,
-    image:
-      "https://www.shutterstock.com/image-photo/triple-room-modern-hotel-260nw-649329964.jpg",
-  },
-  {
-    id: 2,
-    number: "T202",
-    rent: 5300,
-    capacity: 3,
-    amenities: ["Wi-Fi", "Balcony", "Shared Wardrobe", "24x7 Water"],
-    available: true,
-    image:
-      "https://a0.muscache.com/im/pictures/7e3680d2-e66a-4a6c-9438-0375235d1bcc.jpg?im_w=720",
-  },
-  {
-    id: 3,
-    number: "T203",
-    rent: 5000,
-    capacity: 3,
-    amenities: ["Wi-Fi", "Geyser", "Laundry Service", "Table & Chair"],
-    available: false,
-    image:
-      "https://www.silkahotels.com/images/silka-tsuen-wan/stay/triple-room/triple_room-S360-desktop.webp",
-  },
-  {
-    id: 4,
-    number: "T204",
-    rent: 5600,
-    capacity: 3,
-    amenities: ["Wi-Fi", "Mini Fridge", "Attached Bathroom", "Smart TV"],
-    available: true,
-    image:
-      "https://risingstarhostel.com/wp-content/uploads/2025/05/Copy-of-PRB_1274-scaled.jpg",
-  },
-  {
-    id: 5,
-    number: "T205",
-    rent: 5200,
-    capacity: 3,
-    amenities: ["Wi-Fi", "Cupboard", "3 Beds", "24x7 Security"],
-    available: true,
-    image:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQO5mhoym0US4lPP23sNjxn86mEGdlU7cFj4Q&s",
-  },
-  {
-    id: 6,
-    number: "T206",
-    rent: 5100,
-    capacity: 3,
-    amenities: ["Wi-Fi", "Laundry", "Geyser", "Fan & Lights"],
-    available: true,
-    image:
-      "https://5.imimg.com/data5/GI/SC/GLADMIN-50954254/ams-pg-triple-sharing-room-500x500.jpg",
-  },
-];
-
+import { getRoomsWithFacilties } from "../../../services/roomService";
 function TripleRooms() {
-  const availableRooms = tripleRooms.filter((room) => room.available);
+  const [rooms, setRooms] = useState([]);
+
+  useEffect(() => {
+    const fetchRooms = async () => {
+      try {
+        const data = await getRoomsWithFacilties(); // wait for API
+        setRooms(Array.isArray(data) ? data : []); // ensure array
+      } catch (error) {
+        console.error("Failed to fetch rooms", error);
+        setRooms([]); // fallback to empty array
+      }
+    };
+
+    fetchRooms();
+  }, []);
+
+  const availableRooms = rooms.filter(
+    (room) => room.roomType === "THREE_SHARING"
+  );
 
   return (
     <div className="min-h-screen p-6 bg-gray-100">
@@ -77,12 +31,27 @@ function TripleRooms() {
       {availableRooms.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {availableRooms.map((room) => (
-            <RoomCard key={room.id} room={room} />
+            <RoomCard
+              key={room.roomNo}
+              room={{
+                id: room.id,
+                number: room.roomNo,
+                rent: room.rentAmount,
+                capacity: 3,
+                amenities: room.facilties?.map((f) => f.name) || [],
+                currentOccupancy: room.currentOccupancy,
+                image: room.photoUrl,
+                deposit: room.deposit,
+                electricity: room.electricityCharges,
+                maintenance: room.maintenanceCharges,
+                tenantType: room.tenantType,
+              }}
+            />
           ))}
         </div>
       ) : (
         <p className="text-gray-700">
-          No Double Rooms Available at the moment.
+          No Triple Rooms Available at the moment.
         </p>
       )}
     </div>
