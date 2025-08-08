@@ -1,553 +1,290 @@
-// import React, { useState } from "react";
-// import { useNavigate } from "react-router-dom";
-// import facilitiesList from "../../../assets/constants/facilitiesList";
-
-// const AddProperty = () => {
-//   const navigate = useNavigate();
-
-//   const [formData, setFormData] = useState({
-//     roomNumber: "",
-//     roomType: "",
-//     floor: "",
-//     rent: "",
-//     roomSize: "",
-//     maxOccupancy: "",
-//     facilities: {
-//       ac: false,
-//       attachedBathroom: false,
-//       studyTable: false,
-//       hotWater: false,
-//     },
-//     status: "",
-//     photos: "",
-//   });
-
-//   const handleChange = (e) => {
-//     const { name, value, type, checked } = e.target;
-
-//     if (["ac", "attachedBathroom", "studyTable", "hotWater"].includes(name)) {
-//       setFormData((prev) => ({
-//         ...prev,
-//         facilities: {
-//           ...prev.facilities,
-//           [name]: checked,
-//         },
-//       }));
-//     } else {
-//       setFormData((prev) => ({
-//         ...prev,
-//         [name]: value,
-//       }));
-//     }
-//   };
-
-//   const handleSubmit = (e) => {
-//     e.preventDefault();
-//     console.log("Form Data Submitted:", formData);
-//     // TODO: Send data to backend
-//     alert("Property Added!");
-//     navigate("/admin/properties"); // redirect to properties list
-//   };
-
-//   return (
-//     <div className="p-6 max-w-5xl mx-auto">
-//       <h2 className="text-2xl font-bold mb-6 text-center">Add New Room</h2>
-
-//       <form
-//         onSubmit={handleSubmit}
-//         className="bg-white border rounded-lg p-6 shadow"
-//       >
-//         {/* Row 1 */}
-//         <div className="grid grid-cols-2 gap-6 mb-4">
-//           <div>
-//             <label className="block mb-1 font-semibold">Room Number</label>
-//             <input
-//               type="text"
-//               name="roomNumber"
-//               value={formData.roomNumber}
-//               onChange={handleChange}
-//               className="w-full border px-3 py-2 rounded"
-//               required
-//             />
-//           </div>
-//           <div>
-//             <label className="block mb-1 font-semibold">
-//               Room Size (sq.ft)
-//             </label>
-//             <input
-//               type="text"
-//               name="roomSize"
-//               value={formData.roomSize}
-//               onChange={handleChange}
-//               className="w-full border px-3 py-2 rounded"
-//             />
-//           </div>
-//         </div>
-
-//         {/* Row 2 */}
-//         <div className="grid grid-cols-1 gap-6 mb-4">
-//           <div>
-//             <label className="block mb-1 font-semibold">Room Type</label>
-//             <select
-//               name="roomType"
-//               value={formData.roomType}
-//               onChange={handleChange}
-//               className="w-full border px-3 py-2 rounded"
-//               required
-//             >
-//               <option value="">Select Room Type</option>
-//               <option value="Single">Single</option>
-//               <option value="Double">Double</option>
-//               <option value="Triple">Triple</option>
-//             </select>
-//           </div>
-//         </div>
-
-//         {/* Row 3 */}
-//         <div className="grid grid-cols-2 gap-6 mb-4">
-//           <div>
-//             <label className="block mb-1 font-semibold">Floor</label>
-//             <select
-//               name="floor"
-//               value={formData.floor}
-//               onChange={handleChange}
-//               className="w-full border px-3 py-2 rounded"
-//               required
-//             >
-//               <option value="">Select Floor</option>
-//               <option value="1st">1st</option>
-//               <option value="2nd">2nd</option>
-//               <option value="3rd">3rd</option>
-//             </select>
-//           </div>
-//           <div>
-//             <label className="block mb-1 font-semibold">Monthly Rent (₹)</label>
-//             <input
-//               type="number"
-//               name="rent"
-//               value={formData.rent}
-//               onChange={handleChange}
-//               className="w-full border px-3 py-2 rounded"
-//               required
-//             />
-//           </div>
-//         </div>
-
-//         {/* Facilities */}
-//         <div className="mb-4">
-//           <label className="block mb-4 font-semibold">Facilities</label>
-
-//           {Object.entries(facilitiesList).map(([category, items]) => (
-//             <div key={category} className="mb-7">
-//               <h4 className="font-semibold capitalize">{category}</h4>
-//               <div className="grid grid-cols-2 gap-4 pl-4">
-//                 {items.map((facility) => (
-//                   <label key={facility}>
-//                     <input
-//                       type="checkbox"
-//                       name={facility}
-//                       checked={formData.facilities[facility] || false}
-//                       onChange={(e) =>
-//                         setFormData((prev) => ({
-//                           ...prev,
-//                           facilities: {
-//                             ...prev.facilities,
-//                             [facility]: e.target.checked,
-//                           },
-//                         }))
-//                       }
-//                       className="mr-2"
-//                     />
-//                     {facility}
-//                   </label>
-//                 ))}
-//               </div>
-//             </div>
-//           ))}
-//         </div>
-
-//         {/* Status */}
-//         <div className="mb-4">
-//           <label className="block mb-1 font-semibold">Status</label>
-//           <select
-//             name="status"
-//             value={formData.status}
-//             onChange={handleChange}
-//             className="w-full border px-3 py-2 rounded"
-//             required
-//           >
-//             <option value="">Select Status</option>
-//             <option value="Vacant">Vacant</option>
-//             <option value="Partially Occupied">Partially Occupied</option>
-//             <option value="Occupied">Occupied</option>
-//           </select>
-//         </div>
-
-//         {/* Photos */}
-//         <div className="mb-6">
-//           <label className="block mb-1 font-semibold">Room Photo</label>
-//           <input
-//             type="file"
-//             accept="image/*"
-//             name="photos"
-//             onChange={(e) =>
-//               setFormData((prev) => ({
-//                 ...prev,
-//                 photos: e.target.files[0], // store file object
-//               }))
-//             }
-//             className="w-full border px-3 py-2 rounded"
-//           />
-//         </div>
-
-//         {/* Buttons */}
-//         <div className="flex justify-between">
-//           <button
-//             type="button"
-//             onClick={() => navigate("/admin/properties")}
-//             className="reject-button"
-//           >
-//             Cancel
-//           </button>
-//           <button type="submit" className="approve-button">
-//             Save
-//           </button>
-//         </div>
-//       </form>
-//     </div>
-//   );
-// };
-
-// export default AddProperty;
-// AddProperty.jsx
-
-// import React, { useState } from "react";
-// import { useNavigate } from "react-router-dom";
-// import axios from "axios";
-
-// export default function AddProperty() {
-//   const navigate = useNavigate();
-
-//   const [formData, setFormData] = useState({
-//     roomNo: "",
-//     roomType: "SINGLE_SHARING",
-//     tenantType: "MALE_ONLY",
-//     floor: "1st",
-//     rentAmount: "",
-//     maxOccupancy: "",
-//     currentOccupancy: 0,
-//     facilities: [],
-//   });
-
-//   const facilityOptions = [
-//     "Wi-Fi",
-//     "AC",
-//     "Geyser",
-//     "Study Table",
-//     "Attached Bathroom",
-//     "Cupboard",
-//     "Fan",
-//   ];
-
-//   const handleChange = (e) => {
-//     const { name, value } = e.target;
-
-//     setFormData((prev) => ({
-//       ...prev,
-//       [name]: value,
-//     }));
-//   };
-
-//   const handleFacilityToggle = (facility) => {
-//     setFormData((prev) => {
-//       const facilities = prev.facilities.includes(facility)
-//         ? prev.facilities.filter((f) => f !== facility)
-//         : [...prev.facilities, facility];
-//       return { ...prev, facilities };
-//     });
-//   };
-
-//   const handleSubmit = async (e) => {
-//     e.preventDefault();
-
-//     try {
-//       await axios.post("http://localhost:8080/rooms", formData);
-//       alert("Room added successfully!");
-//       navigate("/admin/rooms");
-//     } catch (error) {
-//       console.error("Error adding room:", error);
-//       alert("Failed to add room. Please try again.");
-//     }
-//   };
-
-//   return (
-//     <div className="bg-purpleDarkScale-100 p-6 min-h-screen">
-//       <h2 className="text-3xl font-bold text-purpleDark mb-6 text-center">
-//         Add New Room
-//       </h2>
-
-//       <form
-//         onSubmit={handleSubmit}
-//         className="max-w-3xl mx-auto bg-white p-6 rounded-lg shadow"
-//       >
-//         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-//           <input
-//             type="text"
-//             name="roomNo"
-//             placeholder="Room Number"
-//             value={formData.roomNo}
-//             onChange={handleChange}
-//             required
-//             className="border p-2 rounded"
-//           />
-
-//           <select
-//             name="roomType"
-//             value={formData.roomType}
-//             onChange={handleChange}
-//             className="border p-2 rounded"
-//           >
-//             <option value="SINGLE_SHARING">Single Sharing</option>
-//             <option value="DOUBLE_SHARING">Double Sharing</option>
-//             <option value="TRIPLE_SHARING">Triple Sharing</option>
-//           </select>
-
-//           <select
-//             name="tenantType"
-//             value={formData.tenantType}
-//             onChange={handleChange}
-//             className="border p-2 rounded"
-//           >
-//             <option value="MALE_ONLY">Male Only</option>
-//             <option value="FEMALE_ONLY">Female Only</option>
-//             <option value="UNISEX">Unisex</option>
-//           </select>
-
-//           <select
-//             name="floor"
-//             value={formData.floor}
-//             onChange={handleChange}
-//             className="border p-2 rounded"
-//           >
-//             <option value="1st">1st Floor</option>
-//             <option value="2nd">2nd Floor</option>
-//             <option value="3rd">3rd Floor</option>
-//           </select>
-
-//           <input
-//             type="number"
-//             name="rentAmount"
-//             placeholder="Rent Amount"
-//             value={formData.rentAmount}
-//             onChange={handleChange}
-//             required
-//             className="border p-2 rounded"
-//           />
-
-//           <input
-//             type="number"
-//             name="maxOccupancy"
-//             placeholder="Max Occupancy"
-//             value={formData.maxOccupancy}
-//             onChange={handleChange}
-//             required
-//             className="border p-2 rounded"
-//           />
-//         </div>
-
-//         <div className="mt-4">
-//           <label className="block font-semibold mb-2">Facilities:</label>
-//           <div className="flex flex-wrap gap-2">
-//             {facilityOptions.map((facility) => (
-//               <label key={facility} className="flex items-center gap-1">
-//                 <input
-//                   type="checkbox"
-//                   checked={formData.facilities.includes(facility)}
-//                   onChange={() => handleFacilityToggle(facility)}
-//                 />
-//                 <span>{facility}</span>
-//               </label>
-//             ))}
-//           </div>
-//         </div>
-
-//         <div className="mt-6 flex justify-end">
-//           <button
-//             type="submit"
-//             className="bg-purpleDark text-white px-6 py-2 rounded"
-//           >
-//             Add Room
-//           </button>
-//         </div>
-//       </form>
-//     </div>
-//   );
-// }
-
-
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
-export default function AddProperty() {
-  const navigate = useNavigate();
-
+const AddProperty = () => {
   const [formData, setFormData] = useState({
-    roomNo: "",
-    roomType: "SINGLE_SHARING",
-    tenantType: "MALE_ONLY",
-    floor: "1st",
-    rentAmount: "",
-    maxOccupancy: "",
-    currentOccupancy: 0,
-    facilities: [],
+  roomNo: "",            
+  roomType: "",
+  tenantType: "",         
+  floor: "",
+  rentAmount: "",         
+  maxOccupancy: "",
+  currentOccupancy: "",  
+  facilities: [],
   });
 
-  // Added facilityOptions with default categories
-  const facilityOptions = [
-    { name: "Wi-Fi", category: "Internet" },
-    { name: "AC", category: "Comfort" },
-    { name: "Geyser", category: "Utility" },
-    { name: "Study Table", category: "Furniture" },
-    { name: "Attached Bathroom", category: "Essential" },
-    { name: "Cupboard", category: "Storage" },
-    { name: "Fan", category: "Essential" },
-  ];
+
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [photos, setPhotos] = useState([]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleFacilityToggle = (facility) => {
+  const handleFacilityChange = (e) => {
+    const { value, checked } = e.target;
     setFormData((prev) => {
-      const exists = prev.facilities.some((f) => f.name === facility.name);
-      const updatedFacilities = exists
-        ? prev.facilities.filter((f) => f.name !== facility.name)
-        : [...prev.facilities, facility];
+      const updatedFacilities = checked
+        ? [...prev.facilities, value]
+        : prev.facilities.filter((item) => item !== value);
       return { ...prev, facilities: updatedFacilities };
     });
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    try {
-      await axios.post("http://localhost:8080/rooms", formData);
-      alert("Room added successfully!");
-      navigate("/admin/rooms");
-    } catch (error) {
-      console.error("Error adding room:", error);
-      alert("Failed to add room. Please try again.");
-    }
+  const handleImageUpload = (e) => {
+    const files = Array.from(e.target.files);
+    setPhotos((prev) => [...prev, ...files]);
   };
 
-  return (
-    <div className="bg-purpleDarkScale-100 p-6 min-h-screen">
-      <h2 className="text-3xl font-bold text-purpleDark mb-6 text-center">
-        Add New Room
-      </h2>
+  
+const handleSubmit = async (e) => {
+  e.preventDefault();
+
+  try {
+    const formDataToSend = new FormData();
+
+    // Add the room JSON
+    formDataToSend.append(
+      "room",
+      new Blob(
+        [
+          JSON.stringify({
+            ...formData,
+            rentAmount: Number(formData.rentAmount),
+            maxOccupancy: Number(formData.maxOccupancy),
+            currentOccupancy: Number(formData.currentOccupancy),
+            facilities: formData.facilities.map((name) => ({
+              name: name,
+              category: "", 
+            })),
+          }),
+        ],
+        { type: "application/json" }
+      )
+    );
+
+    // Append a single image (make sure selectedFile is a File object)
+    if (selectedFile) {
+      formDataToSend.append("image", selectedFile);
+    }
+
+   
+    const response = await axios.post("http://localhost:8080/rooms", formDataToSend, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+
+    console.log("Room added:", response.data);
+    alert("Room added successfully!");
+  } catch (err) {
+    console.error("Error adding room:", err);
+    alert("Error adding room.");
+  }
+};
+
+   return (
+    <div className="p-6 bg-purple-100 min-h-screen">
+      <h2 className="text-2xl font-semibold mb-4">Add New Property</h2>
 
       <form
         onSubmit={handleSubmit}
-        className="max-w-3xl mx-auto bg-white p-6 rounded-lg shadow"
+        className="bg-white p-6 rounded-lg shadow-md"
       >
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <input
-            type="text"
-            name="roomNo"
-            placeholder="Room Number"
-            value={formData.roomNo}
-            onChange={handleChange}
-            required
-            className="border p-2 rounded"
-          />
+        <h3 className="text-lg font-semibold mb-4">Property Details</h3>
 
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Room Number */}
+          <div>
+            <label className="block font-medium mb-1">Room Number*</label>
+            <input
+              type="text"
+              name="roomNo"
+              value={formData.roomNo}
+              onChange={handleChange}
+              className="w-full border border-gray-300 rounded px-3 py-2"
+              required
+            />
+          </div>
+
+         
+          
+
+          {/* Room Type */}
+          <div>
+            <label className="block font-medium mb-1">Room Type*</label>
+            <select
+              name="roomType"
+              value={formData.roomType}
+              onChange={handleChange}
+              className="w-full border border-gray-300 rounded px-3 py-2"
+              required
+            >
+              <option value="">Select Room Type</option>
+              <option value="SINGLE_SHARING">Single</option>
+              <option value="DOUBLE_SHARING">Double</option>
+              <option value="THREE_SHARING">Triple</option>
+              
+            </select>
+          </div>
+
+          {/* Max Occupancy */}
+          <div>
+            <label className="block font-medium mb-1">Max Occupancy*</label>
+            <input
+              type="number"
+              name="maxOccupancy"
+              value={formData.maxOccupancy}
+              onChange={handleChange}
+              className="w-full border border-gray-300 rounded px-3 py-2"
+              required
+            />
+          </div>
+
+          {/* Floor */}
+          <div>
+            <label className="block font-medium mb-1">Floor*</label>
+            <select
+              name="floor"
+              value={formData.floor}
+              onChange={handleChange}
+              className="w-full border border-gray-300 rounded px-3 py-2"
+              required
+            >
+              <option value="">Select Floor</option>
+              <option value="Ground">Ground</option>
+              <option value="First">First</option>
+              <option value="Second">Second</option>
+            </select>
+          </div>
+
+
+           {/* Tenant Type */}
           <select
-            name="roomType"
-            value={formData.roomType}
+          name="tenantType"
+          value={formData.tenantType}
             onChange={handleChange}
-            className="border p-2 rounded"
-          >
-            <option value="SINGLE_SHARING">Single Sharing</option>
-            <option value="DOUBLE_SHARING">Double Sharing</option>
-            <option value="TRIPLE_SHARING">Triple Sharing</option>
-          </select>
-
-          <select
-            name="tenantType"
-            value={formData.tenantType}
-            onChange={handleChange}
-            className="border p-2 rounded"
-          >
-            <option value="MALE_ONLY">Male Only</option>
-            <option value="FEMALE_ONLY">Female Only</option>
-            <option value="UNISEX">Unisex</option>
-          </select>
-
-          <select
-            name="floor"
-            value={formData.floor}
-            onChange={handleChange}
-            className="border p-2 rounded"
-          >
-            <option value="1st">1st Floor</option>
-            <option value="2nd">2nd Floor</option>
-            <option value="3rd">3rd Floor</option>
-          </select>
-
-          <input
-            type="number"
-            name="rentAmount"
-            placeholder="Rent Amount"
-            value={formData.rentAmount}
-            onChange={handleChange}
+            className="w-full border border-gray-300 rounded px-3 py-2"
             required
-            className="border p-2 rounded"
-          />
+>
+          <option value="">Select Tenant Type</option>
+          <option value="FEMALE_ONLY">Female Only</option>
+          <option value="MALE_ONLY">Male Only</option>
+          <option value="UNISEX">Unisex</option>
+        </select>
 
-          <input
-            type="number"
-            name="maxOccupancy"
-            placeholder="Max Occupancy"
-            value={formData.maxOccupancy}
-            onChange={handleChange}
-            required
-            className="border p-2 rounded"
-          />
+
+          {/* Monthly Rent */}
+          <div>
+            <label className="block font-medium mb-1">
+              Monthly Rent (₹)*
+            </label>
+            <input
+              type="number"
+              name="rentAmount"
+              value={formData.rentAmount}
+              onChange={handleChange}
+              className="w-full border border-gray-300 rounded px-3 py-2"
+              required
+            />
+          </div>
+
+          {/* Status */}
+          <div>
+            <label className="block font-medium mb-1">Status*</label>
+            <select
+              name="status"
+              value={formData.status}
+              onChange={handleChange}
+              className="w-full border border-gray-300 rounded px-3 py-2"
+              required
+            >
+              <option value="">Select Status</option>
+              <option value="Available">Available</option>
+              <option value="Occupied">Occupied</option>
+            </select>
+          </div>
+
+          {/* Facilities */}
+          <div>
+            <label className="block font-medium mb-1">Facilities</label>
+            <div className="flex flex-wrap gap-4">
+              {["AC", "Attached Bathroom", "Study Table", "Hot Water"].map(
+                (facility) => (
+                  <label key={facility} className="flex items-center gap-1">
+                    <input
+                      type="checkbox"
+                      value={facility}
+                      checked={formData.facilities.includes(facility)}
+                      onChange={handleFacilityChange}
+                      className="h-4 w-4"
+                    />
+                    {facility}
+                  </label>
+                )
+              )}
+            </div>
+          </div>
         </div>
 
-        <div className="mt-4">
-          <label className="block font-semibold mb-2">Facilities:</label>
-          <div className="flex flex-wrap gap-2">
-            {facilityOptions.map((facility) => (
-              <label key={facility.name} className="flex items-center gap-1">
-                <input
-                  type="checkbox"
-                  checked={formData.facilities.some(
-                    (f) => f.name === facility.name
-                  )}
-                  onChange={() => handleFacilityToggle(facility)}
-                />
-                <span>{facility.name}</span>
-              </label>
+        {/* Room Photos */}
+        <div className="mt-6">
+          <label className="block font-medium mb-2">Room Photos</label>
+
+          <input
+            type="file"
+            accept="image/*"
+            multiple
+            id="photo-upload"
+            onChange={handleImageUpload}
+            className="hidden"
+          />
+
+        
+
+            <div>
+             <label>Upload Room Image</label>
+             <input
+             type="file"
+             accept="image/*"
+             onChange={(e) => setSelectedFile(e.target.files[0])}/>
+             </div>
+
+
+          {/* Previews */}
+          <div className="flex flex-wrap gap-3">
+            {photos.map((photo, index) => (
+              <img
+                key={index}
+                src={URL.createObjectURL(photo)}
+                alt={`Photo ${index + 1}`}
+                className="w-24 h-24 object-cover rounded"
+              />
             ))}
           </div>
         </div>
 
-        <div className="mt-6 flex justify-end">
+        {/* Action Buttons */}
+        <div className="flex justify-end mt-8 gap-4">
+          <button
+            type="button"
+            className="bg-red-500 text-white px-6 py-2 rounded hover:bg-red-600"
+          >
+            Cancel
+          </button>
           <button
             type="submit"
-            className="bg-purpleDark text-white px-6 py-2 rounded"
+            className="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700"
           >
-            Add Room
+            Save
           </button>
         </div>
       </form>
     </div>
   );
-}
+};
+
+export default AddProperty;
+
+
