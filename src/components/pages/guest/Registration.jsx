@@ -25,12 +25,18 @@ const Registration = () => {
   const [otpSent, setOtpSent] = useState(false);
   const [otpVerified, setOtpVerified] = useState(false);
   const [showTerms, setShowTerms] = useState(false);
+  const [loadingOtp, setLoadingOtp] = useState(false);
 
   const sendOtp = async () => {
     if (guest.email != "") {
-      const result = await generateOtp(guest.email);
-      toast.success(result.message);
-      setOtpSent(true);
+      setLoadingOtp(true);
+      // Simulate 3 seconds loading delay
+      setTimeout(async () => {
+        const result = await generateOtp(guest.email);
+        toast.success(result.message);
+        setOtpSent(true);
+        setLoadingOtp(false);
+      }, 3000);
     } else {
       toast.warn("Please enter email");
     }
@@ -132,8 +138,9 @@ const Registration = () => {
               type="button"
               className="secondary-button"
               onClick={sendOtp}
+              disabled={loadingOtp} // disable button while loading
             >
-              Send OTP
+              {loadingOtp ? "Sending OTP..." : "Send OTP"}
             </button>
           </div>
           {otpSent && (
