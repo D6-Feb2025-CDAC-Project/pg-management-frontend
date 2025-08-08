@@ -8,39 +8,39 @@ export default function PropertiesListPage() {
   const [search, setSearch] = useState("");
   const [floorFilter, setFloorFilter] = useState("All");
   const [sortAsc, setSortAsc] = useState(true);
-
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080';
 
   const fetchRooms = async () => {
-    const res = await fetch("http://localhost:8080/rooms");
+    const res = await fetch(`${API_BASE_URL}/rooms`);
     const data = await res.json();
-    setRooms(data.filter((room) => !room.hidden)); 
+    setRooms(data.filter((room) => !room.hidden));
   };
 
-  
+
   useEffect(() => {
     axios
-      .get("http://localhost:8080/rooms") 
+      .get(`${API_BASE_URL}/rooms`)
       .then((res) => setRooms(res.data))
       .catch((err) => console.error("Error fetching rooms:", err));
   }, []);
 
-const handleHideRoom = async (roomId) => {
-  try {
-    const response = await fetch(`http://localhost:8080/rooms/${roomId}/hide`, {
-      method: "PUT",
-    });
+  const handleHideRoom = async (roomId) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/rooms/${roomId}/hide`, {
+        method: "PUT",
+      });
 
-    if (response.ok) {
-      alert("Room hidden successfully");
-      fetchRooms(); 
-    } else {
-      alert("Failed to hide room");
+      if (response.ok) {
+        alert("Room hidden successfully");
+        fetchRooms();
+      } else {
+        alert("Failed to hide room");
+      }
+    } catch (error) {
+      console.error("Error hiding room:", error);
+      alert("Something went wrong.");
     }
-  } catch (error) {
-    console.error("Error hiding room:", error);
-    alert("Something went wrong.");
-  }
-};
+  };
 
 
   const filtered = rooms
@@ -76,18 +76,18 @@ const handleHideRoom = async (roomId) => {
           className="w-full sm:w-auto flex-grow border px-3 py-2 rounded"
         />
 
-        
+
 
 
         <select
-        value={floorFilter}
-        onChange={(e) => setFloorFilter(e.target.value)}
-        className="px-4 py-2 border rounded">
-        <option value="All">All Floors</option>
-        <option value="Ground">Ground Floor</option>
-        <option value="First">First Floor</option>
-        <option value="Second">Second Floor</option>
-        <option value="Third">Third Floor</option>
+          value={floorFilter}
+          onChange={(e) => setFloorFilter(e.target.value)}
+          className="px-4 py-2 border rounded">
+          <option value="All">All Floors</option>
+          <option value="Ground">Ground Floor</option>
+          <option value="First">First Floor</option>
+          <option value="Second">Second Floor</option>
+          <option value="Third">Third Floor</option>
         </select>
 
 
@@ -137,15 +137,15 @@ const handleHideRoom = async (roomId) => {
                   </td>
                   <td className="p-2 border space-x-2">
                     <button
-                    onClick={() => navigate(`/admin/edit-property/${room.id}`)}
-                      
+                      onClick={() => navigate(`/admin/edit-property/${room.id}`)}
+
                       className="bg-blue-500 text-white px-3 py-1 rounded text-sm"
                     >
                       Edit
                     </button>
                     <button
-                     onClick={() => handleHideRoom(room.id)}
-                     className="bg-red-500 text-white px-3 py-1 rounded text-sm">
+                      onClick={() => handleHideRoom(room.id)}
+                      className="bg-red-500 text-white px-3 py-1 rounded text-sm">
                       Hide
                     </button>
                   </td>

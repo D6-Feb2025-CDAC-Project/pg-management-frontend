@@ -9,9 +9,11 @@ const AdminNotices = () => {
   const [type, setType] = useState('general');
   const [unread, setUnread] = useState(true);
 
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080';
+
   const fetchNotices = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/notices');
+      const res = await axios.get(`${API_BASE_URL}/notices`);
       setNotices(res.data);
     } catch (err) {
       console.error('Failed to fetch notices:', err);
@@ -33,7 +35,7 @@ const AdminNotices = () => {
     };
 
     try {
-      await axios.post('http://localhost:5000/notices', newNotice);
+      await axios.post(`${API_BASE_URL}/notices`, newNotice);
       fetchNotices();
       setTitle('');
       setMessage('');
@@ -129,9 +131,8 @@ const AdminNotices = () => {
         notices.map((notice) => (
           <div
             key={notice.id}
-            className={`bg-white border border-gray-300 rounded-md p-4 mb-4 shadow-sm ${
-              notice.unread ? 'ring-2 ring-green-400' : ''
-            }`}
+            className={`bg-white border border-gray-300 rounded-md p-4 mb-4 shadow-sm ${notice.unread ? 'ring-2 ring-green-400' : ''
+              }`}
           >
             <div className="flex justify-between items-start mb-2 flex-wrap gap-2">
               <h3 className="text-lg font-medium text-gray-900">{notice.title}</h3>
