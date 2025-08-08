@@ -23,7 +23,7 @@ const ComplaintControls = ({
                 className="text-xs border border-purpleDarkScale-300 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-purpleDarkScale-400"
             >
                 <option value="Low">Low</option>
-                <option value="Medium">Medium</option>
+                <option value="Moderate">Moderate</option>
                 <option value="High">High</option>
             </select>
         </div>

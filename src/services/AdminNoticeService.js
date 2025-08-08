@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-const API_BASE_URL = 'http://localhost:8080'; // Adjust port based on your Spring Boot server
-const NOTICES_ENDPOINT = `${API_BASE_URL}/notices`;
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ||'http://localhost:8080'; // Adjust port based on your Spring Boot server
+const NOTICES_ENDPOINT = `${API_BASE_URL}/admin/notices`;
 
 // Create axios instance with default configuration
 const apiClient = axios.create({
