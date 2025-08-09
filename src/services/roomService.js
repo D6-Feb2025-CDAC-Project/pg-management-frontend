@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API_BASE_URL =
-  "http://localhost:8080" || import.meta.env.VITE_API_BASE_URL;
+  import.meta.env.VITE_API_BASE_URL || "http://localhost:8080";
 
 // GET: Fetch all visible rooms
 export const getAllVisibleRooms = async () => {
@@ -38,6 +38,6 @@ export const hideRoom = async (roomId) => {
 
 // get rooms with their facilities
 export const getRoomsWithFacilties = async () => {
-  const response = await axios.get(`${API_BASE_URL}/rooms/facilities`);
+  const response = await axios.get(`${API_BASE_URL}/guest/rooms/facilities`);
   return response.data;
 };

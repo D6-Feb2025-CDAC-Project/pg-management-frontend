@@ -1,6 +1,10 @@
 import axios from "axios";
 
-const BASE_URL = "http://localhost:8080/facility";
+const API_BASE_URL =
+  import.meta.env.VITE_API_BASE_URL || "http://localhost:8080";
+const BASE_URL = `${API_BASE_URL}/guest/facility`;
+
+
 
 export const getAvailableFacilities = async () => {
   try {
