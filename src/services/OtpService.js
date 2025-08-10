@@ -6,11 +6,12 @@ const BASE_URL = `${API_BASE_URL}/guest/otp`;
 export const generateOtp = async (email) => {
   try {
     const response = await axios.post(`${BASE_URL}/generate`, { email });
-    return { message: response.data };
+    return { status: "success", message: response.data };
   } catch (error) {
     return {
+      status: "error",
       message:
-        error.response?.data || "Failed to send OTP. Please try again later.",
+        error.response?.data.error || "Failed to send OTP. Please try again later.",
     };
   }
 };
