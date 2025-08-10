@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import { EyeIcon, EyeOffIcon } from "lucide-react";
 import { login } from "./../../../services/UserService";
+import { toast } from "react-toastify";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -42,13 +43,17 @@ const Login = () => {
 
         setEmail("");
         setPassword("");
-        alert("logged in successful");
-        navigate("/tenant/dashboard");
+        toast.success("Logged In Successfully...");
+        if (loggedInUser.userrole == "ROLE_ADMIN") {
+          navigate("/admin/dashboard");
+        } else if (loggedInUser.userrole == "ROLE_USER") {
+          navigate("/tenant/dashboard");
+        }
       } catch (error) {
         console.error("Login failed:", error);
 
         if (error.response && error.response.status === 401) {
-          alert("Invalid username/email or password.");
+          alert("Invalid Email or Password.");
         } else {
           alert("Something went wrong. Please try again later.");
         }
@@ -78,7 +83,7 @@ const Login = () => {
         <form onSubmit={handleLogin}>
           <div className="mb-4">
             <label className="block text-gray-600 font-medium mb-2">
-              Email / Username
+              Email
             </label>
             <input
               value={email}
@@ -112,17 +117,6 @@ const Login = () => {
             </div>
           </div>
 
-          <div className="flex justify-between items-center text-sm text-gray-600 mb-6">
-            <a
-              href="/user/password-reset"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-purpleDarkScale-600 hover:underline"
-            >
-              Forgot password?
-            </a>
-          </div>
-
           <button
             type="submit"
             className="w-full bg-purpleDarkScale-600 text-white font-semibold py-3 rounded-xl hover:bg-purpleDarkScale-700 transition"
@@ -130,12 +124,6 @@ const Login = () => {
             Login
           </button>
         </form>
-
-        {/* <p className="mt-4 text-gray-600 text-center">
-                    Don't have an account? <a href="/user/register" className="text-purpleDarkScale-600 hover:underline">Sign up</a>
-                </p> */}
-
-        {/* <Notification errorMessage={errorMessage} successMessage={null} onErrClose={() => setErrorMessage(null)} onSuccClose={null} /> */}
       </div>
     </>
   );

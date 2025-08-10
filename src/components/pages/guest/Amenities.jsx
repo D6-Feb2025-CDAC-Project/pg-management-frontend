@@ -13,6 +13,7 @@ import {
   FaTag,
 } from "react-icons/fa";
 import { getAvailableFacilities } from "../../../services/FacilityService";
+import Loader from "../../shared/Loader";
 
 const iconMap = {
   "Comfortable Beds": <FaBed />,
@@ -30,6 +31,7 @@ const iconMap = {
 
 const Amenities = () => {
   const [groupedAmenities, setGroupedAmenities] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchFacilities = async () => {
@@ -53,8 +55,10 @@ const Amenities = () => {
           items: grouped[key],
         }));
         setGroupedAmenities(formatted);
+        setLoading(false);
       } catch (error) {
         console.error("Failed to fetch amenities", error);
+        setLoading(false);
       }
     };
 
@@ -69,6 +73,10 @@ const Amenities = () => {
       .map((word) => word.charAt(0).toUpperCase() + word.slice(1)) //["In","Progress"]
       .join(" "); // In Progress
   };
+
+  if (loading) {
+    return <Loader />;
+  }
 
   return (
     <div className="bg-bgGray px-6 md:px-16 mt-8">

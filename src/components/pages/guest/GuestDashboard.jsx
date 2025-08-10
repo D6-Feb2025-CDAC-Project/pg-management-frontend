@@ -1,22 +1,36 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import image1 from "../../../assets/images/Guest_dashboard_img1.jpg";
 import image2 from "../../../assets/images/Guest_dashboard_img2.jpg";
 import {
   FaCar,
   FaPlay,
   FaRegLightbulb,
-  FaRegWindowClose,
   FaSwimmingPool,
   FaUtensils,
   FaWifi,
   FaWindowClose,
 } from "react-icons/fa";
 import TourVideo from "../../../assets/videos/Tour_Video.mp4";
+import LogoLoader from "../../shared/LogoLoader";
+import Loader from "../../shared/Loader";
 
 function GuestDashboard() {
   const [showVideo, setShowVideo] = useState(false);
+  const [logoLoading, setLogoLoading] = useState(true);
+
+  // Show loader for 3 seconds
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setLogoLoading(false);
+    }, 2000);
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (logoLoading) {
+    return <LogoLoader />; // Only loader for 2 seconds
+  }
+
   return (
-    // dashboard page
     <>
       {/*1st container*/}
       <div className="grid grid-cols-1 md:grid-cols-2 my-8 bg-purpleLight">
@@ -33,7 +47,7 @@ function GuestDashboard() {
             Your search for the perfect PG ends here!
             <br /> Browse comfy, affordable stays with all the amenities you
             need.
-            <br /> Book your ideal room quickly and stress‑free.
+            <br /> Book your ideal room quickly and stress-free.
             <br />
             Easy PG helps you find the right place, at the right price.
           </p>
@@ -83,7 +97,7 @@ function GuestDashboard() {
         Why Choose Us?
       </h1>
       <div className="h-0.5 w-40 justify-center bg-gray-400 mx-auto"></div>
-      <div className="grid grid-cols-2 md:grid-cols-5 gap-4 my-8 px-4  py-6 place-items-center">
+      <div className="grid grid-cols-2 md:grid-cols-5 gap-4 my-8 px-4 py-6 place-items-center">
         <div className="h-50 w-50 p-10 bg-white rounded-lg shadow-2xl flex flex-col items-center">
           <h3>Free Electricity</h3>
           <span className="text-5xl mt-5 text-purple-500">
@@ -117,7 +131,6 @@ function GuestDashboard() {
       </div>
 
       {/* 3rd container */}
-
       <div className="grid grid-cols-1 md:grid-cols-2 my-15 bg-purpleLight w-[96%] mx-auto rounded-tr-2xl rounded-tl-2xl">
         {/* left image */}
         <div>
@@ -129,11 +142,9 @@ function GuestDashboard() {
         </div>
         {/* right content */}
         <div className="px-10 flex flex-col justify-center">
-          {/* title */}
           <h1 className="text-4xl font-bold mb-10 leading-tight">
             Our History
           </h1>
-          {/* description */}
           <p className="text-gray-700 mb-10">
             Our journey began with a simple idea – to make PG accommodation
             management easier, faster, and more transparent for everyone. Before

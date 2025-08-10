@@ -1,0 +1,68 @@
+.loader-wrapper {
+  position: fixed; /* stays on top of everything */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(45deg,#6E39A3, #30144b,#14061e);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999; /* ensure it overlays all content */
+  color: white;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* Logo Circle */
+.logo-circle {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: bounceIn 1s ease forwards;
+  box-shadow: 0 0 25px rgba(255, 255, 255, 0.5);
+}
+
+/* Title Animation */
+.title {
+  margin-top: 20px;
+  font-size: 2.5rem;
+  display: flex;
+  gap: 3px;
+}
+
+.title span {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(10px);
+  animation: fadeUp 0.4s ease forwards;
+}
+
+/* Animations */
+@keyframes fadeUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes bounceIn {
+  0% {
+    transform: scale(0.3);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 1;
+  }
+  70% {
+    transform: scale(0.9);
+  }
+  100% {
+    transform: scale(1);
+  }
+}

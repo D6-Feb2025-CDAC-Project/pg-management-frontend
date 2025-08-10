@@ -4,6 +4,7 @@ import TermsAndConditions from "../sub-components/TermsAndConditions";
 import { generateOtp, verifyGeneratedOtp } from "../../../services/OtpService";
 import { createPaymentOrder, verifyPaymentAndCompleteRegistration } from "../../../services/PaymentService";
 import { toast } from "react-toastify";
+import { addTenant } from "../../../services/UserService";
 
 const Registration = () => {
   const location = useLocation();
@@ -196,8 +197,18 @@ const Registration = () => {
     if (guest.password != guest.confirmPassword)
       return toast.warn("Password & Confirm password doesn't match");
 
+
+//     try {
+//       await addTenant(payload);
+//       toast.success("Registration Successful!");
+//       navigate("/user/login");
+//     } catch (err) {
+//       toast.error(err + "-> Something went wrong during registration.");
+//     }
+
     // Initiate payment - everything else happens after payment success
     await initiatePayment();
+
   };
 
   return (
