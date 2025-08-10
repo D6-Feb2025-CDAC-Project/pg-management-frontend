@@ -2,7 +2,10 @@ import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import TermsAndConditions from "../sub-components/TermsAndConditions";
 import { generateOtp, verifyGeneratedOtp } from "../../../services/OtpService";
-import { createPaymentOrder, verifyPaymentAndCompleteRegistration } from "../../../services/PaymentService";
+import {
+  createPaymentOrder,
+  verifyPaymentAndCompleteRegistration,
+} from "../../../services/PaymentService";
 import { toast } from "react-toastify";
 import { addTenant } from "../../../services/UserService";
 
@@ -36,6 +39,7 @@ const Registration = () => {
 
   // Load Razorpay script dynamically
   useEffect(() => {
+    localStorage.removeItem("selectedRoom");
     const loadRazorpayScript = () => {
       return new Promise((resolve) => {
         // Check if script is already loaded
@@ -45,8 +49,8 @@ const Registration = () => {
           return;
         }
 
-        const script = document.createElement('script');
-        script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+        const script = document.createElement("script");
+        script.src = "https://checkout.razorpay.com/v1/checkout.js";
         script.onload = () => {
           setRazorpayLoaded(true);
           resolve(true);
@@ -72,7 +76,7 @@ const Registration = () => {
           setOtpSent(true);
           setLoadingOtp(false);
         } else {
-          toast.error(result.message)
+          toast.error(result.message);
         }
       }, 3000);
     } else {
@@ -98,9 +102,11 @@ const Registration = () => {
   const initiatePayment = async () => {
     try {
       // Debug: Check Razorpay key
-      console.log('RAZORPAY_KEY:', RAZORPAY_KEY);
+      console.log("RAZORPAY_KEY:", RAZORPAY_KEY);
       if (!RAZORPAY_KEY) {
-        toast.error("Razorpay key is not configured. Please check environment variables.");
+        toast.error(
+          "Razorpay key is not configured. Please check environment variables."
+        );
         return;
       }
 
@@ -115,7 +121,7 @@ const Registration = () => {
       // Create order on backend
       const orderResponse = await createPaymentOrder({
         amount: REGISTRATION_AMOUNT,
-        currency: "INR"
+        currency: "INR",
       });
 
       const options = {
@@ -168,12 +174,14 @@ const Registration = () => {
           gender: guest.gender,
           contactNumber: guest.phone,
           moveInDate: guest.moveInDate,
-          roomId: room.id
-        }
+          roomId: room.id,
+        },
       };
 
       // Single API call that handles payment verification AND tenant registration
-      const result = await verifyPaymentAndCompleteRegistration(registrationPayload);
+      const result = await verifyPaymentAndCompleteRegistration(
+        registrationPayload
+      );
 
       if (result.success) {
         setPaymentProcessing(false);
@@ -184,7 +192,10 @@ const Registration = () => {
       }
     } catch (error) {
       setPaymentProcessing(false);
-      toast.error(error.message || "Registration failed after payment. Please contact support.");
+      toast.error(
+        error.message ||
+          "Registration failed after payment. Please contact support."
+      );
       console.error("Registration completion error:", error);
     }
   };
@@ -197,18 +208,16 @@ const Registration = () => {
     if (guest.password != guest.confirmPassword)
       return toast.warn("Password & Confirm password doesn't match");
 
-
-//     try {
-//       await addTenant(payload);
-//       toast.success("Registration Successful!");
-//       navigate("/user/login");
-//     } catch (err) {
-//       toast.error(err + "-> Something went wrong during registration.");
-//     }
+    //     try {
+    //       await addTenant(payload);
+    //       toast.success("Registration Successful!");
+    //       navigate("/user/login");
+    //     } catch (err) {
+    //       toast.error(err + "-> Something went wrong during registration.");
+    //     }
 
     // Initiate payment - everything else happens after payment success
     await initiatePayment();
-
   };
 
   return (
@@ -220,12 +229,16 @@ const Registration = () => {
 
         {/* Payment Amount Info */}
         <div className="mb-6 bg-yellow-50 border border-yellow-200 p-4 rounded">
-          <h3 className="font-bold text-lg mb-2 text-yellow-800">Payment Information</h3>
+          <h3 className="font-bold text-lg mb-2 text-yellow-800">
+            Payment Information
+          </h3>
           <p className="text-yellow-700">
-            Registration Amount: <strong>₹{REGISTRATION_AMOUNT.toLocaleString()}</strong>
+            Registration Amount:{" "}
+            <strong>₹{REGISTRATION_AMOUNT.toLocaleString()}</strong>
           </p>
           <p className="text-sm text-yellow-600 mt-1">
-            This includes security deposit and advance payment. You'll be redirected to Razorpay for secure payment.
+            This includes security deposit and advance payment. You'll be
+            redirected to Razorpay for secure payment.
           </p>
         </div>
 
@@ -305,10 +318,11 @@ const Registration = () => {
               />
               <button
                 type="button"
-                className={`px-4 py-2 rounded font-medium transition-colors ${otpVerified
-                  ? "bg-green-500 text-white cursor-default"
-                  : "bg-purpleDark text-white hover:bg-purple-700"
-                  }`}
+                className={`px-4 py-2 rounded font-medium transition-colors ${
+                  otpVerified
+                    ? "bg-green-500 text-white cursor-default"
+                    : "bg-purpleDark text-white hover:bg-purple-700"
+                }`}
                 onClick={verifyOtp}
                 disabled={otpVerified}
               >
@@ -355,8 +369,9 @@ const Registration = () => {
               <select
                 value={guest.gender}
                 onChange={(e) => setGuest({ ...guest, gender: e.target.value })}
-                className={`p-3 border rounded ${guest.gender ? "text-black" : "text-gray-400"
-                  }`}
+                className={`p-3 border rounded ${
+                  guest.gender ? "text-black" : "text-gray-400"
+                }`}
                 required
               >
                 <option value="">Select Gender</option>
@@ -372,8 +387,9 @@ const Registration = () => {
             <label className="mb-1 font-medium">Expected Move-in Date</label>
             <input
               type="date"
-              className={`p-3 border rounded ${guest.moveInDate ? "text-black" : "text-gray-400"
-                }`}
+              className={`p-3 border rounded ${
+                guest.moveInDate ? "text-black" : "text-gray-400"
+              }`}
               value={guest.moveInDate}
               onChange={(e) =>
                 setGuest({ ...guest, moveInDate: e.target.value })
@@ -411,8 +427,8 @@ const Registration = () => {
             {!razorpayLoaded
               ? "Loading Payment Gateway..."
               : paymentProcessing
-                ? "Processing Payment..."
-                : `Pay ₹${REGISTRATION_AMOUNT.toLocaleString()} & Confirm Booking`}
+              ? "Processing Payment..."
+              : `Pay ₹${REGISTRATION_AMOUNT.toLocaleString()} & Confirm Booking`}
           </button>
         </form>
       </div>

@@ -1,11 +1,14 @@
 // services/TenantComplaintService.js
 
+import { store } from "../redux/store";
+
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 class TenantComplaintService {
   // Helper method to get auth headers
   static getAuthHeaders() {
-    const token = localStorage.getItem("token"); // Adjust based on how you store the auth token
+    const state = store.getState();
+    const token = state.auth.token;
     return {
       "Content-Type": "application/json",
       Authorization: token ? `Bearer ${token}` : "",
@@ -70,7 +73,7 @@ class TenantComplaintService {
           headers: this.getAuthHeaders(),
         }
       );
-
+      console.log("response : " + response.data);
       return await this.handleResponse(response);
     } catch (error) {
       console.error("Error fetching complaints:", error);

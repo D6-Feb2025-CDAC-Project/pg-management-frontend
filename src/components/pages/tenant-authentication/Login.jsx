@@ -1,77 +1,79 @@
-import { useState, useEffect } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { EyeIcon, EyeOffIcon } from "lucide-react";
 import { login } from "./../../../services/UserService";
 import { toast } from "react-toastify";
+import { useDispatch } from "react-redux";
+import { login as loginAction } from "../../../redux/slices/authSlice";
+import Loader from "../../shared/Loader";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [user, setUser] = useState(null);
-  const [errorMessage, setErrorMessage] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
+
+  const dispatch = useDispatch();
 
   const navigate = useNavigate();
 
-  useEffect(() => {
-    // const loggedInUserJSON = window.localStorage.getItem("loggedInUser");
-    // if (loggedInUserJSON) {
-    //   const loggedInUser = JSON.parse(loggedInUserJSON);
-    //   setUser(loggedInUser);
-    //   blogService.setToken(loggedInUser.token);
-    // }
-    setLoading(false);
-  }, []);
-
   const handleLogin = async (event) => {
+    setLoading(true);
     event.preventDefault();
 
     if (email === "") {
-      alert("Please enter email or username");
+      toast.warn("Please enter email");
+      setLoading(false);
     } else if (password === "") {
-      alert("Please enter password");
+      toast.warn("Please enter password");
+      setLoading(false);
     } else {
       try {
-        const loggedInUser = await login(email, password);
+        const response = await login(email, password);
 
-        setUser(loggedInUser);
-        window.localStorage.setItem(
-          "loggedInUser",
-          JSON.stringify(loggedInUser)
+        const expiresAt = Date.now() + 10 * 60 * 60 * 1000; // token expiry -> 10 hours
+
+        dispatch(
+          loginAction({
+            user: {
+              id: response.userid,
+              username: response.username,
+              role: response.userrole,
+            },
+            token: response.token,
+            expiresAt,
+          })
         );
 
-        setEmail("");
-        setPassword("");
+        setLoading(false);
         toast.success("Logged In Successfully...");
-        if (loggedInUser.userrole == "ROLE_ADMIN") {
+
+        if (response.userrole == "ROLE_ADMIN") {
           navigate("/admin/dashboard");
-        } else if (loggedInUser.userrole == "ROLE_USER") {
+        } else if (response.userrole == "ROLE_USER") {
           navigate("/tenant/dashboard");
         }
       } catch (error) {
         console.error("Login failed:", error);
 
         if (error.response && error.response.status === 401) {
-          alert("Invalid Email or Password.");
+          setLoading(false);
+          toast.error("Invalid Email or Password.");
         } else {
-          alert("Something went wrong. Please try again later.");
+          setLoading(false);
+          toast.error("Something went wrong. Please try again later.");
         }
 
-        setErrorMessage("Login failed!");
-        setTimeout(() => setErrorMessage(null), 5000);
+        setEmail("");
+        setPassword("");
       }
     }
   };
 
-  // if (loading) {
-  //   return <div>Loading...</div>; // Display a loading message while checking user
-  // }
+  if (loading) {
+    return <Loader />;
+  }
 
-  // if (user) {
-  //   return <Navigate replace to="/" />; // Redirect if user is logged in
-  // }
-  // console.log("On login page");
   return (
     <>
       <div className="bg-white p-8 rounded-2xl shadow-lg w-full max-w-sm">

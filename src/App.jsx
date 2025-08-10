@@ -35,13 +35,24 @@ import PendingBookings from "./components/pages/sub-components/PendingBookings";
 import { ToastContainer } from "react-toastify";
 
 import "./index.css";
+import PrivateRoute from "./components/shared/PrivateRoute";
+import Unauthorized from "./components/shared/Unauthorized";
+import RequireRoomSelection from "./components/shared/RequireRoomSelection";
+import PublicRoute from "./components/shared/PublicRoute";
 
 function App() {
   return (
     <>
       <Routes>
         // Guest routes
-        <Route path="/guest" element={<GuestLayout />}>
+        <Route
+          path="/guest"
+          element={
+            <PublicRoute>
+              <GuestLayout />
+            </PublicRoute>
+          }
+        >
           <Route path="dashboard" element={<GuestDashboard />} />
           <Route path="amenities" element={<Amenities />} />
           <Route path="rooms" element={<Rooms />} />
@@ -50,16 +61,28 @@ function App() {
           <Route path="/guest/rooms/triple" element={<TripleRooms />} />
           <Route index element={<Navigate to="/guest/dashboard" replace />} />
         </Route>
-        // room details route only with footer
-        <Route path="/guest/room-details" element={<RoomDetails />} />
-        // Tenant auth routes
-        <Route path="/user" element={<AuthLayout />}>
+        // user auth routes
+        <Route
+          path="/user"
+          element={
+            <PublicRoute>
+              <AuthLayout />
+            </PublicRoute>
+          }
+        >
           <Route path="login" element={<Login />} />
-          <Route path="password-reset" element={<PasswordReset />} />
+          {/* <Route path="password-reset" element={<PasswordReset />} /> */}
           <Route index element={<Navigate to="/user/login" replace />} />
         </Route>
         // tenant routes
-        <Route path="/tenant" element={<TenantLayout />}>
+        <Route
+          path="/tenant"
+          element={
+            <PrivateRoute roles={["ROLE_USER"]}>
+              <TenantLayout />
+            </PrivateRoute>
+          }
+        >
           <Route path="dashboard" element={<TenantDashboard />} />
           <Route path="payment" element={<Payment />} />
           <Route path="leave-pg" element={<LeaveRequest />} />
@@ -67,13 +90,15 @@ function App() {
           <Route path="notices" element={<TenantNotices />} />
           <Route index element={<Navigate to="/tenant/dashboard" replace />} />
         </Route>
-        // admin auth Routes
-        <Route path="/superUser" element={<AuthLayout />}>
-          {/* <Route path="login" element={<Login />} />
-        <Route index element={<Navigate to="/admin/login" replace />} /> */}
-        </Route>
         // admin routes
-        <Route path="/admin" element={<AdminLayout />}>
+        <Route
+          path="/admin"
+          element={
+            <PrivateRoute roles={["ROLE_ADMIN"]}>
+              <AdminLayout />
+            </PrivateRoute>
+          }
+        >
           <Route path="dashboard" element={<AdminDashboard />} />
           <Route path="rooms" element={<AdminRooms />} />
           <Route path="add-property" element={<AddProperty />} />
@@ -86,7 +111,15 @@ function App() {
           <Route index element={<Navigate to="/admin/dashboard" replace />} />
         </Route>
         // guest Registration
-        <Route path="/guest/registration" element={<Registration />} />
+        <Route
+          path="/guest/registration"
+          element={
+            <RequireRoomSelection>
+              <Registration />
+            </RequireRoomSelection>
+          }
+        />
+        <Route path="/unauthorized" element={<Unauthorized />} />
       </Routes>
       <ToastContainer />
     </>

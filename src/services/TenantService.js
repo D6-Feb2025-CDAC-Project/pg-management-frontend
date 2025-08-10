@@ -3,9 +3,14 @@ import axios from "axios";
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 const BASE_URL = `${API_BASE_URL}/tenant`;
 
-export const getAllTenants = async () => {
+export const getAllTenants = async (token) => {
   try {
-    const response = await axios.get(BASE_URL);
+    const response = await axios.get(`${API_BASE_URL}/admin`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: token ? `Bearer ${token}` : "",
+      },
+    });
     return response.data;
   } catch (error) {
     if (error.response && error.response.status === 204) {

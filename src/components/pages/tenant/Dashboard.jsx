@@ -1,21 +1,15 @@
 import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 
 function Dashboard() {
-  const [username, setUsername] = useState("");
+  const user = useSelector((state) => state.auth.user);
 
-  useEffect(() => {
-    const storedUser = localStorage.getItem("loggedInUser");
-    if (storedUser) {
-      const parsedUser = JSON.parse(storedUser);
-      setUsername(parsedUser.username || parsedUser.name || "User");
-    }
-  }, []);
   return (
     <div className="w-full max-w-6xl mx-auto p-6">
       {/* Welcome Section */}
       <div className="bg-blue-100 rounded-lg p-4 mb-6">
         <h2 className="text-xl font-semibold text-gray-800 mb-1">
-          Welcome back, {username}!
+          {user ? <p>Welcome, {user.username}!</p> : <p>Not logged in</p>}
         </h2>
         <p className="text-gray-600 text-sm">
           Room 205, Double Room, 2nd Floor

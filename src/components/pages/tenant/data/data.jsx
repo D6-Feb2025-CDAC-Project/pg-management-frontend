@@ -12,5 +12,5 @@ export const menuItems = [
   { icon: <Megaphone />, text: "Notices", url: "/tenant/notices" },
   { icon: <OctagonAlert />, text: "Complaints", url: "/tenant/complaints" },
   { icon: <DoorOpen />, text: "Leave PG", url: "/tenant/leave-pg" },
-  { icon: <LogOut />, text: "Logout", url: "/user/login" },
+  { icon: <LogOut />, text: "Logout", action: "logout" },
 ];

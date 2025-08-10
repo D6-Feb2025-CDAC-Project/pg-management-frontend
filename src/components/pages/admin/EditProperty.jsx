@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
 
 export default function EditProperty() {
   const { id } = useParams();
@@ -17,62 +19,68 @@ export default function EditProperty() {
     facilities: "",
   });
 
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
+  const token = useSelector((state) => state.auth.token);
+
   const [loading, setLoading] = useState(true);
 
- const fetchRoomDetails = async () => {
-  try {
-    console.log("Room ID:", id);
+  const fetchRoomDetails = async () => {
+    try {
+      console.log("Room ID:", id);
 
-    if (!id) {
-      console.error("No room ID provided in URL parameters");
-      alert("Invalid room ID. Redirecting to rooms list.");
+      if (!id) {
+        console.error("No room ID provided in URL parameters");
+        toast.error("Invalid room ID. Redirecting to rooms list.");
+        navigate("/admin/rooms");
+        return;
+      }
+
+      setLoading(true);
+      const response = await axios.get(`${API_BASE_URL}/rooms/${id}`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: token ? `Bearer ${token}` : "",
+        },
+      });
+      const room = response.data;
+
+      setFormData({
+        roomNo: room.roomNo,
+        roomType: room.roomType,
+        floor: room.floor,
+        rentAmount: room.rentAmount,
+        maxOccupancy: room.maxOccupancy,
+        currentOccupancy: room.currentOccupancy,
+        tenantType: room.tenantType,
+        facilities: Array.isArray(room.facilities)
+          ? room.facilities.map((f) => ({
+              name: f.name || f,
+              category: f.category || "General",
+            }))
+          : [],
+      });
+
+      setLoading(false);
+    } catch (error) {
+      console.error("Failed to fetch room details:", error);
+      setLoading(false);
+      toast.error("Room not found or server error!");
       navigate("/admin/rooms");
-      return;
     }
-
-    setLoading(true);
-    const response = await axios.get(`http://localhost:8080/rooms/${id}`);
-    const room = response.data;
-
-    setFormData({
-      roomNo: room.roomNo,
-      roomType: room.roomType,
-      floor: room.floor,
-      rentAmount: room.rentAmount,
-      maxOccupancy: room.maxOccupancy,
-      currentOccupancy: room.currentOccupancy,
-      tenantType: room.tenantType,
-      facilities: Array.isArray(room.facilities)
-        ? room.facilities.map(f => ({
-            name: f.name || f,
-            category: f.category || "General",
-          }))
-        : [],
-    });
-
-    setLoading(false);
-  } catch (error) {
-    console.error("Failed to fetch room details:", error);
-    setLoading(false);
-    alert("Room not found or server error!");
-    navigate("/admin/rooms");
-  }
-};
-
+  };
 
   useEffect(() => {
-    
     if (id) {
       fetchRoomDetails();
     } else {
       console.error("No room ID in URL parameters");
-      alert("Invalid room ID. Please select a room to edit.");
+      toast.error("Invalid room ID. Please select a room to edit.");
       navigate("/admin/rooms");
     }
-  }, [id]); 
+  }, [id]);
 
-
-   const facilityOptions = [
+  const facilityOptions = [
     { name: "Wi-Fi", category: "Internet" },
     { name: "AC", category: "Comfort" },
     { name: "Geyser", category: "Utility" },
@@ -97,36 +105,32 @@ export default function EditProperty() {
     });
   };
 
- const handleSubmit = async (e) => {
-  e.preventDefault();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-  if (!id) {
-    alert("Invalid room ID. Cannot update room.");
-    return;
-  }
+    if (!id) {
+      toast.error("Invalid room ID. Cannot update room.");
+      return;
+    }
 
-  try {
-    const updatedRoom = {
-      ...formData,
-      facilities: formData.facilities.map((f) => ({
-        name: f.name,
-        category: f.category || "General",
-      })),
-    };
+    try {
+      const updatedRoom = {
+        ...formData,
+        facilities: formData.facilities.map((f) => ({
+          name: f.name,
+          category: f.category || "General",
+        })),
+      };
 
-    await axios.put(`http://localhost:8080/rooms/${id}`, updatedRoom);
-    alert("Room updated successfully!");
-    navigate("/admin/rooms");
-  } catch (error) {
-    console.error("Error updating room:", error);
-    alert("Failed to update room. Please try again.");
-  }
-};
+      await axios.put(`http://localhost:8080/rooms/${id}`, updatedRoom);
+      toast.success("Room updated successfully!");
+      navigate("/admin/rooms");
+    } catch (error) {
+      console.error("Error updating room:", error);
+      toast.error("Failed to update room. Please try again.");
+    }
+  };
 
-
-  
-
-  
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-100 p-6 flex items-center justify-center">
@@ -237,30 +241,28 @@ export default function EditProperty() {
             />
           </div>
 
-
-          
-        <div className="mt-4">
-          <label className="block font-semibold mb-2">Facilities:</label>
-          <div className="flex flex-wrap gap-2">
-            {facilityOptions.map((facility) => (
-              <label key={facility.name} className="flex items-center gap-1">
-                <input
-                  type="checkbox"
-                  checked={formData.facilities.some(
-                    (f) => f.name === facility.name
-                  )}
-                  onChange={() => handleFacilityToggle(facility)}
-                />
-                <span>{facility.name}</span>
-              </label>
-            ))}
+          <div className="mt-4">
+            <label className="block font-semibold mb-2">Facilities:</label>
+            <div className="flex flex-wrap gap-2">
+              {facilityOptions.map((facility) => (
+                <label key={facility.name} className="flex items-center gap-1">
+                  <input
+                    type="checkbox"
+                    checked={formData.facilities.some(
+                      (f) => f.name === facility.name
+                    )}
+                    onChange={() => handleFacilityToggle(facility)}
+                  />
+                  <span>{facility.name}</span>
+                </label>
+              ))}
+            </div>
           </div>
-        </div>
 
           <div className="flex justify-between mt-6">
             <button
               type="submit"
-              className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+              className="bg-purpleDark text-white px-4 py-2 rounded"
               disabled={!id}
             >
               Save Changes

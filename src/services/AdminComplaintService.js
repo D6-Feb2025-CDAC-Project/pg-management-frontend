@@ -1,11 +1,14 @@
 // services/AdminComplaintService.js
 
+import { store } from "../redux/store";
+
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 class AdminComplaintService {
   // Helper method to get auth headers
   static getAuthHeaders() {
-    const token = localStorage.getItem("token"); // Adjust based on how you store the auth token
+    const state = store.getState();
+    const token = state.auth?.token;
     return {
       "Content-Type": "application/json",
       Authorization: token ? `Bearer ${token}` : "",
@@ -187,12 +190,12 @@ class AdminComplaintService {
     }
   }
 
-  // Filter complaints with multiple criteria
   static async filterComplaints(status = null, priority = null) {
     try {
       const params = new URLSearchParams();
       if (status && status !== "All") {
-        params.append("status", status.toUpperCase());
+        // Replace spaces with underscores
+        params.append("status", status.toUpperCase().replace(/\s+/g, "_"));
       }
       if (priority && priority !== "All") {
         params.append("priority", priority.toUpperCase());

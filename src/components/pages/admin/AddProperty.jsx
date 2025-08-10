@@ -1,15 +1,18 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const AddProperty = () => {
-  
   const [facilitiesList, setFacilitiesList] = useState([
     { name: "AC", category: "Cooling", isChecked: false },
     { name: "Attached Bathroom", category: "Bathroom", isChecked: false },
     { name: "Study Table", category: "Furniture", isChecked: false },
-    { name: "Hot Water", category: "Utility", isChecked: false }
+    { name: "Hot Water", category: "Utility", isChecked: false },
   ]);
 
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     roomNo: "",
     roomType: "",
@@ -22,18 +25,18 @@ const AddProperty = () => {
 
   const [selectedFile, setSelectedFile] = useState(null);
   const [photos, setPhotos] = useState([]);
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
+  const token = useSelector((state) => state.auth.token);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  
   const handleFacilityChange = (index) => {
     setFacilitiesList((prev) =>
-      prev.map((f, i) =>
-        i === index ? { ...f, isChecked: !f.isChecked } : f
-      )
+      prev.map((f, i) => (i === index ? { ...f, isChecked: !f.isChecked } : f))
     );
   };
 
@@ -48,12 +51,11 @@ const AddProperty = () => {
     try {
       const formDataToSend = new FormData();
 
-      
       const selectedFacilities = facilitiesList
         .filter((f) => f.isChecked)
         .map((f) => ({
           name: f.name,
-          category: f.category
+          category: f.category,
         }));
 
       console.log("Selected facilities:", selectedFacilities); // Debug log
@@ -68,7 +70,7 @@ const AddProperty = () => {
               rentAmount: Number(formData.rentAmount),
               maxOccupancy: Number(formData.maxOccupancy),
               currentOccupancy: Number(formData.currentOccupancy),
-              facilities: selectedFacilities
+              facilities: selectedFacilities,
             }),
           ],
           { type: "application/json" }
@@ -80,21 +82,20 @@ const AddProperty = () => {
         formDataToSend.append("image", selectedFile);
       }
 
-      
       const response = await axios.post(
-        "http://localhost:8080/rooms",
+        `${API_BASE_URL}/rooms`,
         formDataToSend,
         {
           headers: {
             "Content-Type": "multipart/form-data",
+            Authorization: token ? `Bearer ${token}` : "",
           },
         }
       );
 
       console.log("Room added:", response.data);
-      alert("Room added successfully!");
-      
-      
+      toast.success("Room added successfully!");
+
       setFormData({
         roomNo: "",
         roomType: "",
@@ -104,19 +105,21 @@ const AddProperty = () => {
         maxOccupancy: "",
         currentOccupancy: "",
       });
-      setFacilitiesList(prev => prev.map(f => ({ ...f, isChecked: false })));
+      setFacilitiesList((prev) =>
+        prev.map((f) => ({ ...f, isChecked: false }))
+      );
       setSelectedFile(null);
       setPhotos([]);
-      
+      navigate("/admin/rooms");
     } catch (err) {
       console.error("Full error:", err);
       console.error("Error response:", err.response?.data);
       console.error("Error status:", err.response?.status);
-      
+
       if (err.response?.data) {
-        alert(`Error: ${err.response.data.message || err.response.data}`);
+        toast.error(`Error: ${err.response.data.message || err.response.data}`);
       } else {
-        alert("Error adding room. Check console for details.");
+        toast.error("Error adding room. Check console for details.");
       }
     }
   };
@@ -211,9 +214,7 @@ const AddProperty = () => {
 
           {/* Monthly Rent */}
           <div>
-            <label className="block font-medium mb-1">
-              Monthly Rent (₹)*
-            </label>
+            <label className="block font-medium mb-1">Monthly Rent (₹)*</label>
             <input
               type="number"
               name="rentAmount"
@@ -259,9 +260,11 @@ const AddProperty = () => {
         {/* Room Photos */}
         <div className="mt-6">
           <label className="block font-medium mb-2">Room Photos</label>
-          
+
           <div className="mb-4">
-            <label className="block text-sm font-medium mb-1">Upload Room Image</label>
+            <label className="block text-sm font-medium mb-1">
+              Upload Room Image
+            </label>
             <input
               type="file"
               accept="image/*"
@@ -315,7 +318,9 @@ const AddProperty = () => {
                 maxOccupancy: "",
                 currentOccupancy: "",
               });
-              setFacilitiesList(prev => prev.map(f => ({ ...f, isChecked: false })));
+              setFacilitiesList((prev) =>
+                prev.map((f) => ({ ...f, isChecked: false }))
+              );
               setSelectedFile(null);
               setPhotos([]);
             }}
