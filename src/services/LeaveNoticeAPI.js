@@ -1,17 +1,23 @@
 import { useState } from "react";
+import { store } from "../redux/store";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
+const getAuthHeaders = () => {
+  const state = store.getState();
+  const token = state.auth?.token;
+  return {
+    "Content-Type": "application/json",
+    Authorization: token ? `Bearer ${token}` : "",
+  };
+};
 
 export const leaveNoticeAPI = {
   // Get all leave notices for admin
   getAllLeaveNotices: async () => {
     const response = await fetch(`${API_BASE_URL}/admin/leave-notices`, {
       method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        // Add authorization header if needed
-        // 'Authorization': `Bearer ${token}`
-      },
+      headers: getAuthHeaders(),
     });
 
     if (!response.ok) {
@@ -27,9 +33,7 @@ export const leaveNoticeAPI = {
       `${API_BASE_URL}/admin/leave-notices/${noticeId}`,
       {
         method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: getAuthHeaders(),
       }
     );
 
@@ -46,9 +50,7 @@ export const leaveNoticeAPI = {
       `${API_BASE_URL}/admin/leave-notices/${noticeId}/status`,
       {
         method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: getAuthHeaders(),
         body: JSON.stringify(statusData),
       }
     );
@@ -66,9 +68,7 @@ export const leaveNoticeAPI = {
       `${API_BASE_URL}/admin/leave-notices/${noticeId}/review-notes`,
       {
         method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: getAuthHeaders(),
         body: JSON.stringify({ reviewNotes }),
       }
     );
@@ -86,9 +86,7 @@ export const leaveNoticeAPI = {
       `${API_BASE_URL}/admin/leave-notices/${noticeId}/settlement`,
       {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: getAuthHeaders(),
         body: JSON.stringify(settlementData),
       }
     );

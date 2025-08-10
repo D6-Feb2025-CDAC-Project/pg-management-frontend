@@ -175,6 +175,7 @@ import { FaEdit, FaRegWindowClose } from "react-icons/fa";
 import { getAllTenants } from "../../../services/TenantService";
 import EditTenantModal from "../admin/sub-components/tenants/EditTenantModel";
 import DeleteTenantModal from "../admin/sub-components/tenants/ConfirmDeleteModel";
+import { useSelector } from "react-redux";
 
 export default function Tenants() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -185,27 +186,29 @@ export default function Tenants() {
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
 
+  const token = useSelector((state) => state.auth.token);
+  const fetchTenants = async () => {
+    try {
+      const data = await getAllTenants(token);
+      const formatted = data.map((t) => ({
+        id: t.id, // Ensure ID is available
+        name: t.username,
+        room: `${t.roomNumber} (${t.roomType})`,
+        tenure: `${t.tenureInMonths} months`,
+        number: t.contactNumber,
+        email: t.email,
+        rentStatus: "Paid", // Replace with dynamic if needed
+        complaints: `${t.totalComplaints} (${t.activeComplaints} Active)`,
+      }));
+      setTenants(formatted);
+    } catch (err) {
+      console.error("Error loading tenants:", err);
+    }
+  };
   useEffect(() => {
-    const fetchTenants = async () => {
-      try {
-        const data = await getAllTenants();
-        const formatted = data.map((t) => ({
-          id: t.id, // Ensure ID is available
-          name: t.username,
-          room: `${t.roomNumber} (${t.roomType})`,
-          tenure: `${t.tenureInMonths} months`,
-          number: t.contactNumber,
-          email: t.email,
-          rentStatus: "Paid", // Replace with dynamic if needed
-          complaints: `${t.totalComplaints} (${t.activeComplaints} Active)`,
-        }));
-        setTenants(formatted);
-      } catch (err) {
-        console.error("Error loading tenants:", err);
-      }
-    };
-
-    fetchTenants();
+    if (token) {
+      fetchTenants();
+    }
   }, []);
 
   const getRentStatusColor = (status) => {
@@ -293,7 +296,7 @@ export default function Tenants() {
                   {tenant.rentStatus}
                 </span>
 
-                <div className="relative">
+                {/* <div className="relative">
                   <button
                     onClick={() =>
                       setActionIndex(actionIndex === index ? null : index)
@@ -321,7 +324,7 @@ export default function Tenants() {
                       </button>
                     </div>
                   )}
-                </div>
+                </div> */}
               </div>
             </div>
           ))}

@@ -1,4 +1,5 @@
 import axios from "axios";
+import { store } from "../redux/store";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 const NOTICES_ENDPOINT = `${API_BASE_URL}/admin/notices`;
@@ -13,18 +14,31 @@ const apiClient = axios.create({
 });
 
 // Request interceptor for adding auth headers if needed
+// apiClient.interceptors.request.use(
+//   (config) => {
+//     // Add authorization header if token exists
+//     const token = localStorage.getItem("authToken");
+//     if (token) {
+//       config.headers.Authorization = `Bearer ${token}`;
+//     }
+//     return config;
+//   },
+//   (error) => {
+//     return Promise.reject(error);
+//   }
+// );
+
 apiClient.interceptors.request.use(
   (config) => {
-    // Add authorization header if token exists
-    const token = localStorage.getItem("authToken");
+    const state = store.getState();
+    const token = state.auth?.token;
+
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
     return config;
   },
-  (error) => {
-    return Promise.reject(error);
-  }
+  (error) => Promise.reject(error)
 );
 
 // Response interceptor for handling common errors

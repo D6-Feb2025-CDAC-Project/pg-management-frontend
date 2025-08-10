@@ -48,7 +48,9 @@ function TripleRooms() {
                 capacity: 3,
                 amenities: room.facilties?.map((f) => f.name) || [],
                 currentOccupancy: room.currentOccupancy,
-                image: room.photoUrl,
+                image: room.photoUrl.startsWith("/uploads")
+                  ? `http://localhost:9090${room.photoUrl}`
+                  : room.photoUrl,
                 deposit: room.deposit,
                 electricity: room.electricityCharges,
                 maintenance: room.maintenanceCharges,

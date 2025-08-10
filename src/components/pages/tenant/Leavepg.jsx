@@ -1,29 +1,32 @@
-import React, { useState, useEffect } from 'react';
-import InfoCard from '../sub-components/InfoCard';
-import InfoDisplay from '../sub-components/InfoDisplay';
-import AlertBox from '../sub-components/AlertBox';
-import FormInput from '../sub-components/FormInput';
-import CheckboxInput from '../sub-components/CheckboxInput';
-import SectionHeader from '../sub-components/SectionHeader';
+import React, { useState, useEffect } from "react";
+import InfoCard from "../sub-components/InfoCard";
+import InfoDisplay from "../sub-components/InfoDisplay";
+import AlertBox from "../sub-components/AlertBox";
+import FormInput from "../sub-components/FormInput";
+import CheckboxInput from "../sub-components/CheckboxInput";
+import SectionHeader from "../sub-components/SectionHeader";
+import { useSelector } from "react-redux";
 
 // Main Leave PG Component
 const Leavepg = () => {
-  // Get tenant ID from props, context, or localStorage
-  const tenantId = 6; // Replace with actual tenant ID from your auth system
+  // // Get tenant ID from props, context, or localStorage
+  // const tenantId = 6; // Replace with actual tenant ID from your auth system
+  const token = useSelector((state) => state.auth.token);
+  const user = useSelector((state) => state.auth.user);
 
   const today = new Date();
   const defaultMoveOutDate = new Date(today);
   defaultMoveOutDate.setDate(today.getDate() + 30);
-  const defaultDateStr = defaultMoveOutDate.toISOString().split('T')[0];
+  const defaultDateStr = defaultMoveOutDate.toISOString().split("T")[0];
 
   // Form states
   const [moveoutDate, setMoveoutDate] = useState(defaultDateStr);
-  const [reason, setReason] = useState('');
-  const [details, setDetails] = useState('');
+  const [reason, setReason] = useState("");
+  const [details, setDetails] = useState("");
   const [confirmations, setConfirmations] = useState({
     confirm1: false,
     confirm2: false,
-    confirm3: false
+    confirm3: false,
   });
 
   // API states
@@ -40,7 +43,16 @@ const Leavepg = () => {
   const checkExistingNotice = async () => {
     try {
       setLoading(true);
-      const response = await fetch(`http://localhost:9090/tenant/leave-notices/${tenantId}`);
+      const response = await fetch(
+        `http://localhost:9090/tenant/leave-notices/${user.id}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
       if (response.ok) {
         const data = await response.json();
@@ -50,13 +62,13 @@ const Leavepg = () => {
         // No existing notice found
         setHasExistingNotice(false);
       } else {
-        throw new Error('Failed to check existing notice');
+        throw new Error("Failed to check existing notice");
       }
     } catch (err) {
-      console.error('Error checking existing notice:', err);
+      console.error("Error checking existing notice:", err);
       // Don't show error for 404, as it means no existing notice
-      if (!err.message.includes('404')) {
-        setError('Failed to load leave notice data');
+      if (!err.message.includes("404")) {
+        setError("Failed to load leave notice data");
       }
     } finally {
       setLoading(false);
@@ -77,7 +89,7 @@ const Leavepg = () => {
       !confirmations.confirm2 ||
       !confirmations.confirm3
     ) {
-      alert('Please complete all required fields and check the confirmations.');
+      alert("Please complete all required fields and check the confirmations.");
       return;
     }
 
@@ -86,7 +98,7 @@ const Leavepg = () => {
     if (diffDays < 30) {
       if (
         !window.confirm(
-          'Your move-out date is less than 30 days from today. This may impact your security deposit. Do you want to proceed?'
+          "Your move-out date is less than 30 days from today. This may impact your security deposit. Do you want to proceed?"
         )
       ) {
         return;
@@ -100,19 +112,22 @@ const Leavepg = () => {
       const requestBody = {
         moveOutDate: moveoutDate,
         reasonOfLeave: reason,
-        additionalTenantNotes: details || null
+        additionalTenantNotes: details || null,
       };
 
-      const response = await fetch(`http://localhost:9090/tenant/leave-notices/${tenantId}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(requestBody)
-      });
+      const response = await fetch(
+        `http://localhost:9090/tenant/leave-notices/${user.id}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(requestBody),
+        }
+      );
 
       if (!response.ok) {
-        throw new Error('Failed to submit leave notice');
+        throw new Error("Failed to submit leave notice");
       }
 
       const result = await response.json();
@@ -122,24 +137,23 @@ const Leavepg = () => {
 
       // Reset form
       setMoveoutDate(defaultDateStr);
-      setReason('');
-      setDetails('');
+      setReason("");
+      setDetails("");
       setConfirmations({
         confirm1: false,
         confirm2: false,
-        confirm3: false
+        confirm3: false,
       });
-
     } catch (err) {
-      console.error('Error submitting leave notice:', err);
-      setError('Failed to submit leave notice. Please try again.');
+      console.error("Error submitting leave notice:", err);
+      setError("Failed to submit leave notice. Please try again.");
     } finally {
       setLoading(false);
     }
   };
 
   const handleCancelNotice = async () => {
-    if (!window.confirm('Are you sure you want to cancel your leave notice?')) {
+    if (!window.confirm("Are you sure you want to cancel your leave notice?")) {
       return;
     }
 
@@ -147,21 +161,23 @@ const Leavepg = () => {
       setLoading(true);
       setError(null);
 
-      const response = await fetch(`http://localhost:9090/tenant/leave-notices/${tenantId}`, {
-        method: 'DELETE'
-      });
+      const response = await fetch(
+        `http://localhost:9090/tenant/leave-notices/${user.id}`,
+        {
+          method: "DELETE",
+        }
+      );
 
       if (!response.ok) {
-        throw new Error('Failed to cancel leave notice');
+        throw new Error("Failed to cancel leave notice");
       }
 
       setLeaveNotice(null);
       setHasExistingNotice(false);
-      alert('Leave notice cancelled successfully');
-
+      alert("Leave notice cancelled successfully");
     } catch (err) {
-      console.error('Error cancelling leave notice:', err);
-      setError('Failed to cancel leave notice. Please try again.');
+      console.error("Error cancelling leave notice:", err);
+      setError("Failed to cancel leave notice. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -169,22 +185,22 @@ const Leavepg = () => {
 
   const getStatusColor = (status) => {
     switch (status) {
-      case 'PENDING_REVIEW':
-        return 'text-yellow-600 bg-yellow-100';
-      case 'APPROVED':
-        return 'text-green-600 bg-green-100';
-      case 'REJECTED':
-        return 'text-red-600 bg-red-100';
+      case "PENDING_REVIEW":
+        return "text-yellow-600 bg-yellow-100";
+      case "APPROVED":
+        return "text-green-600 bg-green-100";
+      case "REJECTED":
+        return "text-red-600 bg-red-100";
       default:
-        return 'text-gray-600 bg-gray-100';
+        return "text-gray-600 bg-gray-100";
     }
   };
 
   const formatDate = (dateString) => {
-    return new Date(dateString).toLocaleDateString('en-GB', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric'
+    return new Date(dateString).toLocaleDateString("en-GB", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
     });
   };
 
@@ -206,9 +222,10 @@ const Leavepg = () => {
     return (
       <div className="min-h-screen w-full bg-purpleLighter py-10 px-6">
         <div className="max-w-4xl mx-auto space-y-8">
-
           {/* Title */}
-          <h1 className="text-3xl font-bold text-center text-purpleDark mb-8">Your Leave Notice</h1>
+          <h1 className="text-3xl font-bold text-center text-purpleDark mb-8">
+            Your Leave Notice
+          </h1>
 
           {/* Error Alert */}
           {error && (
@@ -225,59 +242,80 @@ const Leavepg = () => {
               <InfoDisplay
                 label="Status"
                 value={
-                  <span className={`px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(leaveNotice.noticeResponseStatus)}`}>
-                    {leaveNotice.noticeResponseStatus.replace('_', ' ')}
+                  <span
+                    className={`px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(
+                      leaveNotice.noticeResponseStatus
+                    )}`}
+                  >
+                    {leaveNotice.noticeResponseStatus.replace("_", " ")}
                   </span>
                 }
               />
-              <InfoDisplay label="Move-out Date" value={formatDate(leaveNotice.moveOutDate)} />
-              <InfoDisplay label="Reason for Leaving" value={leaveNotice.reasonOfLeave} />
+              <InfoDisplay
+                label="Move-out Date"
+                value={formatDate(leaveNotice.moveOutDate)}
+              />
+              <InfoDisplay
+                label="Reason for Leaving"
+                value={leaveNotice.reasonOfLeave}
+              />
               {leaveNotice.additionalTenantNotes && (
-                <InfoDisplay label="Additional Notes" value={leaveNotice.additionalTenantNotes} />
+                <InfoDisplay
+                  label="Additional Notes"
+                  value={leaveNotice.additionalTenantNotes}
+                />
               )}
               <InfoDisplay
                 label="Settlement Status"
-                value={leaveNotice.settlementGenerated ? "Generated" : "Pending"}
+                value={
+                  leaveNotice.settlementGenerated ? "Generated" : "Pending"
+                }
               />
             </div>
           </InfoCard>
 
           {/* Current Status Info */}
-          {leaveNotice.noticeResponseStatus === 'PENDING_REVIEW' && (
+          {leaveNotice.noticeResponseStatus === "PENDING_REVIEW" && (
             <AlertBox type="info">
               <strong>Your leave notice is under review</strong>
               <div className="mt-2 text-blue-800">
-                <div>• Management will review your request within 2-3 business days</div>
+                <div>
+                  • Management will review your request within 2-3 business days
+                </div>
                 <div>• You'll receive notification once a decision is made</div>
                 <div>• You can cancel this request if your plans change</div>
               </div>
             </AlertBox>
           )}
 
-          {leaveNotice.noticeResponseStatus === 'APPROVED' && (
+          {leaveNotice.noticeResponseStatus === "APPROVED" && (
             <AlertBox type="success">
               <strong>Your leave notice has been approved</strong>
               <div className="mt-2 text-green-800">
                 <div>• Proceed with your move-out preparations</div>
-                <div>• Room inspection will be scheduled before your move-out date</div>
+                <div>
+                  • Room inspection will be scheduled before your move-out date
+                </div>
                 <div>• Settlement process will begin after room handover</div>
               </div>
             </AlertBox>
           )}
 
-          {leaveNotice.noticeResponseStatus === 'REJECTED' && (
+          {leaveNotice.noticeResponseStatus === "REJECTED" && (
             <AlertBox type="error">
               <strong>Your leave notice has been rejected</strong>
               <div className="mt-2 text-red-800">
                 <div>• Please contact management for more details</div>
-                <div>• You can submit a new request after addressing the issues</div>
+                <div>
+                  • You can submit a new request after addressing the issues
+                </div>
               </div>
             </AlertBox>
           )}
 
           {/* Action Buttons */}
           <div className="flex gap-4 justify-center">
-            {leaveNotice.noticeResponseStatus === 'PENDING_REVIEW' && (
+            {leaveNotice.noticeResponseStatus === "PENDING_REVIEW" && (
               <button
                 onClick={handleCancelNotice}
                 disabled={loading}
@@ -287,7 +325,7 @@ const Leavepg = () => {
               </button>
             )}
 
-            {(leaveNotice.noticeResponseStatus === 'REJECTED') && (
+            {leaveNotice.noticeResponseStatus === "REJECTED" && (
               <button
                 onClick={() => {
                   setLeaveNotice(null);
@@ -308,9 +346,10 @@ const Leavepg = () => {
   return (
     <div className="min-h-screen w-full bg-purpleLighter py-10 px-6">
       <div className="max-w-4xl mx-auto space-y-8">
-
         {/* Title */}
-        <h1 className="text-3xl font-bold text-center text-purpleDark mb-8">Leave PG Request</h1>
+        <h1 className="text-3xl font-bold text-center text-purpleDark mb-8">
+          Leave PG Request
+        </h1>
 
         {/* Error Alert */}
         {error && (
@@ -332,20 +371,27 @@ const Leavepg = () => {
         {/* Section 2: Notice Period Warning */}
         <AlertBox type="warning">
           <strong className="text-yellow-900">Notice Period:</strong>
-          <span className="text-yellow-800"> Minimum 30 days notice is required before vacating. Early exit may result in forfeiture of your security deposit.</span>
+          <span className="text-yellow-800">
+            {" "}
+            Minimum 30 days notice is required before vacating. Early exit may
+            result in forfeiture of your security deposit.
+          </span>
         </AlertBox>
 
         {/* Section 3: Notice Details Form */}
         <div onSubmit={handleSubmit}>
           <InfoCard>
-            <SectionHeader title="Notice Details" bgColor="bg-purpleDarkScale-100" />
+            <SectionHeader
+              title="Notice Details"
+              bgColor="bg-purpleDarkScale-100"
+            />
             <div className="p-6 space-y-6">
               <FormInput
                 label="Intended Move-out Date"
                 type="date"
                 value={moveoutDate}
                 onChange={(e) => setMoveoutDate(e.target.value)}
-                min={today.toISOString().split('T')[0]}
+                min={today.toISOString().split("T")[0]}
                 required
               />
 
@@ -360,9 +406,15 @@ const Leavepg = () => {
                 <option value="Job relocation">Job Relocation</option>
                 <option value="Higher studies">Higher Studies</option>
                 <option value="Family reasons">Family Reasons</option>
-                <option value="Found better accommodation">Found Better Accommodation</option>
-                <option value="Financial constraints">Financial Constraints</option>
-                <option value="Issues with facilities">Issues with Facilities</option>
+                <option value="Found better accommodation">
+                  Found Better Accommodation
+                </option>
+                <option value="Financial constraints">
+                  Financial Constraints
+                </option>
+                <option value="Issues with facilities">
+                  Issues with Facilities
+                </option>
                 <option value="Other">Other</option>
               </FormInput>
 
@@ -381,7 +433,9 @@ const Leavepg = () => {
             <strong className="text-blue-900">What happens next:</strong>
             <div className="mt-2 space-y-1 text-blue-800">
               <div>• Your notice will be reviewed by PG management</div>
-              <div>• Security deposit refund will begin after room inspection</div>
+              <div>
+                • Security deposit refund will begin after room inspection
+              </div>
               <div>• Final settlement within 7–10 days after vacating</div>
               <div>• You'll receive confirmation via email/SMS</div>
             </div>
@@ -389,20 +443,24 @@ const Leavepg = () => {
 
           {/* Section 5: Confirmation & Submit */}
           <InfoCard className="mt-8">
-            <SectionHeader title="Confirmation & Acknowledgment" bgColor="bg-purpleDarkScale-100" />
+            <SectionHeader
+              title="Confirmation & Acknowledgment"
+              bgColor="bg-purpleDarkScale-100"
+            />
             <div className="p-6 space-y-5">
               <CheckboxInput
                 id="confirm1"
                 checked={confirmations.confirm1}
-                onChange={() => handleCheckboxChange('confirm1')}
+                onChange={() => handleCheckboxChange("confirm1")}
               >
-                I confirm I want to vacate the PG accommodation on the specified date.
+                I confirm I want to vacate the PG accommodation on the specified
+                date.
               </CheckboxInput>
 
               <CheckboxInput
                 id="confirm2"
                 checked={confirmations.confirm2}
-                onChange={() => handleCheckboxChange('confirm2')}
+                onChange={() => handleCheckboxChange("confirm2")}
               >
                 I understand the notice period and deposit conditions.
               </CheckboxInput>
@@ -410,9 +468,10 @@ const Leavepg = () => {
               <CheckboxInput
                 id="confirm3"
                 checked={confirmations.confirm3}
-                onChange={() => handleCheckboxChange('confirm3')}
+                onChange={() => handleCheckboxChange("confirm3")}
               >
-                I agree to leave the room in good condition and follow all move-out procedures.
+                I agree to leave the room in good condition and follow all
+                move-out procedures.
               </CheckboxInput>
 
               <button
@@ -420,7 +479,7 @@ const Leavepg = () => {
                 disabled={loading}
                 className="w-full bg-purpleDark text-white font-semibold py-4 rounded-lg hover:bg-purpleDarkScale-600 transition-colors duration-200 disabled:opacity-50 mt-6"
               >
-                {loading ? 'Submitting...' : 'Submit Leave Notice'}
+                {loading ? "Submitting..." : "Submit Leave Notice"}
               </button>
             </div>
           </InfoCard>

@@ -1,11 +1,18 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const RoomCard = ({ room }) => {
   const navigate = useNavigate();
 
   const handleBookNow = (room) => {
-    navigate("/guest/registration", { state: { room } });
+    if (room) {
+      localStorage.setItem("selectedRoom", JSON.stringify(room));
+      navigate("/guest/registration", { state: { room } });
+      toast.warn("Do not refresh the page until registration completed...");
+    } else {
+      toast.warn("Please select a room first.");
+    }
   };
 
   const capacity = 1;

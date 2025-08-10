@@ -6,7 +6,7 @@ const BASE_URL = `${API_BASE_URL}/guest/facility`;
 export const getAvailableFacilities = async () => {
   try {
     const response = await axios.get(BASE_URL);
-    console.log("response : " + response.data);
+    // console.log("response : " + response.data);
     return response.data;
   } catch (error) {
     if (error.response && error.response.status === 204) {

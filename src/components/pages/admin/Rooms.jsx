@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
 
 export default function PropertiesListPage() {
   const navigate = useNavigate();
@@ -8,20 +10,24 @@ export default function PropertiesListPage() {
   const [search, setSearch] = useState("");
   const [floorFilter, setFloorFilter] = useState("All");
   const [sortAsc, setSortAsc] = useState(true);
-  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080';
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
+  const token = useSelector((state) => state.auth.token);
 
   const fetchRooms = async () => {
-    const res = await fetch(`${API_BASE_URL}/rooms`);
+    const res = await fetch(`${API_BASE_URL}/rooms`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: token ? `Bearer ${token}` : "",
+      },
+    });
     const data = await res.json();
     setRooms(data.filter((room) => !room.hidden));
   };
 
-
   useEffect(() => {
-    axios
-      .get(`${API_BASE_URL}/rooms`)
-      .then((res) => setRooms(res.data))
-      .catch((err) => console.error("Error fetching rooms:", err));
+    fetchRooms();
   }, []);
 
   const handleHideRoom = async (roomId) => {
@@ -31,17 +37,16 @@ export default function PropertiesListPage() {
       });
 
       if (response.ok) {
-        alert("Room hidden successfully");
+        toast.success("Room hidden successfully");
         fetchRooms();
       } else {
-        alert("Failed to hide room");
+        toast.error("Failed to hide room");
       }
     } catch (error) {
       console.error("Error hiding room:", error);
-      alert("Something went wrong.");
+      toast.error("Something went wrong.");
     }
   };
-
 
   const filtered = rooms
     .filter(
@@ -50,7 +55,9 @@ export default function PropertiesListPage() {
         p.roomType.toLowerCase().includes(search.toLowerCase())
     )
     .filter((p) => floorFilter === "All" || p.floor === floorFilter)
-    .sort((a, b) => (sortAsc ? a.rentAmount - b.rentAmount : b.rentAmount - a.rentAmount));
+    .sort((a, b) =>
+      sortAsc ? a.rentAmount - b.rentAmount : b.rentAmount - a.rentAmount
+    );
 
   return (
     <div className="bg-purpleDarkScale-100 p-6 min-h-screen">
@@ -76,20 +83,17 @@ export default function PropertiesListPage() {
           className="w-full sm:w-auto flex-grow border px-3 py-2 rounded"
         />
 
-
-
-
-        <select
+        {/* <select
           value={floorFilter}
           onChange={(e) => setFloorFilter(e.target.value)}
-          className="px-4 py-2 border rounded">
+          className="px-4 py-2 border rounded"
+        >
           <option value="All">All Floors</option>
           <option value="Ground">Ground Floor</option>
           <option value="First">First Floor</option>
           <option value="Second">Second Floor</option>
           <option value="Third">Third Floor</option>
-        </select>
-
+        </select> */}
 
         <button
           className="px-4 py-2 border rounded bg-white"
@@ -121,14 +125,10 @@ export default function PropertiesListPage() {
                   <td className="p-2 border">{room.floor}</td>
                   <td className="p-2 border">₹{room.rentAmount}</td>
                   <td className="p-2 border space-x-1">
-                    <button
-                      className="bg-green-200 text-green-900 text-xs px-2 py-1 rounded"
-                    >
+                    <button className="bg-green-200 text-green-900 text-xs px-2 py-1 rounded">
                       Vacant: {room.maxOccupancy - room.currentOccupancy}
                     </button>
-                    <button
-                      className="bg-red-200 text-red-900 text-xs px-2 py-1 rounded"
-                    >
+                    <button className="bg-red-200 text-red-900 text-xs px-2 py-1 rounded">
                       Occupied: {room.currentOccupancy}
                     </button>
                   </td>
@@ -137,15 +137,17 @@ export default function PropertiesListPage() {
                   </td>
                   <td className="p-2 border space-x-2">
                     <button
-                      onClick={() => navigate(`/admin/edit-property/${room.id}`)}
-
+                      onClick={() =>
+                        navigate(`/admin/edit-property/${room.id}`)
+                      }
                       className="bg-blue-500 text-white px-3 py-1 rounded text-sm"
                     >
                       Edit
                     </button>
                     <button
                       onClick={() => handleHideRoom(room.id)}
-                      className="bg-red-500 text-white px-3 py-1 rounded text-sm">
+                      className="bg-red-500 text-white px-3 py-1 rounded text-sm"
+                    >
                       Hide
                     </button>
                   </td>
