@@ -1,14 +1,14 @@
 // services/TenantComplaintService.js
 
-const API_BASE_URL = 'http://localhost:8080';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 class TenantComplaintService {
   // Helper method to get auth headers
   static getAuthHeaders() {
-    const token = localStorage.getItem('token'); // Adjust based on how you store the auth token
+    const token = localStorage.getItem("token"); // Adjust based on how you store the auth token
     return {
-      'Content-Type': 'application/json',
-      'Authorization': token ? `Bearer ${token}` : ''
+      "Content-Type": "application/json",
+      Authorization: token ? `Bearer ${token}` : "",
     };
   }
 
@@ -16,7 +16,7 @@ class TenantComplaintService {
   static async handleResponse(response) {
     if (!response.ok) {
       let errorMessage = `HTTP error! status: ${response.status}`;
-      
+
       // Try to get error message from response
       try {
         const errorData = await response.json();
@@ -28,7 +28,7 @@ class TenantComplaintService {
       } catch (e) {
         // If response is not JSON, use default error message
       }
-      
+
       throw new Error(errorMessage);
     }
 
@@ -44,7 +44,7 @@ class TenantComplaintService {
   static async submitComplaint(complaintData) {
     try {
       const response = await fetch(`${API_BASE_URL}/tenant/complaints`, {
-        method: 'POST',
+        method: "POST",
         headers: this.getAuthHeaders(),
         body: JSON.stringify({
           title: complaintData.title,
@@ -52,10 +52,10 @@ class TenantComplaintService {
           priorityLevel: complaintData.priorityLevel,
         }),
       });
-      
+
       return await this.handleResponse(response);
     } catch (error) {
-      console.error('Error submitting complaint:', error);
+      console.error("Error submitting complaint:", error);
       throw error;
     }
   }
@@ -63,14 +63,17 @@ class TenantComplaintService {
   // Get all my complaints (authenticated tenant)
   static async getMyComplaints() {
     try {
-      const response = await fetch(`${API_BASE_URL}/tenant/complaints/my-complaints`, {
-        method: 'GET',
-        headers: this.getAuthHeaders(),
-      });
-      
+      const response = await fetch(
+        `${API_BASE_URL}/tenant/complaints/my-complaints`,
+        {
+          method: "GET",
+          headers: this.getAuthHeaders(),
+        }
+      );
+
       return await this.handleResponse(response);
     } catch (error) {
-      console.error('Error fetching complaints:', error);
+      console.error("Error fetching complaints:", error);
       throw error;
     }
   }
@@ -78,14 +81,17 @@ class TenantComplaintService {
   // Get a specific complaint by ID
   static async getComplaintById(complaintId) {
     try {
-      const response = await fetch(`${API_BASE_URL}/tenant/complaints/${complaintId}`, {
-        method: 'GET',
-        headers: this.getAuthHeaders(),
-      });
-      
+      const response = await fetch(
+        `${API_BASE_URL}/tenant/complaints/${complaintId}`,
+        {
+          method: "GET",
+          headers: this.getAuthHeaders(),
+        }
+      );
+
       return await this.handleResponse(response);
     } catch (error) {
-      console.error('Error fetching complaint:', error);
+      console.error("Error fetching complaint:", error);
       throw error;
     }
   }
@@ -93,19 +99,22 @@ class TenantComplaintService {
   // Update an existing complaint (only if status is 'PENDING')
   static async updateComplaint(complaintId, updateData) {
     try {
-      const response = await fetch(`${API_BASE_URL}/tenant/complaints/${complaintId}`, {
-        method: 'PUT',
-        headers: this.getAuthHeaders(),
-        body: JSON.stringify({
-          title: updateData.title,
-          issue: updateData.issue,
-          priorityLevel: updateData.priorityLevel,
-        }),
-      });
-      
+      const response = await fetch(
+        `${API_BASE_URL}/tenant/complaints/${complaintId}`,
+        {
+          method: "PUT",
+          headers: this.getAuthHeaders(),
+          body: JSON.stringify({
+            title: updateData.title,
+            issue: updateData.issue,
+            priorityLevel: updateData.priorityLevel,
+          }),
+        }
+      );
+
       return await this.handleResponse(response);
     } catch (error) {
-      console.error('Error updating complaint:', error);
+      console.error("Error updating complaint:", error);
       throw error;
     }
   }
@@ -113,14 +122,17 @@ class TenantComplaintService {
   // Delete a complaint (only if status is 'PENDING')
   static async deleteComplaint(complaintId) {
     try {
-      const response = await fetch(`${API_BASE_URL}/tenant/complaints/${complaintId}`, {
-        method: 'DELETE',
-        headers: this.getAuthHeaders(),
-      });
-      
+      const response = await fetch(
+        `${API_BASE_URL}/tenant/complaints/${complaintId}`,
+        {
+          method: "DELETE",
+          headers: this.getAuthHeaders(),
+        }
+      );
+
       return await this.handleResponse(response);
     } catch (error) {
-      console.error('Error deleting complaint:', error);
+      console.error("Error deleting complaint:", error);
       throw error;
     }
   }
@@ -128,14 +140,17 @@ class TenantComplaintService {
   // Get complaints by status
   static async getComplaintsByStatus(status) {
     try {
-      const response = await fetch(`${API_BASE_URL}/tenant/complaints/status/${status}`, {
-        method: 'GET',
-        headers: this.getAuthHeaders(),
-      });
-      
+      const response = await fetch(
+        `${API_BASE_URL}/tenant/complaints/status/${status}`,
+        {
+          method: "GET",
+          headers: this.getAuthHeaders(),
+        }
+      );
+
       return await this.handleResponse(response);
     } catch (error) {
-      console.error('Error fetching complaints by status:', error);
+      console.error("Error fetching complaints by status:", error);
       throw error;
     }
   }
@@ -143,14 +158,17 @@ class TenantComplaintService {
   // Get complaints by priority
   static async getComplaintsByPriority(priority) {
     try {
-      const response = await fetch(`${API_BASE_URL}/tenant/complaints/priority/${priority}`, {
-        method: 'GET',
-        headers: this.getAuthHeaders(),
-      });
-      
+      const response = await fetch(
+        `${API_BASE_URL}/tenant/complaints/priority/${priority}`,
+        {
+          method: "GET",
+          headers: this.getAuthHeaders(),
+        }
+      );
+
       return await this.handleResponse(response);
     } catch (error) {
-      console.error('Error fetching complaints by priority:', error);
+      console.error("Error fetching complaints by priority:", error);
       throw error;
     }
   }
@@ -159,13 +177,13 @@ class TenantComplaintService {
   static async getComplaintStats() {
     try {
       const response = await fetch(`${API_BASE_URL}/tenant/complaints/stats`, {
-        method: 'GET',
+        method: "GET",
         headers: this.getAuthHeaders(),
       });
-      
+
       return await this.handleResponse(response);
     } catch (error) {
-      console.error('Error fetching complaint stats:', error);
+      console.error("Error fetching complaint stats:", error);
       throw error;
     }
   }
@@ -173,14 +191,17 @@ class TenantComplaintService {
   // Check complaint status
   static async checkComplaintStatus(complaintId) {
     try {
-      const response = await fetch(`${API_BASE_URL}/tenant/complaints/check-status/${complaintId}`, {
-        method: 'GET',
-        headers: this.getAuthHeaders(),
-      });
-      
+      const response = await fetch(
+        `${API_BASE_URL}/tenant/complaints/check-status/${complaintId}`,
+        {
+          method: "GET",
+          headers: this.getAuthHeaders(),
+        }
+      );
+
       return await this.handleResponse(response);
     } catch (error) {
-      console.error('Error checking complaint status:', error);
+      console.error("Error checking complaint status:", error);
       throw error;
     }
   }
@@ -188,24 +209,24 @@ class TenantComplaintService {
   // Helper method to format date for display
   static formatDate(dateString) {
     if (!dateString) return null;
-    return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
+    return new Date(dateString).toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
     });
   }
 
   // Helper method to get priority level display text
   static getPriorityDisplayText(priority) {
     const priorityMap = {
-      'HIGH': 'High',
-      'LOW': 'Low',
-      'MODERATE': 'Moderate',
-      'GENERAL': 'General',
-      'IMPORTANT': 'Important',
-      'URGENT': 'Urgent'
+      HIGH: "High",
+      LOW: "Low",
+      MODERATE: "Moderate",
+      GENERAL: "General",
+      IMPORTANT: "Important",
+      URGENT: "Urgent",
     };
     return priorityMap[priority] || priority;
   }
@@ -213,9 +234,9 @@ class TenantComplaintService {
   // Helper method to get status display text
   static getStatusDisplayText(status) {
     const statusMap = {
-      'PENDING': 'Pending',
-      'RESOLVED': 'Resolved',
-      'IN_PROGRESS': 'In Progress'
+      PENDING: "Pending",
+      RESOLVED: "Resolved",
+      IN_PROGRESS: "In Progress",
     };
     return statusMap[status] || status;
   }
@@ -225,26 +246,36 @@ class TenantComplaintService {
     const errors = [];
 
     if (!complaintData.title || complaintData.title.trim().length === 0) {
-      errors.push('Title is required');
+      errors.push("Title is required");
     }
     if (complaintData.title && complaintData.title.length > 100) {
-      errors.push('Title cannot exceed 100 characters');
+      errors.push("Title cannot exceed 100 characters");
     }
 
     if (!complaintData.issue || complaintData.issue.trim().length === 0) {
-      errors.push('Issue description is required');
+      errors.push("Issue description is required");
     }
     if (complaintData.issue && complaintData.issue.length > 1000) {
-      errors.push('Issue description cannot exceed 1000 characters');
+      errors.push("Issue description cannot exceed 1000 characters");
     }
 
     if (!complaintData.priorityLevel) {
-      errors.push('Priority level is required');
+      errors.push("Priority level is required");
     }
 
-    const validPriorities = ['HIGH', 'LOW', 'MODERATE', 'GENERAL', 'IMPORTANT', 'URGENT'];
-    if (complaintData.priorityLevel && !validPriorities.includes(complaintData.priorityLevel)) {
-      errors.push('Invalid priority level');
+    const validPriorities = [
+      "HIGH",
+      "LOW",
+      "MODERATE",
+      "GENERAL",
+      "IMPORTANT",
+      "URGENT",
+    ];
+    if (
+      complaintData.priorityLevel &&
+      !validPriorities.includes(complaintData.priorityLevel)
+    ) {
+      errors.push("Invalid priority level");
     }
 
     return errors;

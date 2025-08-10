@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import TermsAndConditions from "../sub-components/TermsAndConditions";
-import { addTenant } from "../../../services/TenantService";
 import { generateOtp, verifyGeneratedOtp } from "../../../services/OtpService";
 import { toast } from "react-toastify";
+import { addTenant } from "../../../services/UserService";
 
 const Registration = () => {
   const location = useLocation();
@@ -72,10 +72,10 @@ const Registration = () => {
 
     try {
       await addTenant(payload);
-      alert("Registration Successful!");
+      toast.success("Registration Successful!");
       navigate("/user/login");
     } catch (err) {
-      alert(err + "Something went wrong during registration.");
+      toast.error(err + "-> Something went wrong during registration.");
     }
   };
 

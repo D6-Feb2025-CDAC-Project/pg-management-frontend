@@ -1,18 +1,22 @@
 import React, { useEffect, useState } from "react";
 import RoomCard from "../sub-components/RoomCard";
 import { getRoomsWithFacilties } from "../../../services/roomService";
+import Loader from "../../shared/Loader";
 
 function SingleRooms() {
   const [rooms, setRooms] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchRooms = async () => {
       try {
         const data = await getRoomsWithFacilties(); // wait for API
         setRooms(Array.isArray(data) ? data : []); // ensure array
+        setLoading(false);
       } catch (error) {
         console.error("Failed to fetch rooms", error);
         setRooms([]); // fallback to empty array
+        setLoading(false);
       }
     };
 
@@ -23,6 +27,9 @@ function SingleRooms() {
     (room) => room.roomType === "SINGLE_SHARING"
   );
 
+  if (loading) {
+    return <Loader />;
+  }
   return (
     <div className="min-h-screen p-6 bg-gray-100">
       <h1 className="text-2xl font-bold mb-6 text-black">

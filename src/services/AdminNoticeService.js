@@ -1,13 +1,13 @@
-import axios from 'axios';
+import axios from "axios";
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ||'http://localhost:8080'; // Adjust port based on your Spring Boot server
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 const NOTICES_ENDPOINT = `${API_BASE_URL}/admin/notices`;
 
 // Create axios instance with default configuration
 const apiClient = axios.create({
   baseURL: API_BASE_URL,
   headers: {
-    'Content-Type': 'application/json',
+    "Content-Type": "application/json",
   },
   timeout: 10000, // 10 seconds timeout
 });
@@ -16,7 +16,7 @@ const apiClient = axios.create({
 apiClient.interceptors.request.use(
   (config) => {
     // Add authorization header if token exists
-    const token = localStorage.getItem('authToken');
+    const token = localStorage.getItem("authToken");
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -35,7 +35,7 @@ apiClient.interceptors.response.use(
   (error) => {
     if (error.response?.status === 401) {
       // Handle unauthorized access
-      localStorage.removeItem('authToken');
+      localStorage.removeItem("authToken");
       // Redirect to login or handle as needed
     }
     return Promise.reject(error);
@@ -56,8 +56,8 @@ class AdminNoticeService {
         // No content - empty list
         return [];
       }
-      console.error('Error fetching notices:', error);
-      throw new Error('Failed to fetch notices');
+      console.error("Error fetching notices:", error);
+      throw new Error("Failed to fetch notices");
     }
   }
 
@@ -76,21 +76,19 @@ class AdminNoticeService {
         title: noticeData.title,
         message: noticeData.message,
         from: this.mapFromValue(noticeData.from),
-        priorityLevel: this.mapPriorityLevel(noticeData.priorityLevel)
+        priorityLevel: this.mapPriorityLevel(noticeData.priorityLevel),
       };
 
       const response = await apiClient.post(NOTICES_ENDPOINT, payload);
       return response.data;
     } catch (error) {
-      console.error('Error adding notice:', error);
+      console.error("Error adding notice:", error);
       if (error.response?.status === 400) {
-        throw new Error('Invalid notice data provided');
+        throw new Error("Invalid notice data provided");
       }
-      throw new Error('Failed to add notice');
+      throw new Error("Failed to add notice");
     }
   }
-
-
 
   /**
    * Update notice details
@@ -104,17 +102,20 @@ class AdminNoticeService {
         title: noticeData.title,
         message: noticeData.message,
         from: this.mapFromValue(noticeData.from),
-        priorityLevel: this.mapPriorityLevel(noticeData.priorityLevel)
+        priorityLevel: this.mapPriorityLevel(noticeData.priorityLevel),
       };
 
-      const response = await apiClient.put(`${NOTICES_ENDPOINT}/${noticeId}`, payload);
+      const response = await apiClient.put(
+        `${NOTICES_ENDPOINT}/${noticeId}`,
+        payload
+      );
       return response.data;
     } catch (error) {
-      console.error('Error updating notice:', error);
+      console.error("Error updating notice:", error);
       if (error.response?.status === 404) {
-        throw new Error('Notice not found');
+        throw new Error("Notice not found");
       }
-      throw new Error('Failed to update notice');
+      throw new Error("Failed to update notice");
     }
   }
 
@@ -125,20 +126,18 @@ class AdminNoticeService {
    */
   async deleteNotice(noticeId) {
     try {
-      const response = await apiClient.delete(`${NOTICES_ENDPOINT}/${noticeId}`);
+      const response = await apiClient.delete(
+        `${NOTICES_ENDPOINT}/${noticeId}`
+      );
       return response.data;
     } catch (error) {
-      console.error('Error deleting notice:', error);
+      console.error("Error deleting notice:", error);
       if (error.response?.status === 404) {
-        throw new Error('Notice not found');
+        throw new Error("Notice not found");
       }
-      throw new Error('Failed to delete notice');
+      throw new Error("Failed to delete notice");
     }
   }
-
-
-
-  
 
   /**
    * Map frontend 'from' values to backend enum values
@@ -147,14 +146,14 @@ class AdminNoticeService {
    */
   mapFromValue(frontendValue) {
     const mapping = {
-      'PG Admin': 'ADMIN',
-      'PG Owner': 'OWNER',
-      'Housekeeping Staff': 'HOUSEKEEPING',
-      'ADMIN': 'ADMIN',
-      'OWNER': 'OWNER',
-      'HOUSEKEEPING': 'HOUSEKEEPING'
+      "PG Admin": "ADMIN",
+      "PG Owner": "OWNER",
+      "Housekeeping Staff": "HOUSEKEEPING",
+      ADMIN: "ADMIN",
+      OWNER: "OWNER",
+      HOUSEKEEPING: "HOUSEKEEPING",
     };
-    return mapping[frontendValue] || 'ADMIN';
+    return mapping[frontendValue] || "ADMIN";
   }
 
   /**
@@ -164,17 +163,17 @@ class AdminNoticeService {
    */
   mapPriorityLevel(frontendValue) {
     const mapping = {
-      'urgent': 'URGENT',
-      'important': 'IMPORTANT',
-      'general': 'GENERAL',
-      'HIGH': 'HIGH',
-      'LOW': 'LOW',
-      'MODERATE': 'MODERATE',
-      'GENERAL': 'GENERAL',
-      'IMPORTANT': 'IMPORTANT',
-      'URGENT': 'URGENT'
+      urgent: "URGENT",
+      important: "IMPORTANT",
+      general: "GENERAL",
+      HIGH: "HIGH",
+      LOW: "LOW",
+      MODERATE: "MODERATE",
+      GENERAL: "GENERAL",
+      IMPORTANT: "IMPORTANT",
+      URGENT: "URGENT",
     };
-    return mapping[frontendValue] || 'GENERAL';
+    return mapping[frontendValue] || "GENERAL";
   }
 
   /**
@@ -184,9 +183,9 @@ class AdminNoticeService {
    */
   mapFromValueToDisplay(backendValue) {
     const mapping = {
-      'ADMIN': 'PG Admin',
-      'OWNER': 'PG Owner',
-      'HOUSEKEEPING': 'Housekeeping Staff'
+      ADMIN: "PG Admin",
+      OWNER: "PG Owner",
+      HOUSEKEEPING: "Housekeeping Staff",
     };
     return mapping[backendValue] || backendValue;
   }
@@ -198,14 +197,14 @@ class AdminNoticeService {
    */
   mapPriorityLevelToDisplay(backendValue) {
     const mapping = {
-      'URGENT': 'urgent',
-      'IMPORTANT': 'important',
-      'HIGH': 'important',
-      'MODERATE': 'important',
-      'LOW': 'general',
-      'GENERAL': 'general'
+      URGENT: "urgent",
+      IMPORTANT: "important",
+      HIGH: "important",
+      MODERATE: "important",
+      LOW: "general",
+      GENERAL: "general",
     };
-    return mapping[backendValue] || 'general';
+    return mapping[backendValue] || "general";
   }
 
   /**
@@ -214,17 +213,15 @@ class AdminNoticeService {
    * @returns {Object} Formatted notice object for frontend
    */
   formatNoticeForFrontend(backendNotice) {
-  return {
-    id: backendNotice.id,
-    title: backendNotice.title,
-    message: backendNotice.message,
-    from: this.mapFromValueToDisplay(backendNotice.from),
-    priorityLevel: backendNotice.priorityLevel,
-    createdAt: backendNotice.createdAt,
-  };
-}
-
-  
+    return {
+      id: backendNotice.id,
+      title: backendNotice.title,
+      message: backendNotice.message,
+      from: this.mapFromValueToDisplay(backendNotice.from),
+      priorityLevel: backendNotice.priorityLevel,
+      createdAt: backendNotice.createdAt,
+    };
+  }
 
   /**
    * Get formatted notices for frontend
@@ -233,13 +230,12 @@ class AdminNoticeService {
   async getFormattedNotices() {
     try {
       const notices = await this.getAllNotices();
-      return notices.map(notice => this.formatNoticeForFrontend(notice));
+      return notices.map((notice) => this.formatNoticeForFrontend(notice));
     } catch (error) {
-      console.error('Error getting formatted notices:', error);
+      console.error("Error getting formatted notices:", error);
       throw error;
     }
   }
-
 }
 
 // Export a singleton instance

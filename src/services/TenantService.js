@@ -1,7 +1,6 @@
 import axios from "axios";
 
-const API_BASE_URL =
-  import.meta.env.VITE_API_BASE_URL || "http://localhost:8080";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 const BASE_URL = `${API_BASE_URL}/tenant`;
 
 export const getAllTenants = async () => {

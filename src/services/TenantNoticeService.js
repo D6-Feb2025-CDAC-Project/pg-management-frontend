@@ -1,6 +1,6 @@
-import axios from 'axios';
+import axios from "axios";
 
-const BASE_URL = import.meta.env.VITE_API_BASE_URL ||'http://localhost:8080';
+const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const TenantNoticeService = {
   getAllNotices: async () => {
@@ -8,7 +8,7 @@ const TenantNoticeService = {
       const response = await axios.get(`${BASE_URL}/tenant/notices`);
       return response.data;
     } catch (error) {
-      console.error('Error fetching notices:', error);
+      console.error("Error fetching notices:", error);
       return [];
     }
   },
