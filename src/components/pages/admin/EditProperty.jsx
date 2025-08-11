@@ -122,7 +122,12 @@ export default function EditProperty() {
         })),
       };
 
-      await axios.put(`http://localhost:8080/rooms/${id}`, updatedRoom);
+      await axios.put(`http://localhost:9090/rooms/${id}`, updatedRoom, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: token ? `Bearer ${token}` : "",
+        },
+      });
       toast.success("Room updated successfully!");
       navigate("/admin/rooms");
     } catch (error) {

@@ -34,6 +34,10 @@ export default function PropertiesListPage() {
     try {
       const response = await fetch(`${API_BASE_URL}/rooms/${roomId}/hide`, {
         method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: token ? `Bearer ${token}` : "",
+        },
       });
 
       if (response.ok) {
