@@ -55,6 +55,7 @@ const Login = () => {
         }
       } catch (error) {
         console.error("Login failed:", error);
+        console.log("In login failed");
 
         if (error.response && error.response.status === 401) {
           setLoading(false);
