@@ -91,7 +91,7 @@ const Registration = () => {
         setOtpVerified(true);
         toast.success("OTP verified successfully! ✓");
       } else {
-        toast.error(result.message || "Invalid OTP");
+        toast.error("Invalid OTP" || result.message);
       }
     } catch (error) {
       toast.error("OTP verification failed. Please try again.");
